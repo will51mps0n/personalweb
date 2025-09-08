@@ -80,3 +80,77 @@
   .marquee{ margin: var(--s-5) var(--s-3) var(--s-5); }
   .section{ padding: 0 var(--s-3) var(--s-6); }
 }
+
+/* Right side stack */
+.top-right{
+  display:flex; align-items:center; gap:12px;
+}
+
+/* Icon row */
+.socials{
+  display:flex; align-items:center; gap:10px;
+}
+
+/* Pills: circular, animated (no CSS border) */
+.icon-pill{
+  --size: 36px;
+  width: var(--size);
+  height: var(--size);
+  display:grid; place-items:center;
+  border-radius: 999px;
+  background: transparent;   /* ring & fill come from the SVG */
+  color: var(--accent);
+  transition: transform .14s ease, box-shadow .18s ease, color .18s ease;
+}
+.icon-pill:hover,
+.icon-pill:focus-visible{
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.10);
+  outline: none;
+}
+.icon-pill svg{ display:block; }
+
+/* Optional: invert on hover */
+.icon-pill:hover svg .glyph{ fill:#fff; }
+.icon-pill:hover svg .bg{ fill: var(--accent); }
+.icon-pill:hover svg .ring{ stroke: var(--accent); }
+
+/* Site wrapper */
+#site{
+  color:var(--accent);
+  background:#fff;
+  min-height:100dvh;
+  position:relative;
+}
+
+/* Fixed vertical rail at the content start */
+#site::before{
+  content:"";
+  position: fixed;
+  top:0; bottom:0;
+  left: var(--rail-x);              /* aligns with your left gutter */
+  width: 0;
+  border-left: 2px solid rgba(42,20,126,.45);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Header / chips */
+.site-top{
+  position:relative;
+  z-index:1;                        /* above the rail */
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding: var(--s-4) var(--pad-right) 0 var(--gutter-left);
+}
+
+/* Sections / rows */
+.section{
+  padding: 0 var(--pad-right) var(--s-7) var(--gutter-left);
+  margin-top: var(--s-6);
+}
+
+/* Marquee */
+.marquee{
+  margin: var(--s-6) var(--pad-right) var(--s-6) var(--gutter-left);
+}
+

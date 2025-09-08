@@ -9,17 +9,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   const particles = document.getElementById('particles');
 
   // Center the intro name precisely
-  const NUDGE_UP_PX = 40;
-  if (document.fonts && document.fonts.ready) { await document.fonts.ready; }
-  requestAnimationFrame(() => {
-    const vb = svg.viewBox.baseVal;
-    const box = textEl.getBBox();
-    const cx = box.x + box.width/2;
-    const cy = box.y + box.height/2;
-    const targetX = vb.x + vb.width/2;
-    const targetY = vb.y + vb.height/2 - NUDGE_UP_PX;
-    group.setAttribute('transform', `translate(${targetX - cx},${targetY - cy})`);
-  });
+ // Center the intro lines precisely
+const NUDGE_UP_PX = 40;
+if (document.fonts && document.fonts.ready) { await document.fonts.ready; }
+requestAnimationFrame(() => {
+  const svg   = document.getElementById('name-svg');
+  const line1 = document.getElementById('line-1');
+  const line2 = document.getElementById('line-2');
+
+  const vb = svg.viewBox.baseVal;
+  const cx = vb.x + vb.width / 2;
+  const cy = vb.y + vb.height / 2 - NUDGE_UP_PX;
+
+  // center both lines horizontally
+  line1.setAttribute('text-anchor','middle');
+  line2.setAttribute('text-anchor','middle');
+  line1.setAttribute('x', cx);
+  line2.setAttribute('x', cx);
+
+  // vertical spacing between lines (tweak if you want them closer/farther)
+    const lineGap = 80; // spacing between lines
+    line1.setAttribute('y', cy - lineGap/2 - 20); // move Hi up by 20px
+    line2.setAttribute('y', cy + lineGap/2);
+});
 
   // Timings: draw -> slide up -> remove
   const toMS = v => parseFloat(getComputedStyle(root).getPropertyValue(v)) * 1000;

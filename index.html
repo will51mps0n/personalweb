@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik+Iso&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500&display=swap" rel="stylesheet">
+
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/base.css">
@@ -20,9 +22,12 @@
   <!-- INTRO (blue overlay) -->
   <section class="intro" id="intro" aria-hidden="true">
     <svg id="name-svg" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet">
-      <g id="name-group">
-        <text id="name-text" class="name draw">ADAM SIMPSON</text>
-      </g>
+    <g id="name-group">
+    <!-- Line 1 -->
+    <text id="line-1" class="name draw">Hi,</text>
+    <!-- Line 2 (appears slightly after line 1) -->
+    <text id="line-2" class="name draw delay">I’m Adam Simpson.</text>
+    </g>
     </svg>
   </section>
 
@@ -43,7 +48,52 @@
         <button class="chip">About</button>
         <button class="chip">Feed</button>
       </nav>
-      <div class="status chip">Currently booking projects for Sep, 2025 ✳︎</div>
+        <!-- RIGHT SIDE -->
+    <div class="top-right">
+
+        <!-- Socials -->
+        <nav class="socials" aria-label="Social links">
+        <a class="icon-pill" href="https://linkedin.com/in/YOUR_HANDLE" target="_blank" aria-label="LinkedIn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36">
+            <!-- background + ring -->
+            <circle class="bg"   cx="24" cy="24" r="21.5" fill="#c2c8ff"/>
+            <circle class="ring" cx="24" cy="24" r="21.5" fill="none" stroke="#2A147E"
+                    stroke-width="2" vector-effect="non-scaling-stroke"/>
+            <!-- glyph -->
+            <path class="glyph" fill="#2A147E"
+            d="M17 20h4v12h-4zM19 16.5a2 2 0 110-4 2 2 0 010 4zM23 20h4v1.9c.7-1.2 2.1-2.2 4.3-2.2
+                3.5 0 5.7 2.2 5.7 6.7V32h-4v-5.8c0-2-.7-3.3-2.6-3.3-2.2 0-3.4 1.5-3.4 4V32h-4z"/>
+        </svg>
+        </a>
+
+        <a class="icon-pill" href="https://github.com/YOUR_HANDLE" target="_blank" aria-label="GitHub">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36">
+            <circle class="bg"   cx="24" cy="24" r="21.5" fill="#8bc7ff"/>
+            <circle class="ring" cx="24" cy="24" r="21.5" fill="none" stroke="#2A147E"
+                    stroke-width="2" vector-effect="non-scaling-stroke"/>
+            <path class="glyph" fill="#2A147E"
+            d="M24 12a12 12 0 00-3.8 23.4c.6.1.8-.2.8-.6v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.3-1.5-1.3-1.5
+                -1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.6 1.2 3.2.9.1-.7.4-1.2.7-1.5-2.6-.3-5.4-1.3-5.4-6
+                0-1.3.5-2.3 1.1-3.1 0-.3-.5-1.5.1-3.1 0 0 .9-.3 3.2 1.1a11 11 0 015.8 0c2.3-1.4 3.2-1.1 3.2-1.1
+                .6 1.6.1 2.8.1 3.1.7.8 1.1 1.8 1.1 3.1 0 4.7-2.8 5.6-5.4 6 .4.3.8 1 .8 2v3c0 .4.2.7.8.6A12 12 0 0024 12z"/>
+        </svg>
+        </a>
+
+        <a class="icon-pill" href="mailto:adwisi@umich.edu" aria-label="Email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36">
+            <circle class="bg"   cx="24" cy="24" r="21.5" fill="#e7d166"/>
+            <circle class="ring" cx="24" cy="24" r="21.5" fill="none" stroke="#2A147E"
+                    stroke-width="2" vector-effect="non-scaling-stroke"/>
+            <path class="glyph" fill="#2A147E"
+            d="M12 16h24v16H12zm12 8l12-8H12l12 8z"/>
+        </svg>
+        </a>
+
+
+
+
+        </nav>
+    </div>
     </header>
 
     <!-- Banner / marquee -->
@@ -66,9 +116,9 @@
     </section>
 
     <footer class="site-footer">
-      <a href="mailto:adam@example.com">adam@example.com</a>
+      <a href="mailto:adwisi@umich.edu">adwisi@umich.edu</a>
       <span class="dot">•</span>
-      <a href="#">Behance</a>
+      <a href="#"></a>
     </footer>
   </section>
 
