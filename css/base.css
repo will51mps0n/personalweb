@@ -18,7 +18,7 @@
   /* intro timings */
   --draw: 3.2s;
   --hold: .05s;
-  --slide: .5s;
+  --slide: .8s;
   
 }
 
@@ -40,9 +40,6 @@ body{
 }
 /* utilities */
 [hidden]{ display:none !important; }
-
-/* You already added this: */
-:root { --font-ui: "Playfair Display", serif; }
 
 /* Use the new font site-wide */
 body{

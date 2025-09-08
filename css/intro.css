@@ -48,12 +48,15 @@
   text-align:center;
   cursor:pointer; /* click anywhere to continue */
 }
+
 #welcome h1{
-  margin:0;
-  font-weight:600;
-  font-size:clamp(32px,6vw,60px);
-  letter-spacing:.01em;
+  margin: 0;
+  font-family: "Playfair Display", serif; /* 👈 force Playfair */
+  font-weight: 300;                       /* light version */
+  font-size: clamp(32px,6vw,60px);
+  letter-spacing: .01em;
 }
+
 #welcome .sub{
   position:absolute; left:50%; bottom:24px; transform:translateX(-50%);
   font-size:14px; letter-spacing:.02em; color:#6b7280; pointer-events:none;
@@ -61,3 +64,9 @@
 
 /* Particles canvas under welcome */
 #particles{ position:fixed; inset:0; z-index:-1; background:#fff; }
+#particles {
+  --line: var(--accent);
+}
+#welcome {
+  --line: var(--accent); /* your purple (#2A147E) */
+}
