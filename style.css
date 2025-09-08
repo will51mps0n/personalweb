@@ -120,30 +120,33 @@ html.intro-lock, body.intro-lock { height: 100%; overflow: hidden; }
 .status{ opacity:.85 }
 
 /* marquee */
+/* ===== Marquee (reference-style) ===== */
 .marquee{
-  margin: 18px clamp(16px,4vw,40px) 28px;
-  border:2.5px solid var(--border);
-  border-radius:16px;
-  overflow:hidden;
-  position:relative;
+  margin: 8px clamp(16px,4vw,40px) 20px;
+  overflow: hidden;
+  position: relative;
 }
 .marquee-track{
-  white-space:nowrap;
-  font-family:'Monoton', sans-serif;
-  font-size: clamp(28px, 7.8vw, 120px);
-  line-height:1.1;
-  color: transparent;                   /* show only the “triple-line” via stroke */
-  -webkit-text-stroke: 2px var(--accent);
-  text-stroke: 2px var(--accent);
-  padding:18px 24px;
-  display:inline-block;
+  white-space: nowrap;
+  font-family: 'Rubik Iso', sans-serif;
+  font-size: clamp(40px, 10.5vw, 160px);
+  line-height: 1;
+  letter-spacing: .02em;
 
-  /* gentle auto drift; we’ll override on hover with JS */
-  animation: drift 30s linear infinite;
+  /* outlined look; remove if you want solid fill */
+  color: transparent;
+  -webkit-text-stroke: 2px var(--accent);
+
+  display: inline-block;
+  padding: 12px 24px;
+  will-change: transform;
+  cursor: ew-resize;             /* hint that it moves left/right */
 }
+
+
 @keyframes drift{
-  from{ transform: translateX(0); }
-  to  { transform: translateX(-50%); }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }         /* duplicate text in HTML for seamless loop */
 }
 
 /* lists */

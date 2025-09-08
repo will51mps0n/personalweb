@@ -6,7 +6,10 @@
 <title>Adam Simpson — Portfolio</title>
 
 <!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Iso&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 
 <style>
 [hidden]{ display:none !important; }
@@ -54,22 +57,25 @@
     display:block;
     overflow:visible;
   }
-  .name{
-    font-family:'Monoton', sans-serif;
-    font-size:clamp(28px, 6.8vw, 84px);
-    letter-spacing:.02em;
-  }
-  .draw{
-    fill:none;
-    stroke:var(--ink);
-    stroke-width:1.5;  /* thin so Monoton detail shows */
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    vector-effect:non-scaling-stroke;
-    stroke-dasharray:1000;
-    stroke-dashoffset:1000;
-    animation: drawName var(--draw) ease forwards;
-  }
+.name{
+  font-family:'Rubik Iso', sans-serif;          /* was 'Monoton' */
+  font-size:clamp(34px, 7.2vw, 100px);          /* a touch larger for Rubik Iso */
+  letter-spacing:.01em;
+}
+
+.draw{
+  fill:none;
+  stroke:var(--ink);
+  stroke-width:1.25;                             /* was 1.5; Rubik Iso benefits from a bit thicker */
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+  animation: drawName var(--draw) ease forwards;
+  paint-order: stroke fill;                      /* ensures stroke renders cleanly */
+}
+
   @keyframes drawName{ to{ stroke-dashoffset:0 } }
 
   /* Particles canvas */
@@ -128,14 +134,12 @@
   </header>
 
   <!-- marquee / banner -->
-  <div class="marquee" id="marquee">
-    <div class="marquee-track" id="marqueeTrack"
-         aria-label="Adam Simpson roles">
-      ADAM SIMPSON ✳︎ DATA SCIENCE ✳︎ FULL STACK DEVELOPER ✳︎
-      ADAM SIMPSON ✳︎ DATA SCIENCE ✳︎ FULL STACK DEVELOPER ✳︎
-      ADAM SIMPSON ✳︎ DATA SCIENCE ✳︎ FULL STACK DEVELOPER ✳︎
-    </div>
+ <div class="marquee" id="marquee">
+  <div class="marquee-track" id="marqueeTrack" aria-label="Adam Simpson roles">
+    DATA SCIENCE ✳︎ FULL STACK DEVELOPER ✳︎ ADAM SIMPSON ✳︎
+    DATA SCIENCE ✳︎ FULL STACK DEVELOPER ✳︎ ADAM SIMPSON ✳︎
   </div>
+</div>
 
   <!-- sample lists (keep simple for now) -->
   <section class="section">
@@ -310,40 +314,57 @@ function openSite(){
     resize(); requestAnimationFrame(frame);
   })();
 
-  /* -----------------------
-     5) MARQUEE HOVER CONTROL
-  ----------------------- */
-  const marquee = document.getElementById('marquee');
-  const track   = document.getElementById('marqueeTrack');
-  if (marquee && track){
-    let hover=false, targetX=0, currentX=0, rafId;
-    const lerp = (a,b,t)=> a + (b-a)*t;
-
-    function onMove(e){
-      const rect = marquee.getBoundingClientRect();
-      const pct = (e.clientX - rect.left) / rect.width; // 0..1
-      targetX = -35 + pct*35; // -35% .. 0%
-      if (!hover){
-        hover = true;
-        track.style.animationPlayState = 'paused';
-        animate();
-      }
-    }
-    function onLeave(){
-      hover = false;
-      cancelAnimationFrame(rafId);
-      track.style.animationPlayState = 'running';
-    }
-    function animate(){
-      currentX = lerp(currentX, targetX, 0.12);
-      track.style.transform = `translateX(${currentX}%)`;
-      if (hover) rafId = requestAnimationFrame(animate);
-    }
-    marquee.addEventListener('mousemove', onMove);
-    marquee.addEventListener('mouseleave', onLeave);
-  }
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const marquee = document.getElementById('marquee');
+  const track   = document.getElementById('marqueeTrack');
+  if (!marquee || !track) return;
 
+  // Respect reduced motion
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  let pos = 0;              // current X position (px, negative)
+  let vx  = 0;              // current velocity
+  const friction = 0.8;    // 0..1 (lower = more damping)
+  const sensitivity = 0.6;  // how much mouse movement affects speed
+
+  let lastX = null;
+  let rafId;
+
+  function loop(){
+    // advance position by velocity
+    pos += vx;
+
+    // wrap seamlessly (we duplicated the text exactly twice)
+    const cycle = track.scrollWidth / 2; // one copy width
+    if (pos <= -cycle) pos += cycle;
+    if (pos > 0)       pos -= cycle;
+
+    track.style.transform = `translateX(${pos}px)`;
+    vx *= friction;
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function onMove(e){
+    // movementX has better precision; fallback to clientX delta
+    const dx = (typeof e.movementX === 'number' ? e.movementX :
+               (lastX === null ? 0 : e.clientX - lastX));
+    vx += dx * sensitivity;
+    lastX = e.clientX;
+  }
+
+  function onLeave(){
+    lastX = null; // stop injecting deltas; inertia continues then decays
+  }
+
+  marquee.addEventListener('mousemove', onMove, {passive:true});
+  marquee.addEventListener('mouseleave', onLeave, {passive:true});
+
+  loop();
+});
+</script>
 </body>
 </html>
