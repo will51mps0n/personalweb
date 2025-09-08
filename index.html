@@ -1,375 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Adam Simpson — Portfolio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Adam Simpson — Portfolio</title>
 
-<!-- Google Fonts -->
- <!-- in <head> with your Rubik Iso links -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik+Iso&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik+Iso&display=swap" rel="stylesheet">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik+Iso&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-
-<style>
-[hidden]{ display:none !important; }
-
-  :root{
-    /* COLORS */
-    --brand:#2A147E;
-    --ink:#ffffff;
-    --text:#111;
-    --muted:#6b7280;
-    --line:#bdbdbd;
-
-    /* TIMING (faster) */
-    --draw:3.2s;
-    --hold:.05s;     /* start sliding almost immediately after draw */
-    --slide:0.5s;    /* fast slide */
-  }
-
-  html,body{height:100%;margin:0}
-  body{
-    background:#fff;
-    color:var(--text);
-    font-family:'Wire One', system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
-    font-weight:400;
-    overflow:hidden; /* no scroll (we'll enable later when adding sections) */
-  }
-
-  /* INTRO overlay */
-  .intro{
-    position:fixed; inset:0;
-    height:100dvh;
-    display:grid; place-items:center;
-    background:var(--brand);
-    z-index:10;
-    will-change:transform;
-  }
-  .intro.slide-away{ animation: slideUp var(--slide) cubic-bezier(.22,.61,.36,1) forwards; }
-  @keyframes slideUp{ to{ transform:translateY(-100%); } }
-
-  /* Name SVG */
-  /* Large, stable viewBox; we’ll center the text by bbox via JS */
-  #name-svg{
-    width:min(82vw, 960px);
-    height:auto;
-    display:block;
-    overflow:visible;
-  }
-.name{
-  font-family:'Rubik Iso', sans-serif;          /* was 'Monoton' */
-  font-size:clamp(34px, 7.2vw, 100px);          /* a touch larger for Rubik Iso */
-  letter-spacing:.01em;
-}
-
-.draw{
-  fill:none;
-  stroke:var(--ink);
-  stroke-width:1.25;                             /* was 1.5; Rubik Iso benefits from a bit thicker */
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  vector-effect:non-scaling-stroke;
-  stroke-dasharray:1000;
-  stroke-dashoffset:1000;
-  animation: drawName var(--draw) ease forwards;
-  paint-order: stroke fill;                      /* ensures stroke renders cleanly */
-}
-
-  @keyframes drawName{ to{ stroke-dashoffset:0 } }
-
-  /* Particles canvas */
-  #particles{ position:fixed; inset:0; z-index:-1; background:#fff; }
-
-  /* Main page (perfectly centered) */
-  main{
-    min-height:100dvh;
-    display:grid; place-items:center;
-    position:relative; isolation:isolate;
-    padding:0;
-    text-align:center;
-  }
-  h1{
-    margin:0;
-    font-size:clamp(32px,6vw,60px);
-    font-weight:600;
-    line-height:1.15;
-  }
-  .sub{
-    position:absolute; left:50%; bottom:24px; transform:translateX(-50%);
-    font-size:14px; letter-spacing:.02em; color:var(--muted);
-    pointer-events:none;
-  }
-</style>
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/intro.css">
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
 
-<!-- INTRO -->
-<section class="intro" id="intro" aria-hidden="true">
-  <svg id="name-svg" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet">
-    <!-- We center this group precisely via JS using getBBox() -->
-    <g id="name-group">
-      <text id="name-text" class="name draw">ADAM SIMPSON</text>
-    </g>
-  </svg>
-</section>
-
-<!-- PARTICLES -->
-<canvas id="particles"></canvas>
-
-<!-- MAIN -->
-<main>
-  <h1>Welcome to my portfolio.</h1>
-  <div class="sub">(Click to continue)</div>
-</main>
-
-<section id="site" hidden>
-  <header class="site-top">
-    <nav class="chips">
-      <button class="chip">Works</button>
-      <button class="chip">About</button>
-      <button class="chip">Feed</button>
-    </nav>
-    <div class="status chip">Currently booking projects for Sep, 2025 ✳︎</div>
-  </header>
-
-  <!-- marquee / banner -->
- <div class="marquee" id="marquee">
-  <div class="marquee-track" id="marqueeTrack" aria-label="Adam Simpson roles">
-    ADAM SIMPSON ✳︎ FULL STACK DEVELOPER ✳︎ DATA SCIENTIST ✳︎
-    ADAM SIMPSON ✳︎ FULL STACK DEVELOPER ✳︎ DATA SCIENTIST ✳︎
-  </div>
-</div>
-<div class="side-label left">ADAM SIMPSON</div>
-  <!-- sample lists (keep simple for now) -->
-  <section class="section">
-    <h3 class="label">= Selected Works</h3>
-    <a class="row" href="#"><span class="pill pill-year">2024</span><span>Project One</span><span class="tag">UI/UX</span></a>
-    <a class="row" href="#"><span class="pill pill-year">2023</span><span>Project Two</span><span class="tag">Data</span></a>
-    <a class="row" href="#"><span class="pill pill-year">2022</span><span>Project Three</span><span class="tag">Full-Stack</span></a>
+  <!-- INTRO (blue overlay) -->
+  <section class="intro" id="intro" aria-hidden="true">
+    <svg id="name-svg" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet">
+      <g id="name-group">
+        <text id="name-text" class="name draw">ADAM SIMPSON</text>
+      </g>
+    </svg>
   </section>
 
-  <footer class="site-footer">
-    <a href="mailto:adam@example.com">adam@example.com</a>
-    <span class="dot">•</span>
-    <a href="#">Behance</a>
-  </footer>
-</section>
+  <!-- PARTICLES behind welcome screen -->
+  <canvas id="particles"></canvas>
 
-<script>
-document.addEventListener('DOMContentLoaded', async () => {
-  /* -----------------------
-     0) QUICK DOM HOOKS
-  ----------------------- */
-  const root      = document.documentElement;
-  const intro     = document.getElementById('intro');       // purple overlay
-  const svg       = document.getElementById('name-svg');    // SVG wrapper
-  const group     = document.getElementById('name-group');  // <g> we translate
-  const textEl    = document.getElementById('name-text');   // <text> element
-  const landing   = document.querySelector('main');         // white "Welcome"
-  const siteEl    = document.getElementById('site');        // main site (hidden)
-  const particles = document.getElementById('particles');   // canvas
+  <!-- WELCOME (white screen) -->
+  <main id="welcome">
+    <h1>Welcome to my portfolio.</h1>
+    <div class="sub">(Click to continue)</div>
+  </main>
 
-  /* -----------------------
-     1) EXACT-CENTER THE NAME
-  ----------------------- */
-  const NUDGE_UP_PX = 40; // tweak to taste (positive = up)
+  <!-- SITE (hidden until click) -->
+  <section id="site" hidden>
+    <header class="site-top">
+      <nav class="chips">
+        <button class="chip">Works</button>
+        <button class="chip">About</button>
+        <button class="chip">Feed</button>
+      </nav>
+      <div class="status chip">Currently booking projects for Sep, 2025 ✳︎</div>
+    </header>
 
-  if (document.fonts && document.fonts.ready) { await document.fonts.ready; }
-  requestAnimationFrame(() => {
-    const vb = svg.viewBox.baseVal;           // 0 0 1600 600
-    const box = textEl.getBBox();             // real drawn bounds
-    const cx = box.x + box.width  / 2;
-    const cy = box.y + box.height / 2;
-    const targetX = vb.x + vb.width  / 2;
-    const targetY = vb.y + vb.height / 2 - NUDGE_UP_PX;
+    <!-- Banner / marquee -->
+    <div class="marquee" id="marquee">
+      <div class="marquee-track" id="marqueeTrack" aria-label="Adam Simpson roles">
+        ADAM SIMPSON ✳︎ FULL STACK DEVELOPER ✳︎ DATA SCIENTIST ✳︎
+        ADAM SIMPSON ✳︎ FULL STACK DEVELOPER ✳︎ DATA SCIENTIST ✳︎
+      </div>
+    </div>
 
-    const dx = targetX - cx;
-    const dy = targetY - cy;
+    <!-- Optional vertical label (keep since you added it) -->
+    <div class="side-label left">ADAM SIMPSON</div>
 
-    group.setAttribute('transform', `translate(${dx},${dy})`);
-  });
+    <!-- Works -->
+    <section class="section">
+      <h3 class="label">= Selected Works</h3>
+      <a class="row" href="#"><span class="pill pill-year">2024</span><span>Project One</span><span class="tag">UI/UX</span></a>
+      <a class="row" href="#"><span class="pill pill-year">2023</span><span>Project Two</span><span class="tag">Data</span></a>
+      <a class="row" href="#"><span class="pill pill-year">2022</span><span>Project Three</span><span class="tag">Full-Stack</span></a>
+    </section>
 
-  /* -----------------------
-     2) INTRO TIMING (draw → slide)
-  ----------------------- */
-  const drawMS  = parseFloat(getComputedStyle(root).getPropertyValue('--draw'))  * 1000;
-  const holdMS  = parseFloat(getComputedStyle(root).getPropertyValue('--hold'))  * 1000;
-  const slideMS = parseFloat(getComputedStyle(root).getPropertyValue('--slide')) * 1000;
+    <footer class="site-footer">
+      <a href="mailto:adam@example.com">adam@example.com</a>
+      <span class="dot">•</span>
+      <a href="#">Behance</a>
+    </footer>
+  </section>
 
-  // start slide soon after draw
-  setTimeout(() => intro.classList.add('slide-away'), drawMS + holdMS);
-
-  // remove intro after slide completes
-  setTimeout(() => { intro.remove(); }, drawMS + holdMS + slideMS + 40);
-
-  /* -----------------------
-     3) CLICK ANYWHERE TO OPEN SITE
-  ----------------------- */
-function openSite(){
-  // hide landing
-  landing.classList.add('is-hidden');     // <- class-based hide
-  landing.setAttribute('hidden', '');     // <- attribute hide (belt & suspenders)
-
-  // show main site
-  siteEl.classList.add('is-visible');
-  siteEl.removeAttribute('hidden');
-
-  // hide or remove the particle canvas
-  if (particles) particles.style.display = 'none';  // or: particles.remove();
-
-  // allow scroll on the site and jump to top
-  document.body.style.overflow = 'auto';
-  window.scrollTo(0, 0);
-}
-  landing.addEventListener('click', openSite);
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') openSite();
-  });
-
-  /* -----------------------
-     4) PARTICLES (lightweight)
-     — You can remove this whole block if you don't want the canvas
-  ----------------------- */
-  (function(){
-    if (!particles) return;
-    const ctx = particles.getContext('2d');
-    let w,h,dpr,pts,mouse;
-    const DENSITY = 0.00009, CONNECT = 120, SPEED = 0.35, PULL=0.12;
-
-    function resize(){
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = particles.width  = Math.floor(innerWidth  * dpr);
-      h = particles.height = Math.floor(innerHeight * dpr);
-      particles.style.width  = innerWidth + 'px';
-      particles.style.height = innerHeight + 'px';
-      const n = Math.round(innerWidth * innerHeight * DENSITY);
-      pts = Array.from({length:n}, () => ({
-        x: Math.random()*w, y: Math.random()*h,
-        vx: (Math.random()-0.5)*SPEED*dpr,
-        vy: (Math.random()-0.5)*SPEED*dpr,
-        r: 1.6*dpr
-      }));
-    }
-    mouse = { x:-9999, y:-9999 };
-    window.addEventListener('mousemove', e=>{
-      const r = particles.getBoundingClientRect();
-      mouse.x = (e.clientX - r.left) * dpr;
-      mouse.y = (e.clientY - r.top)  * dpr;
-    });
-    window.addEventListener('mouseleave', ()=>{ mouse.x=mouse.y=-9999; });
-
-    function frame(){
-      ctx.clearRect(0,0,w,h);
-      const line = getComputedStyle(root).getPropertyValue('--line').trim() || '#bdbdbd';
-      ctx.fillStyle = ctx.strokeStyle = line; ctx.lineWidth = 1.2*dpr; ctx.globalAlpha = 0.9;
-
-      for (const p of pts){
-        const dx = mouse.x - p.x, dy = mouse.y - p.y, dist = Math.hypot(dx,dy);
-        if (dist < 180*dpr){
-          p.vx += (dx/(dist||1))*PULL*0.02*dpr;
-          p.vy += (dy/(dist||1))*PULL*0.02*dpr;
-        }
-        p.x += p.vx; p.y += p.vy;
-        if (p.x<0||p.x>w) p.vx*=-1;
-        if (p.y<0||p.y>h) p.vy*=-1;
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-      }
-
-      const cell=80*dpr, cols=Math.ceil(w/cell), rows=Math.ceil(h/cell);
-      const grid=Array.from({length:cols*rows},()=>[]);
-      pts.forEach((p,i)=>{
-        const c=Math.max(0,Math.min(cols-1,Math.floor(p.x/cell)));
-        const r=Math.max(0,Math.min(rows-1,Math.floor(p.y/cell)));
-        grid[r*cols+c].push(i);
-      });
-
-      ctx.beginPath();
-      for (let r=0;r<rows;r++){
-        for (let c=0;c<cols;c++){
-          const bucket=[];
-          for (let rr=r; rr<=Math.min(rows-1,r+1); rr++)
-            for (let cc=c; cc<=Math.min(cols-1,c+1); cc++)
-              bucket.push(...grid[rr*cols+cc]);
-
-          for (let i=0;i<bucket.length;i++){
-            const a=pts[bucket[i]];
-            for (let j=i+1;j<bucket.length;j++){
-              const b=pts[bucket[j]];
-              const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
-              if (d < CONNECT*dpr){
-                const alpha = 1 - (d/(CONNECT*dpr));
-                ctx.globalAlpha = 0.9*alpha;
-                ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-              }
-            }
-          }
-        }
-      }
-      ctx.stroke(); ctx.globalAlpha = 1;
-      requestAnimationFrame(frame);
-    }
-
-    window.addEventListener('resize', resize, {passive:true});
-    resize(); requestAnimationFrame(frame);
-  })();
-
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const marquee = document.getElementById('marquee');
-  const track   = document.getElementById('marqueeTrack');
-  if (!marquee || !track) return;
-
-  // Respect reduced motion
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) return;
-
-  let pos = 0;              // current X position (px, negative)
-  let vx  = 0;              // current velocity
-  const friction = 0.8;    // 0..1 (lower = more damping)
-  const sensitivity = 0.6;  // how much mouse movement affects speed
-
-  let lastX = null;
-  let rafId;
-
-  function loop(){
-    // advance position by velocity
-    pos += vx;
-
-    // wrap seamlessly (we duplicated the text exactly twice)
-    const cycle = track.scrollWidth / 2; // one copy width
-    if (pos <= -cycle) pos += cycle;
-    if (pos > 0)       pos -= cycle;
-
-    track.style.transform = `translateX(${pos}px)`;
-    vx *= friction;
-    rafId = requestAnimationFrame(loop);
-  }
-
-  function onMove(e){
-    // movementX has better precision; fallback to clientX delta
-    const dx = (typeof e.movementX === 'number' ? e.movementX :
-               (lastX === null ? 0 : e.clientX - lastX));
-    vx += dx * sensitivity;
-    lastX = e.clientX;
-  }
-
-  function onLeave(){
-    lastX = null; // stop injecting deltas; inertia continues then decays
-  }
-
-  marquee.addEventListener('mousemove', onMove, {passive:true});
-  marquee.addEventListener('mouseleave', onLeave, {passive:true});
-
-  loop();
-});
-</script>
+  <!-- JS -->
+  <script defer src="js/intro.js"></script>
+  <script defer src="js/particles.js"></script>
+  <script defer src="js/marquee.js"></script>
 </body>
 </html>

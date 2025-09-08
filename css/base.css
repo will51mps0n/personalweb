@@ -1,0 +1,36 @@
+:root{
+  /* colors */
+  --blue: #0a2cff;      /* intro blue */
+  --accent:#2A147E;     /* site purple */
+  --ink:  #1f2540;      /* text */
+  --bg:   #ffffff;
+
+  /* spacing scale */
+  --s-1: 8px;
+  --s-2: 12px;
+  --s-3: 16px;
+  --s-4: 24px;
+  --s-5: 32px;
+  --s-6: 48px;
+  --s-7: 72px;
+  --s-8: 96px;
+
+  /* intro timings */
+  --draw: 3.2s;
+  --hold: .05s;
+  --slide: .5s;
+}
+
+/* Reset-ish */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+html{ -webkit-text-size-adjust:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:16px/1.55 'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+/* utilities */
+[hidden]{ display:none !important; }

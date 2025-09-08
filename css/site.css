@@ -1,0 +1,82 @@
+/* Site wrapper */
+#site{
+  color:var(--accent);
+  background:#fff;
+  min-height:100dvh;
+}
+
+/* Header / chips */
+.site-top{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding: var(--s-4) clamp(16px,4vw,40px) 0;
+}
+.chips{ display:flex; gap:var(--s-2); }
+.chip{
+  font:600 12px/1 'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  padding:8px 12px; border-radius:999px; background:#fff;
+  border:2px solid rgba(42,20,126,.45); color:var(--accent);
+}
+.status{ opacity:.85; }
+
+/* Marquee (Rubik Iso) */
+.marquee{
+  margin: var(--s-6) clamp(16px,4vw,40px) var(--s-6);
+  overflow:hidden; border:none; border-radius:0;
+}
+.marquee-track{
+  white-space:nowrap;
+  font-family:'Rubik Iso',sans-serif;
+  font-size:clamp(44px,10.5vw,160px);
+  line-height:1; letter-spacing:.02em;
+  color:transparent; -webkit-text-stroke:2px var(--accent);
+  display:inline-block; padding:6px 24px; will-change:transform;
+  cursor: ew-resize;
+}
+
+/* Optional side label (you have one) */
+.side-label{
+  position: fixed; top: 50%; left: 0;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left top;
+  font:600 14px/1 'Inter',sans-serif;
+  letter-spacing:.1em; color:var(--accent);
+  pointer-events:none; opacity:.85;
+}
+
+/* Sections / rows */
+.section{
+  padding: 0 clamp(16px,4vw,40px) var(--s-7);
+  margin-top: var(--s-6);
+}
+.label{
+  margin: 0 0 var(--s-3);
+  font: 600 13px/1.2 'Inter',sans-serif;
+  color: var(--accent); opacity:.9;
+}
+.row{
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center;
+  gap:14px; padding:16px var(--s-3); margin:12px 0;
+  border:2px solid var(--accent); border-radius:14px;
+  text-decoration:none; color:inherit; background:#fff;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.row:hover{ transform: translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.06); }
+.pill-year,.tag{
+  border:2px solid rgba(42,20,126,.45);
+  border-radius:999px; padding:6px 10px;
+  font:600 12px/1 'Inter',sans-serif;
+}
+
+/* Footer */
+.site-footer{
+  padding: var(--s-6) clamp(16px,4vw,40px) var(--s-7);
+  display:flex; gap:10px; align-items:center; color:var(--accent);
+}
+.site-footer a{ color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(42,20,126,.25); }
+.dot{ opacity:.5; }
+
+/* Responsive tweaks */
+@media (max-width: 900px){
+  .marquee{ margin: var(--s-5) var(--s-3) var(--s-5); }
+  .section{ padding: 0 var(--s-3) var(--s-6); }
+}
