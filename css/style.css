@@ -203,11 +203,20 @@ a{color:inherit; text-decoration:none}
 /* ---------------------------------- */
 /* Footer                              */
 /* ---------------------------------- */
-.footer{ padding-top: 32px; }
-.footer__grid{
-  display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 32px; align-items:start;
-  padding-left: var(--content-left); padding-right: var(--content-right);
+/* Footer aligns exactly like a .section */
+.footer{
+  /* remove the separate padding-top; the shorthand below overrides it anyway */
+  padding: var(--section-top) var(--content-right) var(--section-bottom) var(--content-left);
 }
+
+.footer__grid{
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+  padding: 0;                 /* ← important */
+}
+
 .footer__email .footer__biglink{
   font-size: clamp(28px, 3.6vw, 40px);
   font-weight:600;
@@ -219,9 +228,14 @@ a{color:inherit; text-decoration:none}
 .statuscard__row{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px; }
 .statuscard__meta{ border-top:2px dotted rgba(92,66,197,.5); padding-top:8px; font-size:14px; }
 
+/* Meta row: also no padding here */
 .footer__meta{
-  display:flex; justify-content:space-between; opacity:.9; margin-top: 20px; font-size:14px;
-  padding-left: var(--content-left); padding-right: var(--content-right);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  font-size: 14px;
+  opacity: .9;
+  padding: 0;                 /* ← important */
 }
 
 /* ---------------------------------- */
