@@ -110,6 +110,58 @@ a{color:inherit; text-decoration:none}
 .pill--status .dot{ width:10px; height:10px; border-radius:50%; border:2px solid var(--outline); display:inline-block; }
 .avatar{ width:28px; height:28px; border:2px solid var(--outline); border-radius:999px; }
 
+
+
+/* Container aligns them in a row */
+/* --- Social dots (reference-like pastel + purple outline) --- */
+.nav__socials{ display:flex; gap:12px; align-items:center; }
+
+/* size + outline + hover */
+.social{
+  width:36px; height:36px; border-radius:50%;
+  border:2px solid var(--outline);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  background-color:#fff;             /* fallback */
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:18px 18px;
+}
+.social:hover{ transform:scale(1.08); box-shadow:0 0 6px rgba(0,0,0,.15); border-color:var(--outline-2); }
+
+/* palette close to the reference */
+:root{
+  --soc-pink:#f6cae7;
+  --soc-teal:#8ee0e3;
+  --soc-violet:#c8bcff;
+  --soc-yellow:#ffe08a;
+  /* icon color = your ink */
+}
+
+/* Email (envelope) */
+.social--email{
+  background-color:var(--soc-pink);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231d1455'><path d='M3 6h18a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zm1.6 2 6.9 5.2a1 1 0 0 0 1.2 0L19.6 8H4.6z'/></svg>");
+}
+
+/* LinkedIn (simple “in” mark) */
+.social--linkedin{
+  background-color:var(--soc-teal);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231d1455'><path d='M6.5 9.5H4V20h2.5V9.5zM5.2 4.5a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6zM20 20h-2.5v-5.4c0-1.5-.6-2.4-1.9-2.4-1 0-1.6.7-1.9 1.4-.1.2-.1.5-.1.8V20H11V9.5h2.4v1.4c.3-.5 1.2-1.7 3-1.7 2.1 0 3.6 1.4 3.6 4.3V20z'/></svg>");
+}
+
+/* GitHub (octocat head simplified) */
+.social--github{
+  background-color:var(--soc-yellow);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231d1455'><path d='M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.2-1.4-1.2-1.4-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 .1.9-.7 1.9-1 .1-.7.4-1.1.7-1.4-2.2-.3-4.5-1.1-4.5-4.9 0-1.1.4-2 .9-2.7-.1-.3-.4-1.2.1-2.4 0 0 .8-.3 2.7 1a9.2 9.2 0 0 1 4.9 0c2-1.3 2.7-1 2.7-1 .5 1.2.2 2.1.1 2.4.5.7.9 1.6.9 2.7 0 3.8-2.3 4.6-4.5 4.9.5.4.8 1 .8 2v2.9c0 .3.2.6.7.5A10 10 0 0 0 12 2z'/></svg>");
+}
+
+/* Instagram (camera glyph) */
+.social--instagram{
+  background-color:var(--soc-violet);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231d1455'><path d='M7 4h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zm5 4.2A4.8 4.8 0 1 0 16.8 13 4.8 4.8 0 0 0 12 8.2zm0 2.4A2.4 2.4 0 1 1 9.6 13 2.4 2.4 0 0 1 12 10.6zm4.5-3.1a1 1 0 1 0 1 1 1 1 0 0 0-1-1z'/></svg>");
+}
+
 /* ---------------------------------- */
 /* Hero                                */
 /* ---------------------------------- */
@@ -217,10 +269,10 @@ a{color:inherit; text-decoration:none}
   padding: 0;                 /* ← important */
 }
 
-.footer__email .footer__biglink{
-  font-size: clamp(28px, 3.6vw, 40px);
-  font-weight:600;
-  border-bottom:2px dotted rgba(92,66,197,.5);
+.footer__email .footer__biglink {
+  font-size: clamp(18px, 2vw, 24px);  /* ↓ much smaller */
+  font-weight: 600;
+  border-bottom: 2px dotted rgba(92,66,197,.5);
 }
 .footer__links a{ display:block; margin: 6px 0; text-decoration: underline; text-underline-offset: 4px; }
 .footer .subtle{ opacity:.9; }
