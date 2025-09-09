@@ -12,49 +12,43 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-
-  <!-- Custom cursor -->
   <div id="cursor" class="cursor"></div>
 
-  <!-- Intro: blue screen, typewriter text, then slides up -->
+  <!-- Intro -->
   <section id="intro" class="intro" aria-hidden="false">
     <div class="intro__bg"></div>
-    <div class="intro__content">
-      <h1 id="type" class="intro__type" aria-live="polite"></h1>
-    </div>
+    <div class="intro__content"><h1 id="type" class="intro__type"></h1></div>
   </section>
 
-  <!-- Page chrome -->
+  <!-- Left rail -->
   <aside class="side">
-    <div class="side__logo" aria-hidden="true">◎</div>
+    <div class="side__logo">◎</div>
     <div class="side__tag">DON'T  DIE  CURIOUS</div>
-    <div class="side__trash" aria-hidden="true">🗑</div>
+    <div class="side__trash">🗑</div>
   </aside>
 
+  <!-- Top nav -->
   <header class="nav">
     <nav class="nav__left">
       <a class="pill" href="#works" data-hover>Works</a>
       <a class="pill" href="#about" data-hover>About</a>
       <a class="pill" href="#feed" data-hover>Feed</a>
     </nav>
-
     <div class="nav__center">
       <a class="pill pill--status" href="#contact" data-hover>
-        <span class="dot" aria-hidden="true"></span>
-        Currently: booking projects for Sep, 2025 →
+        <span class="dot"></span>Currently: booking projects for Sep, 2025 →
       </a>
     </div>
-
     <div class="nav__right">
-      <img src="assets/avatar.svg" alt="" class="avatar" />
-      <img src="assets/avatar.svg" alt="" class="avatar" />
-      <img src="assets/avatar.svg" alt="" class="avatar" />
+      <span class="avatar badge"></span>
+      <span class="avatar badge"></span>
+      <span class="avatar badge"></span>
       <a class="pill" href="#" data-hover>+ 9 others</a>
     </div>
   </header>
 
   <main id="top" class="page">
-    <!-- Big outlined hero text -->
+    <!-- One-line hero marquee -->
     <section class="hero hero--marquee">
       <div class="hero__marquee" id="heroMarquee">
         <div class="hero__track" id="heroTrack">
@@ -66,61 +60,70 @@
       </div>
     </section>
 
-    <!-- Selected Works -->
+    <!-- Selected works -->
     <section id="works" class="section">
-      <div class="section__header">
-        <span class="eq">=</span>
-        <h2>Selected Works</h2>
-      </div>
-
+      <div class="section__header"><span class="eq">=</span><h2>Selected Works</h2></div>
       <ul class="works">
-        <li class="work" data-hover>
-          <a href="#" class="work__pill">
-            <span class="year">2024</span>
-            <span class="title">igma.im</span>
-            <span class="tags"><em>UI/UX</em><em>Development</em></span>
-          </a>
-        </li>
-        <li class="work" data-hover>
-          <a href="#" class="work__pill">
-            <span class="year">2023</span>
-            <span class="title">Kryptex Pool</span>
-            <span class="tags"><em>UI/UX</em><em>Development</em></span>
-          </a>
-        </li>
-        <li class="work" data-hover>
-          <a href="#" class="work__pill">
-            <span class="year">2022</span>
-            <span class="title">Quarks</span>
-            <span class="tags"><em>UI/UX</em><em>Motion</em></span>
-          </a>
-        </li>
-        <li class="work" data-hover>
-          <a href="#" class="work__pill">
-            <span class="year">2022</span>
-            <span class="title">Otskok</span>
-            <span class="tags"><em>Identity</em><em>Illustration</em></span>
-          </a>
-        </li>
-        <li class="work" data-hover>
-          <a href="#" class="work__pill">
-            <span class="year">2022</span>
-            <span class="title">Illustrándom</span>
-            <span class="tags"><em>Illustration</em><em>3D</em></span>
-          </a>
-        </li>
+        <li class="work" data-hover><a href="#" class="work__pill">
+          <span class="year">2024</span><span class="title">igma.im</span>
+          <span class="tags"><em>UI/UX</em><em>Development</em></span>
+        </a></li>
+        <li class="work" data-hover><a href="#" class="work__pill">
+          <span class="year">2023</span><span class="title">Kryptex Pool</span>
+          <span class="tags"><em>UI/UX</em><em>Development</em></span>
+        </a></li>
+        <li class="work" data-hover><a href="#" class="work__pill">
+          <span class="year">2022</span><span class="title">Quarks</span>
+          <span class="tags"><em>UI/UX</em><em>Motion</em></span>
+        </a></li>
+        <li class="work" data-hover><a href="#" class="work__pill">
+          <span class="year">2022</span><span class="title">Otskok</span>
+          <span class="tags"><em>Identity</em><em>Illustration</em></span>
+        </a></li>
+        <li class="work" data-hover><a href="#" class="work__pill">
+          <span class="year">2022</span><span class="title">Illustrándom</span>
+          <span class="tags"><em>Illustration</em><em>3D</em></span>
+        </a></li>
       </ul>
     </section>
 
     <section id="about" class="section">
       <h2>About</h2>
-      <p>Systems + ML‑minded engineer who enjoys playful interfaces and performant software.</p>
+      <p>Systems + ML-minded engineer who enjoys playful interfaces and performant software.</p>
     </section>
 
-    <section id="feed" class="section">
-      <h2>Feed</h2>
-      <p>Notes and experiments.</p>
-    </section>
+    <!-- Footer -->
+    <footer class="footer section">
+      <div class="footer__grid">
+        <div class="footer__email">
+          <a href="mailto:adam@example.com" class="footer__biglink">adam@example.com ↗</a>
+        </div>
+        <div class="footer__links">
+          <div>
+            <a href="#works">Works</a>
+            <a href="#about">About</a>
+            <a href="#feed">Feed</a>
+            <p class="small">Need a hand? I do freelance too. Pick a plan, send a brief, let’s jam.</p>
+            <a href="#" class="subtle">✧ Pigeonbite</a>
+          </div>
+        </div>
+        <div class="footer__status">
+          <div class="statuscard">
+            <div class="statuscard__row">
+              <span class="globe">🌐</span>
+              <span>@850 <small>.beat time</small></span>
+              <span class="globe">🌐</span>
+            </div>
+            <div class="statuscard__meta">out of signal range — <em>Offline</em> — Currently out of office</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__meta">
+        <span>2019–2025 ©</span>
+        <span>All rights reserved</span>
+        <span>Last Updated: Jun, 2025</span>
+      </div>
+    </footer>
   </main>
 
   <script src="js/app.js"></script>
