@@ -1,4 +1,9 @@
+/* =========================
+   YOUR VALUES, CLEANED UP
+   (no duplicates / conflicts)
+   ========================= */
 :root{
+  /* colors */
   --bg:#ffffff;
   --ink:#1d1455;
   --outline:#5c42c5;
@@ -7,27 +12,33 @@
   --white:#ffffff;
 
   /* layout */
-  --rail: 56px;          /* sidebar width */
-  --gutter-left: 88px;   /* master left column for nav/hero/sections/footer */
-  --rhythm: 18px;        /* baseline spacing */
+  --rail: 60px;                 /* ← final sidebar width (you had 56 & 60; 60 wins) */
+  --content-left: 190px;        /* ← your current left content inset */
+  --content-right: 130px;       /* ← your current right content inset */
+  --rhythm: 18px;               /* baseline spacing used on nav top padding */
+
+  /* vertical rhythm (keep your numbers) */
+  --nav-bottom: 28px;           /* extra space after the nav */
+  --hero-gap: 40px;             /* gap after hero before section title */
+  --section-top: 32px;          /* section padding top */
+  --section-bottom: 72px;       /* section padding bottom */
+  --works-gap: 16px;            /* gap between work rows */
 
   /* sizes */
   --pill-r: 999px;
   --pill-pad-y: 10px;
   --pill-pad-x: 16px;
   --work-r: 18px;
-  --work-pad-y: 18px;
+  --work-pad-y: 16px;           /* you were effectively using 16 on rows */
   --work-pad-x: 22px;
-  /* Outline reading heavy or light*/
-  --stroke: 2.0px;       /* hero outline weight */
 
-  --gutter-right: 88px;    /* mirror of left on desktop (ref feels symmetric) */
-  --section-top: 24px;     /* top padding for sections */
-  --section-bottom: 56px;  /* bottom padding for sections */
-  --hero-gap: 28px;        /* space between hero and "Selected Works" header */
-  --works-gap: 14px;       /* vertical gap between work rows */
+  /* hero outline weight */
+  --stroke: 2.0px;
 }
 
+/* ---------------------------------- */
+/* Base                                */
+/* ---------------------------------- */
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
@@ -38,7 +49,9 @@ body{
 img{display:block; max-width:100%}
 a{color:inherit; text-decoration:none}
 
-/* cursor */
+/* ---------------------------------- */
+/* Custom cursor                       */
+/* ---------------------------------- */
 .cursor{
   position:fixed; left:0; top:0; width:24px; height:24px; border-radius:50%;
   border:2px solid var(--outline);
@@ -49,7 +62,9 @@ a{color:inherit; text-decoration:none}
 .cursor.cursor--down{ background: var(--outline-2); }
 .cursor.cursor--hover{ background: var(--fill); border-color: var(--outline-2); }
 
-/* intro */
+/* ---------------------------------- */
+/* Intro gate                          */
+/* ---------------------------------- */
 .intro{ position:fixed; inset:0; z-index:9999; overflow:hidden; display:grid; place-items:center; }
 .intro__bg{ position:absolute; inset:0; background:#121438; }
 .intro__content{ position:relative; z-index:1; color:#cfd3ff; }
@@ -57,7 +72,9 @@ a{color:inherit; text-decoration:none}
 .intro.intro--slide{ animation:introSlide 900ms cubic-bezier(.22,.9,.24,1) forwards; }
 @keyframes introSlide{ to{ transform: translateY(-100%); } }
 
-/* left rail */
+/* ---------------------------------- */
+/* Left rail                           */
+/* ---------------------------------- */
 .side{
   position:fixed; inset:0 auto 0 0;
   width:var(--rail);
@@ -71,10 +88,13 @@ a{color:inherit; text-decoration:none}
   letter-spacing:.18em; font-weight:700; font-size:12px; color:var(--outline); }
 .side__trash{ font-size:18px; color:var(--outline); margin-bottom:8px; }
 
-/* header */
+/* ---------------------------------- */
+/* Header / Nav                        */
+/* ---------------------------------- */
 .nav{
   position: sticky; top: 0; z-index: 5; background: #fff;
-  padding: var(--rhythm) var(--gutter-right) 0 var(--gutter-left);
+  /* top | right | bottom | left */
+  padding: var(--rhythm) var(--content-right) var(--nav-bottom) var(--content-left);
   display: flex; align-items: center; justify-content: space-between; gap: 18px;
 }
 .nav__left, .nav__right, .nav__center{ display:flex; align-items:center; gap:14px; }
@@ -90,15 +110,17 @@ a{color:inherit; text-decoration:none}
 .pill--status .dot{ width:10px; height:10px; border-radius:50%; border:2px solid var(--outline); display:inline-block; }
 .avatar{ width:28px; height:28px; border:2px solid var(--outline); border-radius:999px; }
 
-/* hero */
+/* ---------------------------------- */
+/* Hero                                */
+/* ---------------------------------- */
 .hero--marquee{ overflow:hidden; }
-/* Hero */
+
 .hero__marquee{
   position: relative;
-  height: clamp(100px, 17vw, 160px);
-  padding-left: var(--gutter-left);
-  padding-right: var(--gutter-right);   /* NEW: keep hero’s right edge aligned */
-  margin-bottom: var(--hero-gap);       /* NEW: space before the section title */
+  height: clamp(200px, 20vw, 200px);        /* keep your exact height clamp */
+  padding-left: var(--content-left);
+  padding-right: var(--content-right);
+  margin-bottom: var(--hero-gap);
 }
 
 .hero__track{
@@ -110,65 +132,60 @@ a{color:inherit; text-decoration:none}
   color:transparent;
   -webkit-text-stroke: var(--stroke) var(--outline);
   text-stroke: var(--stroke) var(--outline);
-  /* Tiny scaling nudge to font size*/
-  font-size: clamp(54px, 10.8vw, 136px);
+  font-size: clamp(54px, 10.8vw, 136px);    /* your font sizing */
   letter-spacing:.03em;
 }
 .hero__track span{ padding-right: 2.2rem; }
 
-/* sections */
+/* ---------------------------------- */
+/* Sections                            */
+/* ---------------------------------- */
 .section{
-  padding: var(--section-top) var(--gutter-right) var(--section-bottom) var(--gutter-left);
+  padding: var(--section-top) var(--content-right) var(--section-bottom) var(--content-left);
 }
-
 .section__header{
   display:flex; align-items:center; gap:10px;
-  margin: 0 0 12px;  /* tighter top margin, small gap below */
+  margin: 0 0 12px;
 }
-.section__header .eq{ border:2px solid var(--outline); padding:2px 8px; border-radius:8px; font-weight:700; color:var(--outline); }
+.section__header .eq{
+  border:2px solid var(--outline); padding:2px 8px; border-radius:8px; font-weight:700; color:var(--outline);
+}
 
-/* works list */
-
-/* List spacing */
+/* ---------------------------------- */
+/* Works list                          */
+/* ---------------------------------- */
 .works{
-  list-style:none; margin: 8px 0 0; padding:0;
-  display:flex; flex-direction:column; gap: var(--works-gap);
+  list-style: none; margin: 8px 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--works-gap);
 }
-/* Row grid + padding */
+
 .work__pill{
-  display:grid; grid-template-columns: 88px 1fr auto;  /* was 96px */
+  display:grid; grid-template-columns: 88px 1fr auto;
   align-items:center; gap:16px;
-  border:2px solid var(--outline); border-radius:18px;
-  padding: 16px 22px;     /* was 18px 22px; slightly shorter like ref */
+  border:2px solid var(--outline); border-radius:var(--work-r);
+  padding: var(--work-pad-y) var(--work-pad-x);
   background:#fff;
   transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
   position:relative;
 }
-
-/* Year and tag sizing */
-.work__pill .year{ opacity:.75; font-weight:600; font-size:13px; } /* smaller tick */
-.work__pill .title{ font-size:22px; font-weight:600; }
-.work__pill .tags{ display:flex; gap:10px; }
-.work__pill .tags em{
-  font-style:normal; border:2px solid var(--outline);
-  padding: 5px 10px;          /* a touch slimmer */
-  border-radius:999px; font-size:14px; line-height:1;
-}
-
 .work__pill:hover{ background:var(--fill); border-color:var(--outline-2); box-shadow:0 6px 0 var(--outline); }
-.work__pill .year{ opacity:.75; font-weight:600; font-size:14px; }
+
+.work__pill .year{ opacity:.75; font-weight:600; font-size:13px; }
 .work__pill .title{ font-size:22px; font-weight:600; }
 .work__pill .tags{ display:flex; gap:10px; }
 .work__pill .tags em{
   font-style:normal; border:2px solid var(--outline);
-  padding:6px 10px; border-radius:999px; font-size:14px;
+  padding:5px 10px; border-radius:999px; font-size:14px; line-height:1;
 }
 
-/* footer */
+/* ---------------------------------- */
+/* Footer                              */
+/* ---------------------------------- */
 .footer{ padding-top: 32px; }
-
-.footer__grid{ gap: 32px; }
-.footer__grid{ display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 32px; align-items:start; }
+.footer__grid{
+  display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 32px; align-items:start;
+  padding-left: var(--content-left); padding-right: var(--content-right);
+}
 .footer__email .footer__biglink{
   font-size: clamp(28px, 3.6vw, 40px);
   font-weight:600;
@@ -180,25 +197,35 @@ a{color:inherit; text-decoration:none}
 .statuscard__row{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px; }
 .statuscard__meta{ border-top:2px dotted rgba(92,66,197,.5); padding-top:8px; font-size:14px; }
 
-footer__meta{ margin-top: 24px; }
+.footer__meta{
+  display:flex; justify-content:space-between; opacity:.9; margin-top: 20px; font-size:14px;
+  padding-left: var(--content-left); padding-right: var(--content-right);
+}
 
-.footer__meta{ display:flex; justify-content:space-between; opacity:.9; margin-top: 20px; font-size:14px; }
-
-/* page */
+/* ---------------------------------- */
+/* Page misc                           */
+/* ---------------------------------- */
 .page{ position:relative; }
 .section h2{ margin:8px 0 0; }
 
-/* responsive */
+/* ---------------------------------- */
+/* Responsive                          */
+/* ---------------------------------- */
 @media (max-width: 1024px){
-  :root{ --gutter-left: 80px; }
+  :root{ --content-left: 80px; --content-right: 80px; } /* your breakpoint intent */
   .footer__grid{ grid-template-columns: 1fr; }
 }
+
 @media (max-width: 900px){
-  :root{ --rail: 44px; --gutter-left: 72px; --gutter-right: 24px; }
+  :root{
+    --rail: 44px;
+    --content-left: 72px;
+    --content-right: 24px;
+  }
   .side{ width: var(--rail); }
-  .nav{ padding-left: var(--gutter-left); padding-right: var(--gutter-right); }
-  .section{ padding-left: var(--gutter-left); padding-right: var(--gutter-right); }
-  .hero__marquee{ padding-left: var(--gutter-left); padding-right: var(--gutter-right); }
+  .nav{ padding-left: var(--content-left); padding-right: var(--content-right); }
+  .section{ padding-left: var(--content-left); padding-right: var(--content-right); }
+  .hero__marquee{ padding-left: var(--content-left); padding-right: var(--content-right); }
   .work__pill{ grid-template-columns:80px 1fr; }
   .work__pill .tags{ display:none; }
 }
