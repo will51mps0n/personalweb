@@ -67,13 +67,35 @@ a{color:inherit; text-decoration:none}
 .avatar{ width:28px; height:28px; border:2px solid var(--outline); border-radius:999px; }
 
 /* Hero */
-.hero{ padding:40px 24px 0 80px; }
-.hero__text{ font-family: 'Playfair Display', serif; font-weight:600; color:transparent;
+.hero--marquee {
+  overflow: hidden;
+  border-bottom: 2px solid rgba(92,66,197,.25);
+}
+
+.hero__marquee {
+  position: relative;
+  height: clamp(80px, 15vw, 140px);
+}
+
+.hero__track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  color: transparent;
   -webkit-text-stroke: 2px var(--outline);
   text-stroke: 2px var(--outline);
-  display:flex; gap:24px; flex-wrap:wrap; font-size:min(9vw, 140px);
+  font-size: clamp(48px, 10vw, 120px); 
+  letter-spacing: .06em;
 }
-.hero__text .sep{ font-family: Inter, sans-serif; -webkit-text-stroke: 2px var(--outline); }
+
+.hero__track span {
+  padding-right: 2rem;
+}
+
 
 /* Sections */
 .section{ padding:20px 24px 40px 80px; }
