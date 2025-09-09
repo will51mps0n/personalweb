@@ -12,10 +12,10 @@
   --white:#ffffff;
 
   /* layout */
-  --rail: 60px;                 /* ← final sidebar width (you had 56 & 60; 60 wins) */
+  --rail: 70px;                 /* ← final sidebar width (you had 56 & 60; 60 wins) */
   --content-left: 190px;        /* ← your current left content inset */
   --content-right: 130px;       /* ← your current right content inset */
-  --rhythm: 18px;               /* baseline spacing used on nav top padding */
+  --nav-top: 60px;            /* baseline spacing used on nav top padding */
 
   /* vertical rhythm (keep your numbers) */
   --nav-bottom: 28px;           /* extra space after the nav */
@@ -79,9 +79,9 @@ a{color:inherit; text-decoration:none}
   position:fixed; inset:0 auto 0 0;
   width:var(--rail);
   border-right:2px solid var(--outline);
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:space-between;
-  padding:16px 0; z-index:10;
+  display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+  padding: var(--nav-top) 0 16px 0;  /* ← here */
+  z-index:10;
 }
 .side__logo{ font-size:22px; margin-top:8px; color:var(--outline); }
 .side__tag{ writing-mode:vertical-rl; transform:rotate(180deg);
@@ -94,7 +94,7 @@ a{color:inherit; text-decoration:none}
 .nav{
   position: sticky; top: 0; z-index: 5; background: #fff;
   /* top | right | bottom | left */
-  padding: var(--rhythm) var(--content-right) var(--nav-bottom) var(--content-left);
+  padding: var(--nav-top) var(--content-right) var(--nav-bottom) var(--content-left);
   display: flex; align-items: center; justify-content: space-between; gap: 18px;
 }
 .nav__left, .nav__right, .nav__center{ display:flex; align-items:center; gap:14px; }
@@ -113,29 +113,51 @@ a{color:inherit; text-decoration:none}
 /* ---------------------------------- */
 /* Hero                                */
 /* ---------------------------------- */
-.hero--marquee{ overflow:hidden; }
-
-.hero__marquee{
-  position: relative;
-  height: clamp(200px, 20vw, 200px);        /* keep your exact height clamp */
-  padding-left: var(--content-left);
-  padding-right: var(--content-right);
-  margin-bottom: var(--hero-gap);
+.hero--marquee {
+  overflow: hidden;
 }
 
-.hero__track{
-  position:absolute; top:50%; left:0;
+.hero__marquee {
+  position: relative;
+  height: clamp(200px, 20vw, 200px);
+  padding-left: var(--content-left);
+  margin-bottom: var(--hero-gap);
+  overflow: hidden; /* still helpful */
+}
+
+/* left curtain only */
+.hero__marquee::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--rail);  /* match your content inset */
+  background: var(--bg);       /* same as page background */
+  z-index: 2;                  /* above the track */
+  pointer-events: none;
+}
+
+.hero__track {
+  position: absolute;
+  top: 50%;
+  left: 0;
   transform: translateY(-50%);
-  white-space:nowrap;
-  font-family:'Playfair Display', serif;
-  font-weight:600;
-  color:transparent;
+  white-space: nowrap;
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  color: transparent;
   -webkit-text-stroke: var(--stroke) var(--outline);
   text-stroke: var(--stroke) var(--outline);
-  font-size: clamp(54px, 10.8vw, 136px);    /* your font sizing */
-  letter-spacing:.03em;
+  font-size: clamp(54px, 10.8vw, 136px);
+  letter-spacing: .03em;
+  z-index: 1; /* sit below the curtain */
 }
-.hero__track span{ padding-right: 2.2rem; }
+
+.hero__track span {
+  padding-right: 2.2rem;
+}
+
 
 /* ---------------------------------- */
 /* Sections                            */
