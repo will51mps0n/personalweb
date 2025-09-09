@@ -69,3 +69,39 @@
   // slight delay to mimic reference
   setTimeout(tick, 400);
 })();
+
+// ===== One-line hero marquee with mouse-driven inertia =====
+(function(){
+  const track = document.getElementById('heroTrack');
+  if (!track) return;
+
+  let pos = 0, vx = 0;
+  const friction = 0.92;
+  const sensitivity = 0.35;
+  let lastX = null;
+  let cycle = track.scrollWidth / 2;
+
+  function loop(){
+    pos += vx;
+    if (pos <= -cycle) pos += cycle;
+    if (pos > 0) pos -= cycle;
+    track.style.transform = `translate3d(${pos}px, -50%, 0)`;
+    vx *= friction;
+    requestAnimationFrame(loop);
+  }
+
+  function onMove(e){
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    if (lastX !== null){
+      const dx = x - lastX;
+      vx += dx * sensitivity;
+    }
+    lastX = x;
+  }
+
+  window.addEventListener('mousemove', onMove, { passive:true });
+  window.addEventListener('touchmove', onMove, { passive:true });
+  window.addEventListener('resize', () => { cycle = track.scrollWidth / 2; });
+
+  loop();
+})();
