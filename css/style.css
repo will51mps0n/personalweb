@@ -269,12 +269,92 @@ a{color:inherit; text-decoration:none}
   padding: 0;                 /* ← important */
 }
 
+.footer__socials {
+  margin-top: 12px;   /* small gap above */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer__socials a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.footer__socials .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* brand colors */
+.dot--github { background: #24292f; }
+.dot--linkedin { background: #0a66c2; }
+.dot--instagram { background: radial-gradient(circle at 30% 30%, #feda75, #d62976, #962fbf, #4f5bd5); }
+
+
 .footer__email .footer__biglink {
   font-size: clamp(18px, 2vw, 24px);  /* ↓ much smaller */
   font-weight: 600;
   border-bottom: 2px dotted rgba(92,66,197,.5);
 }
-.footer__links a{ display:block; margin: 6px 0; text-decoration: underline; text-underline-offset: 4px; }
+/* ----- footer middle column becomes 2 cols (menu | socials) ----- */
+.footer__links{
+  display:grid;
+  grid-template-columns: auto auto;
+  gap: 48px;                    /* space between the two lists */
+  align-items:start;
+}
+
+/* Reset lists */
+.footer__menu,
+.footer__social{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+/* Link styling (keeps your underline look) */
+.footer__menu a,
+.footer__social a{
+  display:inline-block;
+  margin: 6px 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: var(--ink);
+}
+
+/* Each social item: dot + text inline */
+.footer__social li{
+  display:flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* The small colored dots (match the reference vibe) */
+.footer__social .dot{
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--outline);
+  display:inline-block;
+}
+
+/* Colors for networks */
+.dot--li{ background: #79A7FF; }                      /* LinkedIn-ish blue tint */
+.dot--gh{ background: #1F2330; }                      /* GitHub dark */
+.dot--ig{ background: radial-gradient(circle at 30% 30%, #FFB069 0%, #FF6CAB 45%, #7F61FF 100%); } /* IG blend */
+
+/* Mobile: stack the two lists */
+@media (max-width: 900px){
+  .footer__links{ grid-template-columns: 1fr; gap: 18px; }
+}
 .footer .subtle{ opacity:.9; }
 .statuscard{ border:2px solid var(--outline); border-radius:14px; padding:10px 12px; }
 .statuscard__row{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px; }
