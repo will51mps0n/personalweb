@@ -16,9 +16,8 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   });
 
   const finish = () => {
-    // slide up and remove from flow
     intro.classList.add('intro--slide');
-    setTimeout(() => (intro.style.display = 'none'), 1000);
+    setTimeout(() => (intro.style.display = 'none'), 900);
   };
 
   anim.addEventListener('complete', () => setTimeout(finish, 150));
@@ -50,33 +49,39 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   });
 })();
 
-/* ------------------ HERO MARQUEE ------------------ */
-(function marquee(){
-  const track = document.getElementById('heroTrack');
-  if (!track) return;
+/* ------------------ NAV + HERO REACTIVE ------------------ */
+(function reactive(){
+  const header = document.getElementById('siteHeader');
+  const heroInner = document.querySelector('.hero-inner');
+  if (!header || !heroInner) return;
 
-  let pos = 0, vx = 0;
-  const friction = REDUCED ? 1 : 0.92;
-  const sens      = REDUCED ? 0 : 0.35;
-  let lastX = null, cycle = track.scrollWidth / 2;
+  let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY || document.documentElement.scrollTop;
 
-  const render = () => track.style.transform = `translate3d(${pos}px,-50%,0)`;
-  const recalc = () => (cycle = track.scrollWidth / 2);
+    // Compact header
+    if (y > 30) header.classList.add('nav--compact');
+    else header.classList.remove('nav--compact');
 
-  const loop = () => {
-    pos += vx;
-    if (pos <= -cycle) pos += cycle;
-    if (pos > 0)       pos -= cycle;
-    render(); vx *= friction;
-    if (!REDUCED) requestAnimationFrame(loop);
-  };
+    // Lift hero content a touch
+    const maxLift = 24;
+    const lift = Math.min(maxLift, y * 0.15);
+    heroInner.style.transform = `translateY(-${lift}px)`;
 
-  window.addEventListener('mousemove', (e)=>{
-    if (REDUCED) return;
-    if (lastX !== null) vx += (e.clientX - lastX) * sens;
-    lastX = e.clientX;
+    lastY = y;
   }, {passive:true});
+})();
 
-  window.addEventListener('resize', recalc);
-  render(); if (!REDUCED) loop();
+/* ------------------ INTERSECTION REVEAL ------------------ */
+(function reveal(){
+  const io = new IntersectionObserver((entries)=>{
+    for(const e of entries){
+      if(e.isIntersecting){
+        e.target.classList.add('reveal--in');
+        io.unobserve(e.target);
+      }
+    }
+  }, {root:null, rootMargin:"0px 0px -10% 0px", threshold:0.1});
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 })();
