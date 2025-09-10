@@ -57,6 +57,35 @@ var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!REDUCED) loop();
 })();
 
+// Lottie intro animation
+document.addEventListener("DOMContentLoaded", () => {
+  const intro = document.getElementById("intro");
+  const container = document.getElementById("lottie-hello");
+
+  if (!container) return;
+
+  const anim = lottie.loadAnimation({
+    container: container,
+    renderer: "svg",
+    loop: false,
+    autoplay: true,
+    path: "assets/cat.json" // <-- your animation JSON
+  });
+
+  // When the animation finishes, trigger the slide-up
+  anim.addEventListener("complete", () => {
+    setTimeout(() => {
+      intro.classList.add("intro--slide");
+    }, 200); // small delay feels smoother
+  });
+
+  // Safety: if it fails to load, slide up anyway
+  anim.addEventListener("data_failed", () => {
+    intro.classList.add("intro--slide");
+  });
+});
+
+
 /* =========================================================
    Intro typewriter → slide-up reveal
    ========================================================= */

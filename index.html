@@ -14,11 +14,19 @@
 <body>
   <div id="cursor" class="cursor"></div>
 
-  <!-- Intro -->
-  <section id="intro" class="intro" aria-hidden="false">
-    <div class="intro__bg"></div>
-    <div class="intro__content"><h1 id="type" class="intro__type"></h1></div>
-  </section>
+    <!-- Intro -->
+    <section id="intro" class="intro" aria-hidden="false">
+      <div class="intro__bg"></div>
+
+      <!-- Lottie container (replaces the #type element) -->
+      <div class="intro__content">
+        <div id="lottie-hello" class="intro__lottie" aria-label="Intro animation"></div>
+        <noscript><h1 class="intro__type">Hi, I’m Adam Simpson</h1></noscript>
+      </div>
+    </section>
+
+    <!-- Load Lottie (minified) just before your app.js -->
+    <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
 
   <!-- Left rail -->
   <aside class="side">
@@ -43,9 +51,9 @@
     </div>
     <div class="nav__socials">
       <a href="mailto:adwisi@umich.edu" target="_blank" rel="noopener" class="social social--email" aria-label="Email"></a>
-      <a href="https://www.linkedin.com/in/YOUR_USERNAME" target="_blank" rel="noopener" class="social social--linkedin" aria-label="LinkedIn"></a>
-      <a href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener" class="social social--github" aria-label="GitHub"></a>
-      <a href="https://instagram.com/YOUR_USERNAME" target="_blank" rel="noopener" class="social social--instagram" aria-label="Instagram"></a>
+      <a href="https://www.linkedin.com/in/adam-simpson-b6a3201a7/" target="_blank" rel="noopener" class="social social--linkedin" aria-label="LinkedIn"></a>
+      <a href="https://github.com/will51mps0n" target="_blank" rel="noopener" class="social social--github" aria-label="GitHub"></a>
+      <a href="https://instagram.com/adam.simps0n" target="_blank" rel="noopener" class="social social--instagram" aria-label="Instagram"></a>
     </div>
   </header>
 
@@ -64,74 +72,121 @@
 
     <!-- Selected works -->
     <section id="works" class="section">
-      <div class="section__header"><span class="eq">=</span><h2>Selected Projects</h2></div>
-      <ul class="works">
-        <li class="work" data-hover><a href="#" class="work__pill">
-          <span class="year">2025</span><span class="title">Networked-Fs-Cpp</span>
-          <span class="tags"><em>C++</em><em>Linux</em><em>OS Kernel Development</em></span>
-        </a></li>
-        <li class="work" data-hover><a href="#" class="work__pill">
-          <span class="year">2024</span><span class="title">Othello-AG0</span>
-          <span class="tags"><em>Python</em><em>AI/ML</em><em>Reinforcement Learning</em></span>
-        </a></li>
-        <li class="work" data-hover><a href="#" class="work__pill">
-          <span class="year">2025</span><span class="title">OS-Pager</span>
-          <span class="tags"><em>C++</em><em>OS Memory Management</em></span>
-        </a></li>
-        <li class="work" data-hover><a href="#" class="work__pill">
-          <span class="year">2024</span><span class="title">Othello-AG0</span>
-          <span class="tags"><em>Python</em><em>AI/ML</em><em>Reinforcement Learning</em></span>
-        </a></li>
-        <li class="work" data-hover><a href="#" class="work__pill">
-          <span class="year">2024</span><span class="title">Image-Convolutional-Neural-Network</span>
-          <span class="tags"><em>Python</em><em>AI/ML</em><em>Image Processing</em></span>
-        </a></li>
-      </ul>
+      <div class="section__header"><span class="eq">=</span><h2>Project Highlights</h2></div>
+        <ul class="works works--proj">
+          <!-- Networked-Fs-Cpp -->
+          <li class="work" data-accent="#F5EAFE">
+            <a href="#" class="work__pill">
+              <span class="leftcell">
+                <img src="img/proj/cpp.svg" class="row-icon" alt="C++" loading="lazy">
+                <span class="year">2025</span>
+              </span>
+              <span class="title">Networked-Fs-Cpp</span>
+              <span class="tags"><em>C++</em><em>Linux</em><em>OS Kernel Development</em></span>
+            </a>
+          </li>
+
+          <!-- Othello-AG0 -->
+          <li class="work" data-accent="#E9F6FF">
+            <a href="#" class="work__pill">
+              <span class="leftcell">
+                <img src="img/proj/ml.svg" class="row-icon" alt="AI/ML" loading="lazy">
+                <span class="year">2024</span>
+              </span>
+              <span class="title">Othello-AG0</span>
+              <span class="tags"><em>Python</em><em>AI/ML</em><em>Reinforcement Learning</em></span>
+            </a>
+          </li>
+
+          <!-- OS-Pager -->
+          <li class="work" data-accent="#FFF3E6">
+            <a href="#" class="work__pill">
+              <span class="leftcell">
+                <img src="img/proj/memory.svg" class="row-icon" alt="Memory / OS" loading="lazy">
+                <span class="year">2025</span>
+              </span>
+              <span class="title">OS-Pager</span>
+              <span class="tags"><em>C++</em><em>OS Memory Management</em></span>
+            </a>
+          </li>
+
+          <!-- Image-Convolutional-Neural-Network -->
+          <li class="work" data-accent="#F0FFF4">
+            <a href="#" class="work__pill">
+              <span class="leftcell">
+                <img src="img/proj/vision.svg" class="row-icon" alt="Computer Vision" loading="lazy">
+                <span class="year">2024</span>
+              </span>
+              <span class="title">Image-Convolutional-Neural-Network</span>
+              <span class="tags"><em>Python</em><em>AI/ML</em><em>Image Processing</em></span>
+            </a>
+          </li>
+        </ul>
     </section>
 
     <!-- Selected experiences -->
-  <section id="experience" class="section">
-    <div class="section__header"><span class="eq">=</span><h2>Selected Experiences</h2></div>
+ <section id="experience" class="section">
+  <div class="section__header"><span class="eq">=</span><h2>Selected Experiences</h2></div>
 
-    <ul class="works works--exp">
-      <!-- 2025 · Michigan Medicine -->
-      <li class="work" data-hover>
-        <a href="#" class="work__pill">
+  <ul class="works works--exp">
+    <!-- Michigan Medicine -->
+    <li class="work" data-accent="#F2E9FF">
+      <a href="#" class="work__pill">
+        <span class="leftcell">
+          <img src="img/exp/med.svg" class="exp-icon" alt="Michigan Medicine" loading="lazy">
           <span class="year">2025</span>
-          <span class="title">Michigan Medicine — Software Developer</span>
-          <span class="tags">
-            <em>AI/ML</em>
-            <em>Image Processing</em>
-          </span>
-        </a>
-      </li>
+        </span>
+        <span class="title">Michigan Medicine </span>
+        <span class="tags">
+          <em>AI/ML</em><em>Image Processing</em><em>Python</em>
+        </span>
+      </a>
+    </li>
 
-      <!-- 2025 · American Airlines -->
-      <li class="work" data-hover>
-        <a href="#" class="work__pill">
+    <!-- American Airlines -->
+    <li class="work" data-accent="#E9F6FF">
+      <a href="#" class="work__pill">
+        <span class="leftcell">
+          <img src="img/exp/aa.svg" class="exp-icon" alt="American Airlines" loading="lazy">
           <span class="year">2025</span>
-          <span class="title">American Airlines — Machine Learning</span>
-          <span class="tags">
-            <em>Data Science</em>
-            <em>AI/ML</em>
-          </span>
-        </a>
-      </li>
+        </span>
+        <span class="title">American Airlines</span>
+        <span class="tags">
+          <em>ML</em><em>Data Science</em><em>MLOps</em>
+        </span>
+      </a>
+    </li>
 
-      <!-- 2024 · Homestream -->
-      <li class="work" data-hover>
-        <a href="#" class="work__pill">
+    <!-- Homestream -->
+    <li class="work" data-accent="#FFF3E6">
+      <a href="#" class="work__pill">
+        <span class="leftcell">
+          <img src="img/exp/homestream.svg" class="exp-icon" alt="Homestream" loading="lazy">
           <span class="year">2024</span>
-          <span class="title">Homestream — AI/ML Full-Stack</span>
-          <span class="tags">
-            <em>UI/UX</em>
-            <em>Full Stack</em>
-            <em>AI/ML</em>
-          </span>
-        </a>
-      </li>
-    </ul>
-  </section>
+        </span>
+        <span class="title">Homestream</span>
+        <span class="tags">
+          <em>AI/ML</em><em>Full-Stack</em><em>UI/UX</em>
+        </span>
+      </a>
+    </li>
+
+    <!-- NEW: NASA -->
+    <li class="work" data-accent="#EDF2FF">
+      <a href="#" class="work__pill">
+        <span class="leftcell">
+          <img src="img/exp/nasa.svg" class="exp-icon" alt="NASA" loading="lazy">
+          <span class="year">2023</span>
+        </span>
+        <span class="title">NASA</span>
+        <span class="tags">
+          <em>Research</em><em>Aerospace</em><em>Simulations</em>
+        </span>
+      </a>
+    </li>
+  </ul>
+</section>
+
 
 
     <!-- Footer -->
@@ -152,32 +207,71 @@
       <ul class="footer__social">
         <li>
           <span class="dot dot--li" aria-hidden="true"></span>
-          <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="https://www.linkedin.com/in/adam-simpson-b6a3201a7/" target="_blank" rel="noopener">LinkedIn ↗</a>
         </li>
         <li>
           <span class="dot dot--gh" aria-hidden="true"></span>
-          <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://github.com/will51mps0n" target="_blank" rel="noopener">GitHub ↗</a>
         </li>
         <li>
           <span class="dot dot--ig" aria-hidden="true"></span>
-          <a href="https://instagram.com/yourusername" target="_blank" rel="noopener">Instagram ↗</a>
+          <a href="https://instagram.com/adam.simps0n" target="_blank" rel="noopener">Instagram ↗</a>
         </li>
       </ul>
     </div>
 
         <div class="footer__status">
-          <div class="statuscard">
-            <div class="statuscard__row">
-              <span class="globe">🌐</span>
-              <span>@850 <small>.beat time</small></span>
-              <span class="globe">🌐</span>
+          <div class="stackcard">
+            <div class="stackcard__header">
+              <span class="stackcard__spark">✦</span>
+              <span class="stackcard__title">My Stack</span>
             </div>
-            <div class="statuscard__meta">out of signal range — <em>Offline</em> — Currently out of office</div>
+
+            <p class="stackcard__sub">
+              Python, C++, AI, and web technologies across diverse projects.
+            </p>
+
+            <!-- Row 1 → slides left -->
+          <!-- Row 1 -->
+            <div class="stackcard__row stackcard__row--a">
+              <ul class="stackcard__track">
+                <li class="chip"><span class="chip__icon chip__icon--python"></span>Python</li>
+                <li class="chip"><span class="chip__icon chip__icon--cpp"></span>C++</li>
+                <li class="chip"><span class="chip__icon chip__icon--sql"></span>SQL</li>
+                <li class="chip"><span class="chip__icon chip__icon--js"></span>JS</li>
+                <li class="chip"><span class="chip__icon chip__icon--react"></span>React</li>
+              </ul>
+              <ul class="stackcard__track" aria-hidden="true">
+                <li class="chip"><span class="chip__icon chip__icon--python"></span>Python</li>
+                <li class="chip"><span class="chip__icon chip__icon--cpp"></span>C++</li>
+                <li class="chip"><span class="chip__icon chip__icon--sql"></span>SQL</li>
+                <li class="chip"><span class="chip__icon chip__icon--js"></span>JS</li>
+                <li class="chip"><span class="chip__icon chip__icon--react"></span>React</li>
+              </ul>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="stackcard__row stackcard__row--b">
+              <ul class="stackcard__track">
+                <li class="chip"><span class="chip__icon chip__icon--ts"></span>TypeScript</li>
+                <li class="chip"><span class="chip__icon chip__icon--node"></span>Node</li>
+                <li class="chip"><span class="chip__icon chip__icon--next"></span>Next.js</li>
+                <li class="chip"><span class="chip__icon chip__icon--tw"></span>Tailwind</li>
+                <li class="chip"><span class="chip__icon chip__icon--docker"></span>Docker</li>
+              </ul>
+              <ul class="stackcard__track" aria-hidden="true">
+                <li class="chip"><span class="chip__icon chip__icon--ts"></span>TypeScript</li>
+                <li class="chip"><span class="chip__icon chip__icon--node"></span>Node</li>
+                <li class="chip"><span class="chip__icon chip__icon--next"></span>Next.js</li>
+                <li class="chip"><span class="chip__icon chip__icon--tw"></span>Tailwind</li>
+                <li class="chip"><span class="chip__icon chip__icon--docker"></span>Docker</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
       <div class="footer__meta">
-        <span>2019–2025 ©</span>
+        <span>2025 ©</span>
         <span>Last Updated: Sep, 2025</span>
       </div>
     </footer>

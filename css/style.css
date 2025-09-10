@@ -49,6 +49,19 @@ body{
 img{display:block; max-width:100%}
 a{color:inherit; text-decoration:none}
 
+/* size/position like your old headline */
+.intro__lottie{
+  width: clamp(240px, 48vw, 560px);
+  height: clamp(120px, 24vw, 300px);
+  display: block;
+}
+
+/* Respect reduced motion: if motion is reduced we’ll skip the animation in JS,
+   but this ensures the block doesn’t flash weird sizes */
+@media (prefers-reduced-motion: reduce){
+  .intro__lottie{ display:none; }
+}
+
 /* ---------------------------------- */
 /* Custom cursor                       */
 /* ---------------------------------- */
@@ -397,3 +410,198 @@ a{color:inherit; text-decoration:none}
   .work__pill{ grid-template-columns:80px 1fr; }
   .work__pill .tags{ display:none; }
 }
+
+/* ---------------------------------- */
+/* Footer “My Stack” card             */
+/* ---------------------------------- */
+.stackcard{
+  border:2px solid var(--outline);
+  border-radius:18px;
+  background:#fff;
+  padding:14px 16px;
+}
+
+.stackcard__header{
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:6px;
+}
+.stackcard__spark{ font-size:18px; }
+.stackcard__title{ font-weight:700; }
+
+.stackcard__sub{
+  margin:0 0 10px 0;
+  font-size:14px;
+  opacity:.9;
+}
+
+/* rows are clipping containers */
+.stackcard__row{
+  position:relative;
+  overflow:hidden;
+  height:48px;             /* single-line chip lane */
+  mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+}
+.stackcard__row + .stackcard__row{ margin-top:10px; }
+
+/* The moving content (twice, for seamless loop) */
+.stackcard__track{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex; gap:10px;
+  padding:0; margin:0;
+  list-style:none;
+  /* width is auto; we loop by moving two identical tracks */
+}
+
+/* Chips stay single-line and centered */
+.chip{
+  display:inline-flex; align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border:2px solid var(--outline);
+  border-radius:999px;
+  background:#fff;
+  font-weight:600;
+  white-space:nowrap;   /* ← never wrap */
+  line-height:1;        /* neat vertical rhythm */
+}
+
+/* Tiny circular “icon” badges */
+.chip__icon{
+  flex:0 0 18px;
+  width:18px; height:18px;
+  border-radius:50%;
+  display:grid; place-items:center;
+  color:#fff; font-size:10px; font-weight:700;
+  border:2px solid var(--outline);   /* keeps outline style */
+}
+
+/* Colorways (roughly like the reference) + label letters */
+.chip__icon--python{ background:linear-gradient(135deg,#4cc9f0,#38bdf8); }
+.chip__icon--python::after{ content:"Py"; }
+
+.chip__icon--cpp{ background:linear-gradient(135deg,#67e8f9,#22d3ee); }
+.chip__icon--cpp::after{ content:"C++"; font-size:9px; }
+
+.chip__icon--sql{ background:linear-gradient(135deg,#22d3ee,#0ea5e9); }
+.chip__icon--sql::after{ content:"DB"; }
+
+.chip__icon--js{ background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#111; border-color:var(--outline); }
+.chip__icon--js::after{ content:"JS"; }
+
+.chip__icon--react{ background:linear-gradient(135deg,#a78bfa,#60a5fa); }
+.chip__icon--react::after{ content:"R"; }
+
+.chip__icon--ts{ background:linear-gradient(135deg,#60a5fa,#3b82f6); }
+.chip__icon--ts::after{ content:"TS"; }
+
+.chip__icon--node{ background:linear-gradient(135deg,#34d399,#10b981); }
+.chip__icon--node::after{ content:"N"; }
+
+.chip__icon--next{ background:linear-gradient(135deg,#94a3b8,#64748b); }
+.chip__icon--next::after{ content:"N"; }
+
+.chip__icon--tw{ background:linear-gradient(135deg,#22d3ee,#38bdf8); }
+.chip__icon--tw::after{ content:"Tw"; }
+
+.chip__icon--docker{ background:linear-gradient(135deg,#93c5fd,#60a5fa); }
+.chip__icon--docker::after{ content:"D"; }
+
+/* ——— Marquee fixes ——— */
+
+/* ensure track widths are their content width (prevents “big empty gap”) */
+.stackcard__track{
+  min-width: max-content;            /* key line */
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex; gap:10px;
+  padding:0; margin:0; list-style:none;
+}
+
+/* place the second track exactly after the first (gap-aware) */
+.stackcard__row--a .stackcard__track:nth-of-type(2),
+.stackcard__row--b .stackcard__track:nth-of-type(2){
+  left: calc(100% + 10px);           /* 10px matches the track gap above */
+}
+
+/* animations (unchanged) */
+@keyframes marquee-left{
+  from{ transform: translateX(0) translateY(-50%); }
+  to  { transform: translateX(-100%) translateY(-50%); }
+}
+@keyframes marquee-right{
+  from{ transform: translateX(-100%) translateY(-50%); }
+  to  { transform: translateX(0) translateY(-50%); }
+}
+.stackcard__row--a .stackcard__track{ animation: marquee-left 22s linear infinite; }
+.stackcard__row--b .stackcard__track{ animation: marquee-right 26s linear infinite; left:-100%; }
+
+/* Respect reduced motion (keeps it readable) */
+@media (prefers-reduced-motion: reduce){
+  .stackcard__track{ animation:none !important; position:static; transform:none; }
+  .stackcard__row{ height:auto; mask-image:none; -webkit-mask-image:none; }
+}
+
+/* Experiences list tweaks */
+.works--exp .work__pill { transition: background .25s ease, border-color .25s ease, box-shadow .25s ease; }
+
+/* Per-row hover color via data-accent */
+.work[data-accent]:hover .work__pill {
+  background: color-mix(in oklab, var(--fill) 20%, attr(data-accent color, #f7f7ff));
+  border-color: var(--outline-2);
+  box-shadow: 0 6px 0 var(--outline);
+}
+
+/* Left cell: year + icon occupy the same spot */
+.leftcell { display:flex; align-items:center; gap:8px; min-width: 0; }
+.leftcell .year { transition: opacity .2s ease; }
+
+/* Icon framing and swap behavior */
+.exp-icon{
+  width:28px; height:28px;
+  border:2px solid var(--outline);
+  border-radius:12px;
+  padding:2px;
+  background:#fff;
+  box-shadow:0 2px 0 var(--outline);
+  opacity:0;
+  transform:scale(.92);
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+/* On hover: fade in icon, hide the year (clean, no layout jump) */
+.work:hover .exp-icon{ opacity:1; transform:scale(1); }
+.work:hover .year{ opacity:0; }
+
+/* Generic icon + year swap that works for both sections */
+.leftcell { display:flex; align-items:center; gap:8px; min-width:0; }
+.leftcell .year { transition: opacity .2s ease; }
+
+.row-icon{
+  width:28px; height:28px;
+  border:2px solid var(--outline);
+  border-radius:12px;
+  padding:2px;
+  background:#fff;
+  box-shadow:0 2px 0 var(--outline);
+  opacity:0;                 /* hidden until hover */
+  transform:scale(.92);
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+.work:hover .row-icon{ opacity:1; transform:scale(1); }
+.work:hover .year{ opacity:0; }
+
+/* Per-row hover tint using data-accent */
+.work[data-accent]:hover .work__pill{
+  /* if supported, keeps tones consistent with your palette */
+  background: color-mix(in oklab, var(--fill) 20%, attr(data-accent color, #f7f7ff));
+  border-color: var(--outline-2);
+  box-shadow: 0 6px 0 var(--outline);
+}
+
+/* If color-mix isn't supported in your target browsers, fall back to: */
+/* .work[data-accent]:hover .work__pill{ background: attr(data-accent color, #f7f7ff); } */
