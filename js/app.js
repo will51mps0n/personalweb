@@ -1,87 +1,123 @@
-// Respect reduced motion
+// Reduced motion
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ------------------ LOTTIE INTRO ------------------ */
+/* ---------- INTRO (hold, then slide) ---------- */
 (function intro(){
   const intro = document.getElementById('intro');
-  const slot = document.getElementById('lottie-hello');
+  const slot  = document.getElementById('lottie-hello');
   if (!intro || !slot || !window.lottie) return;
 
-  const anim = lottie.loadAnimation({
-    container: slot,
-    renderer: 'svg',
-    loop: false,
-    autoplay: true,
-    path: 'assets/cat.json' // your file
-  });
+  document.documentElement.classList.add('intro-open');
+  document.body.classList.add('intro-open');
 
-  const finish = () => {
+  const MIN_HOLD_MS = 900;
+  const start = performance.now();
+  let finished = false;
+
+  const endIntro = () => {
+    if (finished) return; finished = true;
     intro.classList.add('intro--slide');
-    setTimeout(() => (intro.style.display = 'none'), 900);
+    setTimeout(() => {
+      intro.style.display = 'none';
+      document.documentElement.classList.remove('intro-open');
+      document.body.classList.remove('intro-open');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }, 900);
   };
 
-  anim.addEventListener('complete', () => setTimeout(finish, 150));
-  anim.addEventListener('data_failed', finish);
+  const anim = lottie.loadAnimation({
+    container: slot, renderer:'svg', loop:false,
+    autoplay: !REDUCED, path:'assets/kitty.json'
+  });
 
-  if (REDUCED) finish();
-})();
-
-/* ------------------ CURSOR ------------------ */
-(function cursor(){
-  const c = document.getElementById('cursor');
-  if (!c) return;
-
-  const set = (e) => {
-    const p = e.touches ? e.touches[0] : e;
-    c.style.left = p.clientX + 'px';
-    c.style.top  = p.clientY + 'px';
+  const finishAfterHold = () => {
+    const wait = Math.max(0, MIN_HOLD_MS - (performance.now() - start));
+    setTimeout(endIntro, wait);
   };
-  window.addEventListener('mousemove', set, {passive:true});
-  window.addEventListener('touchmove', set, {passive:true});
-  window.addEventListener('mousedown', () => c.classList.add('cursor--down'));
-  window.addEventListener('mouseup',   () => c.classList.remove('cursor--down'));
 
-  document.addEventListener('mouseover', (e)=>{
-    if (e.target.closest('[data-hover]')) c.classList.add('cursor--hover');
+  anim.addEventListener('DOMLoaded', () => REDUCED && anim.goToAndStop(0, true));
+  anim.addEventListener('complete', finishAfterHold);
+  anim.addEventListener('data_failed', finishAfterHold);
+  setTimeout(finishAfterHold, 4000);
+})();
+
+/* ---------- Brand Lottie (hover play, click home) ---------- */
+(function brandLottie(){
+  const mount = document.getElementById('brandLottie');
+  if (!mount || !window.lottie) return;
+
+  const anim = lottie.loadAnimation({
+    container: mount, renderer:'svg', loop:true, autoplay:false,
+    path:'assets/kitty.json'
   });
-  document.addEventListener('mouseout', (e)=>{
-    if (e.target.closest('[data-hover]')) c.classList.remove('cursor--hover');
+  const root = mount.closest('.brand--lottie');
+  const play = () => !REDUCED && anim.play();
+  const stop = () => { anim.pause(); anim.goToAndStop(0, true); };
+
+  root.addEventListener('mouseenter', play);
+  root.addEventListener('focus', play);
+  root.addEventListener('mouseleave', stop);
+  root.addEventListener('blur', stop);
+  root.addEventListener('click', (e)=>{ e.preventDefault(); document.getElementById('hero').scrollIntoView({behavior:'smooth'}); });
+
+  anim.addEventListener('DOMLoaded', () => anim.goToAndStop(0, true));
+})();
+
+/* ---------- Doodle Lotties (looping placeholders) ---------- */
+(function doodles(){
+  if (!window.lottie) return;
+  document.querySelectorAll('.loz-doodle[data-lottie]').forEach(el=>{
+    const path = el.getAttribute('data-lottie') || '';
+    if (!path) return;
+    const a = lottie.loadAnimation({ container: el, renderer:'svg', loop:true, autoplay:!REDUCED, path });
+    if (REDUCED) a.goToAndStop(0, true);
   });
 })();
 
-/* ------------------ NAV + HERO REACTIVE ------------------ */
-(function reactive(){
-  const header = document.getElementById('siteHeader');
-  const heroInner = document.querySelector('.hero-inner');
-  if (!header || !heroInner) return;
+/* ---------- Footer Marquee: endless & gapless ---------- */
+(function stackMarquee(){
+  const marquee = document.querySelector('.stack-marquee');
+  if (!marquee) return;
+  const base = marquee.querySelector('.stack-track');
 
-  let lastY = 0;
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY || document.documentElement.scrollTop;
+  // Duplicate items until width > 2.5x container (ensures endless)
+  function tile(){
+    // Reset to original once on resize
+    const originals = Array.from(base.children).slice();
+    base.innerHTML = '';
+    originals.forEach(n=>base.appendChild(n.cloneNode(true)));
 
-    // Compact header
-    if (y > 30) header.classList.add('nav--compact');
-    else header.classList.remove('nav--compact');
+    const containerW = marquee.clientWidth || 1;
+    while (base.scrollWidth < containerW * 2.5) {
+      originals.forEach(n=>base.appendChild(n.cloneNode(true)));
+    }
+    // set CSS vars
+    const speed = Number(marquee.dataset.speed) || 70; // px/sec
+    const w = base.scrollWidth;
+    const dur = w / speed;
+    marquee.style.setProperty('--w', w + 'px');
+    marquee.style.setProperty('--dur', dur + 's');
 
-    // Lift hero content a touch
-    const maxLift = 24;
-    const lift = Math.min(maxLift, y * 0.15);
-    heroInner.style.transform = `translateY(-${lift}px)`;
+    // Add one clone track for smooth wrap
+    let clone = marquee.querySelector('.stack-track[data-clone]');
+    if (clone) clone.remove();
+    clone = base.cloneNode(true);
+    clone.setAttribute('data-clone','');
+    clone.setAttribute('aria-hidden','true');
+    marquee.appendChild(clone);
+  }
 
-    lastY = y;
-  }, {passive:true});
+  tile();
+  let t;
+  window.addEventListener('resize', ()=>{ clearTimeout(t); t = setTimeout(tile, 120); });
 })();
 
-/* ------------------ INTERSECTION REVEAL ------------------ */
+/* ---------- Reveal ---------- */
 (function reveal(){
   const io = new IntersectionObserver((entries)=>{
     for(const e of entries){
-      if(e.isIntersecting){
-        e.target.classList.add('reveal--in');
-        io.unobserve(e.target);
-      }
+      if(e.isIntersecting){ e.target.classList.add('reveal--in'); io.unobserve(e.target); }
     }
   }, {root:null, rootMargin:"0px 0px -10% 0px", threshold:0.1});
-
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 })();
