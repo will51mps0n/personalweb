@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+html, body {
+  /* Define values for html and body of application. 100 vs is 100 viewport width */
+  width: 100vw;
+  background-color: black;
+  color: white;
+}
+/* With tailwind 14 and beyond, @ theme directive lets us define globalvalues for fonts and colors for whole app without needing other files*/
+@theme {
+  /* Specifies using a specific white across app, dont have to redefinbe it every time*/
+  --color-white-50: #d9ecff;
+  --color-blue-100: #2d2d38;
+}
+
+/* SO many times we will need to center in a div. To avoid having to specify flex center every time, can create layer utility to handle */
+@layer utilities {
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+}
+
