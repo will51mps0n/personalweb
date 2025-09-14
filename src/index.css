@@ -9,8 +9,8 @@ html,
 body {
   width: 100dvw;
   overflow-x: hidden;
-  background-color: black;
-  color: white;
+  background-color: #f1efec; /* offwhite */
+  color: #1c1c21; /* base text */
   scroll-behavior: smooth;
   font-family: "Mona Sans", sans-serif;
 }
@@ -21,12 +21,16 @@ section {
 
 @theme {
   --font-sans: "Mona Sans", sans-serif;
-  --color-white-50: #d9ecff;
-  --color-black-50: #1c1c21;
-  --color-black-100: #0e0e10;
-  --color-black-200: #282732;
-  --color-blue-50: #839cb5;
-  --color-blue-100: #2d2d38;
+  --color-white-50: #066bbd;   /* your blue */
+  --color-black-50: #6e6d6d;   /* grey */
+  --color-black-100: #1c1c21;  /* near black */
+  --color-black-200: #0e0e10;  /* darker black */
+  --color-blue-50: #839cb5;    /* muted blue-grey */
+  --color-blue-100: #2d2d38;   /* deep slate */
+  --color-white-50: #066bbd;  /* your blue accent */
+  --color-black-50: #6e6d6d;  /* mid grey */
+  --color-black-100: #1c1c21; /* near black (text) */
+  --color-black-200: #0e0e10; /* darkest */
 }
 
 @layer utilities {
@@ -96,7 +100,7 @@ section {
   }
 
   .hero-badge {
-    @apply bg-black-200 py-2 px-4 rounded-full w-fit text-sm md:text-base text-nowrap;
+    @apply bg-white text-black py-2 px-4 rounded-full w-fit text-sm md:text-base text-nowrap;
   }
 
   .hero-3d-layout {
@@ -106,9 +110,26 @@ section {
   .navbar {
     @apply fixed w-full left-1/2 py-5 px-5 md:px-20 -translate-x-1/2 z-[100] transition-all duration-300 ease-in-out;
 
-    &.scrolled {
-      @apply top-0 bg-black;
-    }
+  &.scrolled {
+    @apply top-0;
+    background: rgba(255, 255, 255, 0.50);      /* semi-transparent white */
+    backdrop-filter: saturate(180%) blur(10px);  /* glassy blur */
+    -webkit-backdrop-filter: blur(10px);         /* Safari */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);  /* subtle depth */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+    &.scrolled nav.desktop li { color: #1c1c21; }
+    &.scrolled .logo { color: var(--color-white-50); } /* your blue */
+
+    &.scrolled nav.desktop li { color: #1c1c21; }                  /* li text */
+    &.scrolled nav.desktop li span { color: #1c1c21; }             /* spans/links */
+    &.scrolled nav.desktop li span:hover { color: var(--color-white-50); } /* hover = blue */
+    &.scrolled nav.desktop li .underline { background: var(--color-white-50); } /* underline = blue */
+
+    
+    &.not-scrolled nav.desktop li span:hover { color: var(--color-white-50); } /* hover = blue */
+    &.not-scrolled nav.desktop li .underline { background: var(--color-white-50); } 
 
     &.not-scrolled {
       @apply md:top-10 top-0 bg-transparent;
@@ -129,7 +150,7 @@ section {
         @apply flex space-x-8;
 
         li {
-          @apply text-white-50 relative;
+          @apply text-black relative;
 
           span {
             @apply transition-colors duration-300 hover:text-white;
@@ -208,7 +229,7 @@ section {
   }
 
   .cta-button {
-    @apply px-4 py-4 rounded-lg bg-black-200 flex justify-center items-center relative cursor-pointer overflow-hidden;
+    @apply px-4 py-4 rounded-lg bg-white text-white-50 flex justify-center items-center relative cursor-pointer overflow-hidden;
 
     .bg-circle {
       @apply absolute -right-10 origin-center top-1/2 -translate-y-1/2 
@@ -217,7 +238,7 @@ section {
     }
 
     .text {
-      @apply uppercase md:text-lg text-black transition-all duration-500
+      @apply uppercase md:text-lg text-white transition-all duration-500
         group-hover:text-white-50 group-hover:-translate-x-5 xl:translate-x-0 -translate-x-5;
     }
 
@@ -232,7 +253,7 @@ section {
   }
 
   .card-border {
-    @apply border border-black-50 bg-black-100;
+    @apply border border-black-50 bg-white;
   }
 
   .marquee-item {
@@ -244,11 +265,11 @@ section {
   }
 
   .timeline {
-    @apply absolute z-30 h-[110%] -top-10 w-14 md:w-28 bg-black;
+    @apply absolute z-30 h-[110%] -top-10 w-14 md:w-28 bg-[#f1efec];
   }
 
   .timeline-logo {
-    @apply md:size-20 size-10 flex-none rounded-full flex justify-center items-center md:-translate-y-7 border border-black-50 bg-black-100;
+   @apply md:size-28 size-8 flex-none flex justify-center items-center md:-translate-y-7;
   }
 
   .exp-card-wrapper {
@@ -260,7 +281,7 @@ section {
   }
 
   .tech-card-animated-bg {
-    @apply absolute left-0 bottom-[-100%] w-full h-full bg-[#2D3240] group-hover:bottom-0 transition-all duration-700;
+    @apply absolute left-0 bottom-[-100%] w-full h-full bg-[#c1c1c1] group-hover:bottom-0 transition-all duration-700;
   }
 
   .tech-card-content {
@@ -410,9 +431,11 @@ section {
   overflow: hidden;
   animation: marquee 60s linear infinite;
 }
+
 .marquee-item {
   float: left;
 }
+
 @keyframes marquee {
   0% {
     left: 0;
@@ -471,3 +494,4 @@ section {
 .card:hover::before {
   opacity: 1;
 }
+z
