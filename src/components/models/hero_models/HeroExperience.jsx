@@ -12,7 +12,7 @@ import VantaRings from "../../VantaRings";
  */
 const HeroExperience = () => {
   return (
-    <div className="relative w-full min-h-[70vh] md:min-h-[85vh] overflow-hidden">
+    <div className="relative w-full min-h-[70vh] md:min-h-[100vh] overflow-hidden">
       {/* Vanta background fills the section */}
       <VantaRings
       />
