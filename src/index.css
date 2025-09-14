@@ -104,7 +104,7 @@ section {
   }
 
   .hero-3d-layout {
-    @apply xl:w-[70%] w-full h-full min-h-[50vh] absolute xl:-top-20 top-24 xl:-right-20 right-0;
+    @apply xl:w-[70%] w-full h-full min-h-[50vh] absolute xl:-top-4 top-36 xl:-right-20 right-0;
   }
 
   .navbar {
@@ -264,12 +264,15 @@ section {
     @apply absolute top-0 xl:left-[35.5vw] md:left-10 left-5 h-full flex justify-center;
   }
 
-  .timeline {
-    @apply absolute z-30 h-[110%] -top-10 w-14 md:w-28 bg-[#f1efec];
-  }
+  /*.timeline {
+    @apply absolute z-30 h-[110%] -top-10 w-16 md:w-28 bg-[#1c1c21];
+  }*/
 
+  .timeline { @apply absolute z-30 h-[130%] -top-16 bg-[#f1efec]
+                     w-[5.5rem] md:w-[9rem] xl:w-[10rem]; }
+                     
   .timeline-logo {
-   @apply md:size-28 size-8 flex-none flex justify-center items-center md:-translate-y-7;
+   @apply md:size-28 size-7 flex-none flex justify-center items-center md:-translate-y-7 md:-translate-x-5;
   }
 
   .exp-card-wrapper {
