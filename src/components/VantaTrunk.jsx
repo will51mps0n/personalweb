@@ -5,10 +5,10 @@ import TRUNK from "vanta/dist/vanta.trunk.min";
 import p5 from "p5";
 
 export default function VantaTrunk({
-  color = 0x0077b6,           
-  backgroundColor = 0xf2f0ef, 
-  spacing = 100.0,
-  chaos = 10.0,
+  color = 0x0077b6,
+  backgroundColor = 0xf2f0ef,
+  spacing = 0.0,
+  chaos = 1.0,
 }) {
   const ref = useRef(null);
   const [vanta, setVanta] = useState(null);
@@ -18,7 +18,7 @@ export default function VantaTrunk({
       const v = TRUNK({
         el: ref.current,
         THREE,
-        p5,                    
+        p5,
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
@@ -38,5 +38,6 @@ export default function VantaTrunk({
     };
   }, [vanta, color, backgroundColor, spacing, chaos]);
 
-  return <div ref={ref} className="absolute inset-0 -z-100" />;
+  // Changed: Remove absolute positioning, let it fill the container
+  return <div ref={ref} className="w-full h-full min-h-[100vh]" />;
 }
