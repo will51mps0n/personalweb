@@ -118,11 +118,12 @@ main { view-timeline: --main; }
 .bg-video {
   position: absolute;
   inset: 0;
-  background: #efefef;        /* neutral if no video yet */
-  background-position: center;
-  background-size: cover;
-  opacity: 0.85;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* ensures it always fills, cropping if needed */
+  object-position: center; /* keep it centered */
 }
+
 
 /* Grain film layer (CSS noise) */
 .bg-grain {
