@@ -7,8 +7,8 @@ import p5 from "p5";
 export default function VantaTrunk({
   color = 0x0077b6,           
   backgroundColor = 0xf2f0ef, 
-  spacing = 100.0,
-  chaos = 10.0,
+  spacing = 1.0,
+  chaos = 1.0,
 }) {
   const ref = useRef(null);
   const [vanta, setVanta] = useState(null);

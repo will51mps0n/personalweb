@@ -15,7 +15,6 @@ const HeroExperience = () => {
     <div className="relative w-full min-h-[70vh] md:min-h-[100vh] overflow-hidden">
       {/* Vanta background fills the section */}
 
-
       {/* Optional: place any foreground overlay here if needed
           <div className="relative z-10">...</div>
        */}

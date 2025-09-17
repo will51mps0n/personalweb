@@ -72,6 +72,7 @@ main { view-timeline: --main; }
   0%, 100% { filter: blur(.5rem) contrast(4); opacity: 0; visibility: hidden; }
   50% { filter: blur(0) contrast(1); opacity: 1; visibility: visible; }
 }
+
 @keyframes horizontal-scroll {
   0% { transform: translate3d(100%,0,0); }
   50% { transform: none; }
