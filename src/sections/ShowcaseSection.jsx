@@ -3,6 +3,8 @@ import { useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
+const GITHUB_BASE = "https://github.com/will51mps0n"; // <-- change this once
+
 const pad = (n) => String(n).padStart(2, "0");
 
 export default function AppShowcase() {
@@ -16,23 +18,32 @@ export default function AppShowcase() {
 
   const projects = useMemo(
     () => [
-      { title: "Power Outage Cost Estimator — Python/ML", href: "#power-ml", img: "" },
-      { title: "Stock Prediction Pipeline — Python", href: "#stocks", img: "" },
-      { title: "Market-Indicator-Analysis ", href: "#stocks", img: "" },
-      { title: "AlphaZero Othello — Python/AI", href: "#alphazero", img: "" },
-      { title: "CIFAR-10 Classifier — Python/AI", href: "#cifar10", img: "" },
-      { title: "Connect Four AI — Python", href: "#connect4", img: "" },
+      // --- ML / DS ---
+      { title: "Power Outage Prediction", href: `${GITHUB_BASE}/Power-Outage-Analysis`, img: "" },
+      { title: "Stock Prediction Pipeline", href: `${GITHUB_BASE}/Stock-Prediction-Pipeline`, img: "" },
+      { title: "Market Indicator Analysis", href: `${GITHUB_BASE}/Market-Indicator-Analysis`, img: "" },
 
-      { title: "Multithreaded File Server — C++", href: "#file-server", img: "" },
-      { title: "Virtual Memory Pager — C++", href: "#pager", img: "" },
-      { title: "Custom Thread Library — C++", href: "#threads", img: "" },
-      { title: "LC-2K Assembler & Pipeline Simulator — C", href: "#lc2k-asm-sim", img: "" },
-      { title: "LC-2K Cache Simulator — C", href: "#lc2k-cache", img: "" },
-      { title: "Traveling Salesman Solver — C++", href: "#tsp", img: "" },
+      // --- AI / Games ---
+      { title: "AlphaZero Othello", href: `${GITHUB_BASE}/Othello-AG0`, img: "" },
+      { title: "CIFAR-10 Classifier", href: `${GITHUB_BASE}/Image-CNN`, img: "" },
+      { title: "Connect Four AI", href: `${GITHUB_BASE}/Connect-Four-AI`, img: "" },
 
-      { title: "WaitFast — iOS + Flask + AWS", href: "#waitfast", img: "" },
-      { title: "Michigan Medicine — Software Dev / Researcher", href: "#experience", img: "" },
-      { title: "American Airlines — Data Science", href: "#experience", img: "" },
+      // --- Systems ---
+      { title: "Multithreaded File Server", href: `${GITHUB_BASE}/Networked-Fs-Cpp`, img: "" },
+      { title: "Virtual Memory Pager", href: `${GITHUB_BASE}/MemoryManager-VM-OSPager`, img: "" },
+      { title: "Custom Thread Library", href: `${GITHUB_BASE}/Concurrency-Lib`, img: "" },
+      { title: "LC-2K Assembler & Pipeline", href: `${GITHUB_BASE}/Assembler-and-Simulator`, img: "" },
+      { title: "LC-2K Cache Simulator", href: `${GITHUB_BASE}/Cache-Simulator`, img: "" },
+      { title: "Traveling Salesman Solver", href: `${GITHUB_BASE}/TSP`, img: "" },
+
+      // --- Misc / Portfolio / Personal ---
+      // If this is your site’s code repo:
+      // { title: "Personal Portfolio", href: `${GITHUB_BASE}/Adam-Simpson-Portfolio`, img: "" },
+
+      // --- App / Experience anchors (no public repo yet) ---
+      { title: "WaitFast iOS", href: "#waitfast", img: "" },            // keep site anchor
+      { title: "Michigan Medicine", href: "#experience", img: "" },      // keep site anchor
+      { title: "American Airlines", href: "#experience", img: "" },      // keep site anchor
     ],
     []
   );
@@ -77,7 +88,7 @@ export default function AppShowcase() {
                 onFocus={() => setActiveIndex(idx)}         // keyboard focus also sets it
               >
                 <span className="num">{pad(idx)}</span>
-                <a className="ref-link" href={p.href} title={p.title}>
+                <a className="ref-link" href={p.href} title={p.title} target={p.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
                   {p.title}
                 </a>
               </li>
