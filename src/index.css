@@ -18,7 +18,8 @@
   --bg-contrast: 1;           /* tune with video/WebGL if needed */
 
   /* your greyish black used as “text-ink” */
-  --color-default: #3a3a3a;
+   --color-default: #3a3a3a;   /* the paragraph grey you like */
+  --font-body: "Mona Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; /* same as bottom-left */
 }
 
 /* Tailwind design tokens (kept as you had) */
@@ -423,4 +424,31 @@ main { view-timeline: --main; }
 /* utility */
 @layer utilities {
   .text-ink { color: var(--color-default); }
+}
+
+@layer base {
+  /* Site-wide default font & color for *non-heading* text */
+  html, body {
+    font-family: var(--font-body);
+    color: var(--color-default);
+  }
+
+  /* Typical body text elements: paragraphs, list items, links, etc. */
+  p, li, a, span, small, time, label, input, textarea, button,
+  dd, dt, figcaption, table, th, td {
+    font-family: var(--font-body);
+    color: var(--color-default);
+  }
+
+  /* Make list bullets match the text color (timeline bullets too) */
+  li::marker { color: var(--color-default); }
+
+  /* If you want HEADERS / TITLES to keep their darker color, keep this override */
+  h1, h2, h3, h4, h5, h6,
+  .work-title, .logo, .section-title {
+    color: var(--color-black-100);
+    /* If you want the same font everywhere, remove the next line.
+       If you want headings to use a different display font, set it here. */
+    font-family: var(--font-body);
+  }
 }
