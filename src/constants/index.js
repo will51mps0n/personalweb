@@ -149,7 +149,7 @@ const expCards = [
   {
     review: "",
     imgPath: "/images/UM2.jpeg",
-    logoPath: "/images/UM-Logo.png",
+    logoPath: "/images/M.png",
     title: "Software Developer / Researcher",
     date: "May 2025 - August 2025",
     responsibilities: [
@@ -162,7 +162,7 @@ const expCards = [
   {
     review: "",
     imgPath: "/images/AA2.png",
-    logoPath: "/images/AA-Logo.png",
+    logoPath: "/images/AA.png",
     title: "Full Stack Developer",
     date: "Jan 2025 - May 2025",
     responsibilities: [
@@ -176,7 +176,7 @@ const expCards = [
   {
     review: "",
     imgPath: "/images/HS2.jpeg",
-    logoPath: "/images/HS-Logo.png",
+    logoPath: "/images/H.png",
     title: "Software Engineer",
     date: "Jul 2024 - Feb 2025",
     responsibilities: [
@@ -188,7 +188,7 @@ const expCards = [
     {
     review: "",
     imgPath: "/images/HS2.",
-    logoPath: "/images/AV-Logo.png",
+    logoPath: "/images/AV.png",
     title: "Co-Founder",
     date: "Jul 2023 - Apr 2024",
     responsibilities: [
