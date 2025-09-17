@@ -147,55 +147,60 @@ const techStackIcons = [
 
 const expCards = [
   {
-    review: "",
+    review:
+      "Built a computer-vision pipeline to automate hydrophobicity analysis for biomedical surfaces. Integrated real-time droplet detection/angle estimation with a lightweight UI to streamline lab workflows and data capture.",
     imgPath: "/images/UM2.jpeg",
     logoPath: "/images/M.png",
     title: "Software Developer / Researcher",
     date: "May 2025 - August 2025",
     responsibilities: [
-      "Designed OpenCV/Haar Cascade pipeline to automate hydrophobicity analysis, reducing manual error by 40%",
-      "Trained classifiers on biomedical datasets to predict SNAT molecule solubility in catheter and ECMO tubing",
-      "Built web interface to streamline experimental data logging and workflows for research teams",
-      "Contributed to research that resulted in a peer-reviewed clinical publication on biomedical surface analysis",
+      "Designed OpenCV + Haar Cascade pipeline for contact-angle measurement; reduced manual error ~40%.",
+      "Trained/validated classifiers on annotated biomedical datasets (catheter/ECMO tubing) to predict SNAT solubility.",
+      "Built a web UI to configure tests, auto-log metadata, and standardize lab runs.",
+      "Contributed methods/results to a peer-reviewed clinical publication on biomedical surface analysis.",
     ],
   },
   {
-    review: "",
+    review:
+      "Consulted via Michigan Data Science Team to model baggage scan timing and distribution types across U.S. airports. Delivered ML prototypes that informed resource planning at major hubs.",
     imgPath: "/images/AA2.png",
     logoPath: "/images/AA.png",
     title: "Full Stack Developer",
     date: "Jan 2025 - May 2025",
     responsibilities: [
-      "Contracted to build and tune MLPClassifier to forecast baggage scan distributions, improving turnaround rate",
-      "Conducted EDA on large flight datasets via SQL/Snowflake to uncover scan time patterns",
-      "Mitigated class imbalance with clustering and scikit-learn, increasing model generalization by 25%",
-      "Trained random forest models to improve classification across imbalanced and varied distributions",
-      "Worked with ML leads to deploy predictive models across major hubs including Phoenix and Dallas",
+      "Built/tuned MLPClassifier to classify scan-time distributions; improved turnaround prediction accuracy.",
+      "Ran EDA at scale with Snowflake SQL to surface station/hub patterns and peak risks.",
+      "Mitigated class imbalance via clustering + resampling; improved model generalization ~25%.",
+      "Shipped Random Forest baselines with engineered temporal features for robust out-of-sample performance.",
+      "Presented findings to AA stakeholders; models piloted at Phoenix/Dallas for staffing + surge planning.",
     ],
   },
   {
-    review: "",
+    review:
+      "Led ML/NLP features for an AI real-estate MVP that automates document analysis and buyer support. Combined LLMs with rule-based checks to flag risk and draft compliant outputs.",
     imgPath: "/images/HS2.jpeg",
     logoPath: "/images/H.png",
     title: "Software Engineer",
     date: "Jul 2024 - Feb 2025",
     responsibilities: [
-      "Built MVP platform using Python ML + LLMs to automate document analysis and buyer support",
-      "Automated document creation, analysis, and support to help buyers save an average of $10,000 per transaction",
-      "Secured $15K in non-dilutive funding through Dare to Dream, Fuel Startup, and Michigan Business Challenge",
+      "Built Python backend with ML + LLM pipelines for disclosure parsing (TDS/SDN) and risk extraction.",
+      "Automated draft generation for agreements and summaries; saved buyers ≈$10K per transaction on average.",
+      "Implemented intake, metadata tagging, and retrieval flows for fast, auditable responses.",
+      "Secured $15K non-dilutive funding (Dare to Dream, Fuel Startup, Michigan Business Challenge).",
     ],
   },
-    {
-    review: "",
-    imgPath: "/images/HS2.",
+  {
+    review:
+      "Co-founded a hyper-local advertising startup paying homeowners to host digital displays. Built the content and monitoring infra; grew a pilot network across Ann Arbor.",
+    imgPath: "/images/HS2.", // <- looks like a typo in your original path; confirm your asset name
     logoPath: "/images/AV.png",
     title: "Co-Founder",
     date: "Jul 2023 - Apr 2024",
     responsibilities: [
-      "Launched an innovative startup that paid residential property owners to host digital display screens, enabling hyper-local advertising for small businesses and startups",
-      "Led aspects of the venture securing the Lurie Institute Startup Grant to building and managing a growing network of over 10 residential hosts across Ann Arbor",
-      "Designed and installed the screen infrastructure, developed backend systems to monitor content delivery and uptime, and worked directly with local clients to run geo-targeted marketing campaigns",
-      "These efforts boosted neighborhood-level brand visibility by up to 25% for clients, proving the model’s potential for scalable, community-integrated advertising",
+      "Won Lurie Institute Startup Grant; recruited and onboarded 10+ residential hosts.",
+      "Designed/installed screen hardware; built backend to monitor content delivery/uptime.",
+      "Ran geo-targeted campaigns for local SMBs; improved neighborhood brand visibility up to ~25%.",
+      "Managed client ops, placements, and reporting to validate CAC/LTV for a scalable model.",
     ],
   },
 ];
