@@ -214,7 +214,9 @@ main { view-timeline: --main; }
     border-bottom: 1px solid rgba(0,0,0,0.06);
   }
   .navbar .inner { @apply mx-auto flex items-center justify-between; }
-  .navbar .logo { @apply text-white-50 text-xl md:text-2xl font-semibold transition-transform duration-300 hover:scale-105; }
+  .navbar .logo { 
+  @apply text-white-50 text-2xl md:text-3xl font-semibold transition-transform duration-300 hover:scale-105;
+}
   .navbar.scrolled nav.desktop li,
   .navbar.scrolled nav.desktop li span { color: var(--ink); }
   .navbar.scrolled nav.desktop li span:hover { color: var(--color-white-50); }
@@ -279,6 +281,15 @@ main { view-timeline: --main; }
   text-overflow: ellipsis;
   line-height: var(--row-h);
   font-weight: 500;
+}
+
+.ref-link {
+  @apply font-bold text-[color:var(--color-black-100)] underline decoration-transparent transition-colors;
+}
+
+.ref-link:hover {
+  color: var(--color-black-100); /* stays black */
+  text-decoration-color: var(--color-accent); /* underline becomes blue */
 }
 
 /* --- ACTIVE state keeps underline + blue color --- */
