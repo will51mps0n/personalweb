@@ -48,28 +48,52 @@ section { width: 100dvw; }
 
 /* Snap hints (preserved and lightly tidied) */
 html {
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y proximity; /* This will be toggled by JS */
   scroll-padding-top: var(--nav-h);
   timeline-scope: --section, --main;
+  scroll-behavior: auto; /* Remove smooth to let GSAP handle it */
 }
 main { view-timeline: --main; }
 
+/* Allow sections to be taller than viewport and scroll naturally */
 .snap-section {
-  height: 100dvh;
+  height: auto; /* Changed from 100dvh */
+  min-height: 100dvh; /* Minimum full height */
   scroll-snap-align: start;
   scroll-snap-stop: always;
   view-timeline: --section;
   position: relative;
+  will-change: transform;
+  contain: layout;
 }
-.snap-content {
-  position: fixed;
-  inset: 0;
-  padding-top: var(--nav-h);
+
+/* For sections that should be exactly full height */
+.snap-section.full-height-only {
+  height: 100dvh;
   overflow: hidden;
-  background: var(--page-bg);
-  animation: blink ease-in-out both;
-  animation-timeline: --section;
 }
+
+* Disable scroll snap when GSAP is animating */
+html.gsap-scrolling {
+  scroll-snap-type: none;
+}
+
+/* Ensure smooth rendering during animations */
+html.gsap-scrolling * {
+  will-change: transform;
+}
+
+/* Improved scroll performance */
+html {
+  scroll-behavior: auto; /* Let GSAP handle smoothing */
+}
+
+/* Better mobile touch handling */
+body {
+  touch-action: pan-y;
+  overscroll-behavior: none;
+}
+
 @keyframes blink {
   0%, 100% { filter: blur(.5rem) contrast(4); opacity: 0; visibility: hidden; }
   50% { filter: blur(0) contrast(1); opacity: 1; visibility: visible; }
