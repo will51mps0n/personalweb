@@ -16,6 +16,8 @@
   --led-size: 2.2;            /* LED/dot density (increase for bigger dots) */
   --grain-intensity: 0.08;    /* film grain strength 0–1 */
   --bg-contrast: 1;           /* tune with video/WebGL if needed */
+
+    --color-default: #3a3a3a; /* <- pick your greyish black */
 }
 
 /* Tailwind design tokens (kept as you had) */
@@ -248,11 +250,63 @@ main { view-timeline: --main; }
     .ref-body { grid-template-columns: 6fr 5fr; }
   }
 
-  .ref-list {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; gap: 14px 40px;
-    grid-template-columns: 1fr;
-  }
+/* --- tighter list layout from earlier --- */
+.ref-list {
+  --row-h: 26px;
+  font-size: 0.9rem;
+}
+
+.ref-list li {
+  min-width: 0;
+  height: var(--row-h);
+  display: grid;
+  grid-template-columns: 2rem 1fr;  /* smaller number column */
+  column-gap: 0.25rem;              /* tighter gap */
+  align-items: center;
+  transition: opacity .2s ease, filter .2s ease;
+}
+
+.ref-list .num {
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.ref-link {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: var(--row-h);
+  font-weight: 500;
+}
+
+/* --- ACTIVE state keeps underline + blue color --- */
+.ref-list li.is-active .ref-link {
+  text-decoration: underline;
+  text-decoration-color: var(--color-white-50);
+  color: var(--color-white-50);
+}
+
+/* --- Muffle others when pointer is in the list --- */
+.ref-list[data-hover="true"] li {
+  opacity: 0.35;
+  filter: blur(0.15px) saturate(85%);
+}
+
+.ref-list[data-hover="true"] li.is-active {
+  opacity: 1;
+  filter: none;
+}
+
+/* nicer motion when you change rows */
+.ref-list li .ref-link,
+.ref-list li .num {
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+
+
+
   @media (min-width: 768px){
     .ref-list { grid-template-columns: 1fr 1fr; }
   }
@@ -324,7 +378,7 @@ main { view-timeline: --main; }
 
   /* Timeline (Experience.jsx) */
   .timeline-wrapper { @apply absolute top-0 xl:left-[35.5vw] md:left-10 left-5 h-full flex justify-center; }
-  .timeline       { @apply absolute z-30 h-[110%] -top-16 bg-[#f1efec] w-[5.5rem] md:w-[9rem] xl:w-[10rem]; }
+  .timeline       { @apply absolute z-30 h-[130%] -top-20 bg-[#f1efeb] w-[5.5rem] md:w-[9rem] xl:w-[10rem]; }
   .timeline-logo  { @apply md:size-28 size-7 flex-none flex justify-center items-center md:-translate-y-7 md:-translate-x-5; }
   .exp-card-wrapper { @apply flex flex-col-reverse xl:flex-row xl:gap-20 gap-10 justify-between; }
 
@@ -380,3 +434,7 @@ main { view-timeline: --main; }
 .marquee-box { display:flex; align-items:center; width:200%; height:100%; position:absolute; overflow:hidden; animation: marquee 60s linear infinite; }
 .marquee-item { float:left; }
 @keyframes marquee { 0%{ left:0; } 100%{ left:-100%; } }
+
+@layer utilities {
+  .text-ink { color: var(--color-default); }
+}

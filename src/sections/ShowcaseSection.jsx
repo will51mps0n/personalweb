@@ -7,10 +7,13 @@ const pad = (n) => String(n).padStart(2, "0");
 
 export default function AppShowcase() {
   const sectionRef = useRef(null);
-  const [hoverIndex, setHoverIndex] = useState(null); // 1-based
-  const current = hoverIndex ?? 1;
 
-  // ONE flat list in the exact order you want numbered 01..14
+  // The item that stays selected (drives the top counter & underline)
+  const [activeIndex, setActiveIndex] = useState(1); // 1-based
+
+  // Only used to control the “muffle the others” effect while the pointer is inside the list
+  const [isPointerInList, setIsPointerInList] = useState(false);
+
   const projects = useMemo(
     () => [
       { title: "Power Outage Cost Estimator — Python/ML", href: "#power-ml", img: "" },
@@ -34,7 +37,7 @@ export default function AppShowcase() {
     []
   );
 
-  const total = projects.length; // 14
+  const total = projects.length;
 
   useGSAP(() => {
     gsap.fromTo(
@@ -45,45 +48,47 @@ export default function AppShowcase() {
   }, []);
 
   return (
-    <section id="work" ref={sectionRef} className="work-section ref-wrap">
+    <section id="work" data-title="Projects" ref={sectionRef} className="work-section ref-wrap">
       <header className="work-header">
         <h2 className="work-title">Select projects</h2>
         <div className="work-count">
-          <span className="work-current">{pad(current)}</span>
+          <span className="work-current">{pad(activeIndex)}</span>
           <span className="work-divider">/</span>
           <span className="work-total">{pad(total)}</span>
         </div>
       </header>
 
       <div className="ref-body">
-        {/* LEFT: two-column list (single global numbering) */}
-        <ol className="ref-list">
+        {/* LEFT: list */}
+        <ol
+          className="ref-list"
+          data-hover={isPointerInList ? "true" : "false"}
+          onMouseEnter={() => setIsPointerInList(true)}
+          onMouseLeave={() => setIsPointerInList(false)}
+        >
           {projects.map((p, i) => {
             const idx = i + 1;
+            const isActive = idx === activeIndex;
             return (
               <li
                 key={idx}
-                onMouseEnter={() => setHoverIndex(idx)}
-                onMouseLeave={() => setHoverIndex(null)}
-                onFocus={() => setHoverIndex(idx)}
-                onBlur={() => setHoverIndex(null)}
+                className={isActive ? "is-active" : ""}
+                onMouseEnter={() => setActiveIndex(idx)}    // set, but never clear on leave
+                onFocus={() => setActiveIndex(idx)}         // keyboard focus also sets it
               >
                 <span className="num">{pad(idx)}</span>
-                <a className="ref-link" href={p.href}>{p.title}</a>
+                <a className="ref-link" href={p.href} title={p.title}>
+                  {p.title}
+                </a>
               </li>
             );
           })}
         </ol>
 
-        {/* RIGHT: sticky media viewer (images later) */}
+        {/* RIGHT: sticky media viewer (can swap to image for activeIndex later) */}
         <aside className="ref-media">
           <div className="ref-media-frame">
-            {/* When you add images, set projects[i].img and show it here */}
-            {/* For now, a placeholder block */}
-            <div className="ref-media-placeholder">
-              {/* You can swap in an <img src={projects[(hoverIndex ?? 1)-1].img} .../> later */}
-              Coming soon
-            </div>
+            <div className="ref-media-placeholder">Coming soon</div>
           </div>
         </aside>
       </div>

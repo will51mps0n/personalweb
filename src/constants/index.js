@@ -176,13 +176,26 @@ const expCards = [
   {
     review: "",
     imgPath: "/images/HS2.jpeg",
-    logoPath: "/images/HS-Logo.jpeg",
+    logoPath: "/images/HS-Logo.png",
     title: "Software Engineer",
     date: "Jul 2024 - Feb 2025",
     responsibilities: [
       "Built MVP platform using Python ML + LLMs to automate document analysis and buyer support",
       "Automated document creation, analysis, and support to help buyers save an average of $10,000 per transaction",
       "Secured $15K in non-dilutive funding through Dare to Dream, Fuel Startup, and Michigan Business Challenge",
+    ],
+  },
+    {
+    review: "",
+    imgPath: "/images/HS2.",
+    logoPath: "/images/AV-Logo.png",
+    title: "Co-Founder",
+    date: "Jul 2023 - Apr 2024",
+    responsibilities: [
+      "Launched an innovative startup that paid residential property owners to host digital display screens, enabling hyper-local advertising for small businesses and startups",
+      "Led aspects of the venture securing the Lurie Institute Startup Grant to building and managing a growing network of over 10 residential hosts across Ann Arbor",
+      "Designed and installed the screen infrastructure, developed backend systems to monitor content delivery and uptime, and worked directly with local clients to run geo-targeted marketing campaigns",
+      "These efforts boosted neighborhood-level brand visibility by up to 25% for clients, proving the model’s potential for scalable, community-integrated advertising",
     ],
   },
 ];

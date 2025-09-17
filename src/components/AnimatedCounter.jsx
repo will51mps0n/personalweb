@@ -26,8 +26,10 @@ const AnimatedCounter = () => {
         ease: "power2.out",
         snap: { innerText: 1 }, // Ensures whole numbers
         scrollTrigger: {
-          trigger: "#counter",
+          trigger: ".timeline",
           start: "top center",
+          end: "200% center", // much longer scroll
+          scrub: true,        // smooth scrubbing makes it feel slower
         },
         // Add the suffix after counting is complete
         onComplete: () => {
