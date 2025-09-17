@@ -47,7 +47,7 @@ const Hero = () => {
               </p>
               <br />
               <p className="text-base leading-snug text-ink max-w-md font-semibold  ml-32">
-                Experienced in applied machine learning — from <br />
+                Experienced in applied machine learning, from <br />
                 airline operations forecasting at American Airlines <br />
                 to computer vision, reinforcement learning, and <br />
                 predictive modeling in Python and PyTorch.
