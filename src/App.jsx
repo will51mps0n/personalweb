@@ -1,7 +1,6 @@
 // src/App.jsx
 import { useEffect, useRef } from 'react';
 import Footer from "./sections/Footer";
-import Contact from "./sections/Contact";
 import TechStack from "./sections/TechStack";
 import Experience from "./sections/Experience";
 import Hero from "./sections/Hero";

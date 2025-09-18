@@ -2,7 +2,6 @@
 
 import React from "react";
 // NOTE: from hero_models -> components, go up two levels:
-import VantaRings from "../../VantaRings";
 
 /**
  * HeroExperience
