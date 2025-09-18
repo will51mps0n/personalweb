@@ -52,13 +52,8 @@ const App = () => {
           <TechStack />
         </div>
         
-        <div data-scroll-section>
-          <Contact />
-        </div>
         
-        <div data-scroll-section>
           <Footer />
-        </div>
       </div>
     </>
   );
