@@ -60,7 +60,7 @@ const App = () => {
           data-section-id="experience"
           data-section-title="Experience"
           data-scroll-difficulty="hard"
-          data-scroll-mode="panel"
+          data-scroll-mode="scrollable"
         >
           <Experience />
         </div>

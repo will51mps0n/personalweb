@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef } from 'react';
 
 import { expCards } from "../constants";
 import GlowCard from "../components/GlowCard";
@@ -8,6 +9,9 @@ import GlowCard from "../components/GlowCard";
 gsap.registerPlugin(ScrollTrigger);
 
 const Experience = () => {
+  const sectionRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+
   useGSAP(() => {
     // Loop through each timeline card and animate them in
     // as the user scrolls to each card
@@ -31,31 +35,29 @@ const Experience = () => {
           trigger: card,
           // Trigger the animation when the card is 80% down the screen
           start: "top 80%",
+          // Use the scrollable container as the scroller
+          scroller: scrollContainerRef.current,
         },
       });
     });
 
-    // Animate the timeline height as the user scrolls
-    // from the top of the timeline to 70% down the screen
-    // The timeline height should scale down from 1 to 0
-    // as the user scrolls up the screen
+    // Animate the timeline height as the user scrolls within the container
     gsap.to(".timeline", {
-      // Set the origin of the animation to the bottom of the timeline
+      scaleY: 0,
       transformOrigin: "bottom bottom",
-      // Animate the timeline height over 1 second
-      ease: "power1.inOut",
-      // Trigger the animation when the timeline is at the top of the screen
-      // and end it when the timeline is at 70% down the screen
+      ease: "none",
       scrollTrigger: {
-        trigger: ".timeline",
-        start: "top center",
-        end: "70% center",
-        // Update the animation as the user scrolls
+        trigger: ".timeline-content", // Use a wrapper around timeline content
+        start: "top top",
+        end: "bottom bottom",
+        scroller: scrollContainerRef.current,
+        scrub: 1, // Smooth scrubbing animation
         onUpdate: (self) => {
-          // Scale the timeline height as the user scrolls
-          // from 1 to 0 as the user scrolls up the screen
+          // Animate the timeline bar revealing as we scroll down
           gsap.to(".timeline", {
-            scaleY: 1 - self.progress,
+            scaleY: self.progress,
+            duration: 0.1,
+            ease: "none"
           });
         },
       },
@@ -83,60 +85,143 @@ const Experience = () => {
           trigger: text,
           // Trigger the animation when the text is 60% down the screen
           start: "top 60%",
+          scroller: scrollContainerRef.current,
         },
       });
     }, "<"); // position parameter - insert at the start of the animation
   }, []);
 
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    let isAtTop = true;
+    let isAtBottom = false;
+
+    const checkScrollBoundaries = () => {
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+      const threshold = 5;
+      
+      isAtTop = scrollTop <= threshold;
+      isAtBottom = scrollTop + clientHeight >= scrollHeight - threshold;
+      
+      // Debug logging
+      console.log('Experience scroll boundaries:', {
+        scrollTop,
+        clientHeight,
+        scrollHeight,
+        threshold,
+        isAtTop,
+        isAtBottom,
+        sum: scrollTop + clientHeight,
+        target: scrollHeight - threshold
+      });
+    };
+
+    const handleScroll = () => {
+      checkScrollBoundaries();
+    };
+
+    const handleWheel = (event) => {
+      checkScrollBoundaries();
+      
+      const { deltaY } = event;
+      const scrollingUp = deltaY < 0;
+      const scrollingDown = deltaY > 0;
+
+      // Only allow section navigation when at boundaries
+      if ((scrollingUp && isAtTop) || (scrollingDown && isAtBottom)) {
+        // Let the main ScrollController handle section navigation
+        console.log('Allowing section navigation:', { 
+          direction: scrollingUp ? 'up' : 'down', 
+          isAtTop, 
+          isAtBottom 
+        });
+        return;
+      } else {
+        // Stop propagation to prevent section navigation
+        console.log('Preventing section navigation - not at boundary');
+        event.stopPropagation();
+      }
+    };
+
+    // Force an initial scroll to ensure we're not at bottom on load
+    scrollContainer.scrollTop = 0;
+    
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+    scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+
+    // Initial boundary check with a small delay
+    setTimeout(checkScrollBoundaries, 100);
+
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+      scrollContainer.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="experience"
-      className="snap-section full-height-only xl:px-0"
+      className="snap-section"
+      style={{ height: '100vh', overflow: 'hidden' }}
     >
-      <div className="experience-scroll w-full h-full md:px-20 px-5">
+      <div 
+        ref={scrollContainerRef}
+        className="experience-scroll w-full h-full md:px-20 px-5"
+        style={{ 
+          height: '100%', 
+          overflowY: 'auto',
+          overflowX: 'hidden'
+        }}
+      >
         <h1 className="sr-only">Professional Work Experience</h1>
-        <div className="mt-12 md:mt-20 relative">
-          <div className="relative z-50 xl:space-y-32 space-y-10">
-            {expCards.map((card) => (
-              <div key={card.title} className="exp-card-wrapper">
-                <div className="xl:w-2/6">
-                  <GlowCard card={card}>
-                    <div>
-                      <img src={card.imgPath} alt="exp-img" />
-                    </div>
-                  </GlowCard>
-                </div>
-                <div className="xl:w-4/6">
-                  <div className="flex items-start">
-                    <div className="timeline-wrapper">
-                      <div className="timeline" />
-                      <div className="gradient-line w-1 h-full" />
-                    </div>
-                    <div className="expText flex xl:gap-20 md:gap-10 gap-5 relative z-20">
-                      <div className="timeline-logo">
-                        <img src={card.logoPath} alt="logo" />
-                      </div>
+        <div className="mt-12 md:mt-20 relative pb-20">
+          {/* Timeline content wrapper for animation trigger */}
+          <div className="timeline-content">
+            <div className="relative z-50 xl:space-y-32 space-y-10">
+              {expCards.map((card) => (
+                <div key={card.title} className="exp-card-wrapper timeline-card">
+                  <div className="xl:w-2/6">
+                    <GlowCard card={card}>
                       <div>
-                        <h1 className="font-semibold text-3xl text-[color:var(--color-white-50)]">{card.title}</h1>
-                        <p className="my-5 text-white-50">
-                          &nbsp;{card.date}
-                        </p>
-                        <p className="text-[#839CB5] italic">
-                          Responsibilities
-                        </p>
-                        <ul className="list-disc ms-5 mt-5 flex flex-col gap-5 text-[color:var(--color-black-100)]">
-                          {card.responsibilities.map((responsibility, index) => (
-                            <li key={index} className="text-lg">
-                              {responsibility}
-                            </li>
-                          ))}
-                        </ul>
+                        <img src={card.imgPath} alt="exp-img" />
+                      </div>
+                    </GlowCard>
+                  </div>
+                  <div className="xl:w-4/6">
+                    <div className="flex items-start">
+                      <div className="timeline-wrapper">
+                        <div className="timeline" />
+                        <div className="gradient-line w-1 h-full" />
+                      </div>
+                      <div className="expText flex xl:gap-20 md:gap-10 gap-5 relative z-20">
+                        <div className="timeline-logo">
+                          <img src={card.logoPath} alt="logo" />
+                        </div>
+                        <div>
+                          <h1 className="font-semibold text-3xl text-[color:var(--color-white-50)]">{card.title}</h1>
+                          <p className="my-5 text-white-50">
+                            &nbsp;{card.date}
+                          </p>
+                          <p className="text-[#839CB5] italic">
+                            Responsibilities
+                          </p>
+                          <ul className="list-disc ms-5 mt-5 flex flex-col gap-5 text-[color:var(--color-black-100)]">
+                            {card.responsibilities.map((responsibility, index) => (
+                              <li key={index} className="text-lg">
+                                {responsibility}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

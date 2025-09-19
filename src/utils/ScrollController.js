@@ -181,6 +181,21 @@ class ScrollController {
   }
 
   handleKeydown(e) {
+    // For scrollable sections, let arrow keys work normally within the section
+    const meta = this.sectionMeta[this.currentSection];
+    if (meta && meta.mode === 'scrollable') {
+      // Only handle page navigation keys, let arrow keys scroll normally
+      switch(e.key) {
+        case 'PageDown':
+        case 'PageUp':
+        case 'Home':
+        case 'End':
+          break;
+        default:
+          return; // Let normal scrolling happen
+      }
+    }
+
     switch(e.key) {
       case 'ArrowDown':
       case 'PageDown':
@@ -220,6 +235,15 @@ class ScrollController {
     const direction = e.deltaY > 0 ? 'down' : 'up';
     const strength = Math.abs(e.deltaY);
 
+    // For scrollable sections, check if we're at boundaries
+    if (meta.mode === 'scrollable') {
+      if (!this.isAtScrollableBoundary(direction, meta)) {
+        // We're not at boundary, let normal scrolling happen
+        return;
+      }
+    }
+
+    // For non-scrollable sections, always prevent default
     if (meta.mode !== 'scrollable') {
       e.preventDefault();
     }
@@ -289,19 +313,54 @@ class ScrollController {
     const currentSection = this.sections[this.currentSection];
     if (!currentSection) return true;
 
+    // Find the scrollable container within the current section
+    const scrollContainer = currentSection.querySelector('.experience-scroll') || 
+                            currentSection.querySelector('[data-scrollable]');
+
+    // If we have a dedicated scroll container, check its boundaries
+    if (scrollContainer && scrollContainer !== currentSection) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+      const threshold = 5; // Small threshold for boundary detection
+
+      if (direction === 'down') {
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - threshold;
+        console.log('Checking down boundary:', { 
+          scrollTop, 
+          clientHeight, 
+          scrollHeight, 
+          threshold,
+          sum: scrollTop + clientHeight,
+          target: scrollHeight - threshold,
+          isAtBottom 
+        });
+        return isAtBottom;
+      }
+      
+      if (direction === 'up') {
+        const isAtTop = scrollTop <= threshold;
+        console.log('Checking up boundary:', { 
+          scrollTop, 
+          threshold, 
+          isAtTop 
+        });
+        return isAtTop;
+      }
+    }
+
+    // Fallback to window scroll position relative to section
     const scrollTop = window.scrollY;
     const windowHeight = window.innerHeight;
     const sectionTop = currentSection.offsetTop;
     const sectionHeight = currentSection.offsetHeight;
     const boundary = meta && Number.isFinite(meta.boundary) ? meta.boundary : this.scrollThreshold;
-    const threshold = Math.min(boundary, windowHeight * 0.35);
+    const fallbackThreshold = Math.min(boundary, windowHeight * 0.35);
 
     if (direction === 'down') {
-      return scrollTop + windowHeight >= sectionTop + sectionHeight - threshold;
+      return scrollTop + windowHeight >= sectionTop + sectionHeight - fallbackThreshold;
     }
 
     if (direction === 'up') {
-      return scrollTop <= sectionTop + threshold;
+      return scrollTop <= sectionTop + fallbackThreshold;
     }
 
     return false;
@@ -372,6 +431,15 @@ class ScrollController {
         outgoingSection.classList.remove('transitioning-out');
       }
       targetSection.classList.remove('transitioning-in');
+      
+      // Reset scroll position for scrollable sections
+      if (targetSection.id === 'experience') {
+        const scrollContainer = targetSection.querySelector('.experience-scroll');
+        if (scrollContainer) {
+          scrollContainer.scrollTop = 0;
+        }
+      }
+      
       this.isScrolling = false;
     }, '>');
 

@@ -843,3 +843,187 @@ body {
   will-change: opacity, transform, filter;
   pointer-events: none;
 }
+
+/* Enhanced scrolling for experience section */
+.experience-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(28, 28, 33, 0.3) transparent;
+  
+  /* Padding to ensure content doesn't get cut off */
+  padding-top: clamp(6rem, 12vh, 8rem);
+  padding-bottom: clamp(5rem, 10vh, 7rem);
+}
+
+/* Custom scrollbar styling for webkit browsers */
+.experience-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.experience-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.experience-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(28, 28, 33, 0.2);
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.experience-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(28, 28, 33, 0.4);
+}
+
+/* Ensure smooth scrolling on mobile */
+@media (max-width: 768px) {
+  .experience-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Prevent timeline animations from breaking on scroll */
+.experience-scroll .timeline-card {
+  will-change: transform, opacity;
+}
+
+/* Ensure scrollable section maintains full height */
+#experience {
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Timeline adjustments for scrollable container */
+.timeline-wrapper {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Improved timeline visibility in scrollable context */
+.timeline {
+  background: var(--page-bg);
+  box-shadow: 0 0 0 1px rgba(28, 28, 33, 0.1);
+}
+
+/* Better spacing for timeline cards in scrollable context */
+.exp-card-wrapper {
+  margin-bottom: clamp(2rem, 8vh, 4rem);
+  scroll-margin-top: 2rem;
+  scroll-margin-bottom: 2rem;
+}
+
+/* Last card gets extra bottom margin */
+.exp-card-wrapper:last-child {
+  margin-bottom: clamp(4rem, 12vh, 8rem);
+}
+
+/* Smooth transitions for scroll states */
+.experience-scroll * {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Focus indicators for accessibility */
+.experience-scroll:focus-within {
+  outline: 2px solid var(--color-white-50);
+  outline-offset: -2px;
+}
+
+/* Enhanced scrolling for experience section */
+.experience-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(28, 28, 33, 0.3) transparent;
+  
+  /* Padding to ensure content doesn't get cut off */
+  padding-top: clamp(6rem, 12vh, 8rem);
+  padding-bottom: clamp(5rem, 10vh, 7rem);
+}
+
+/* Custom scrollbar styling for webkit browsers */
+.experience-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.experience-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.experience-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(28, 28, 33, 0.2);
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.experience-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(28, 28, 33, 0.4);
+}
+
+/* Ensure smooth scrolling on mobile */
+@media (max-width: 768px) {
+  .experience-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Prevent timeline animations from breaking on scroll */
+.experience-scroll .timeline-card {
+  will-change: transform, opacity;
+}
+
+/* Ensure scrollable section maintains full height */
+#experience {
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Timeline adjustments for scrollable container */
+.timeline-wrapper {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Timeline content wrapper needs to span the full scrollable height */
+.timeline-content {
+  position: relative;
+  min-height: 200vh; /* Make it taller than viewport to enable the timeline animation */
+}
+
+/* Timeline bar - starts hidden and reveals on scroll */
+.timeline {
+  background: var(--page-bg);
+  box-shadow: 0 0 0 1px rgba(28, 28, 33, 0.1);
+  transform-origin: bottom bottom;
+  transform: scaleY(0); /* Start hidden */
+}
+
+/* Better spacing for timeline cards in scrollable context */
+.exp-card-wrapper {
+  margin-bottom: clamp(2rem, 8vh, 4rem);
+  scroll-margin-top: 2rem;
+  scroll-margin-bottom: 2rem;
+}
+
+/* Last card gets extra bottom margin */
+.exp-card-wrapper:last-child {
+  margin-bottom: clamp(4rem, 12vh, 8rem);
+}
+
+/* Smooth transitions for scroll states */
+.experience-scroll * {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Focus indicators for accessibility */
+.experience-scroll:focus-within {
+  outline: 2px solid var(--color-white-50);
+  outline-offset: -2px;
+}
