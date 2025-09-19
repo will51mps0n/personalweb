@@ -1,7 +1,6 @@
 // src/App.jsx
 import { useEffect, useRef } from 'react';
-import Footer from "./sections/Footer";
-import TechStack from "./sections/TechStack";
+import About from "./sections/About";
 import Experience from "./sections/Experience";
 import Hero from "./sections/Hero";
 import ShowcaseSection from "./sections/ShowcaseSection";
@@ -60,27 +59,19 @@ const App = () => {
           data-scroll-section
           data-section-id="experience"
           data-section-title="Experience"
-          data-scroll-mode="scrollable"
+          data-scroll-difficulty="hard"
+          data-scroll-mode="panel"
         >
           <Experience />
         </div>
         
         <div
           data-scroll-section
-          data-section-id="skills"
-          data-section-title="Tech Stack"
+          data-section-id="about"
+          data-section-title="About"
           data-scroll-mode="panel"
         >
-          <TechStack />
-        </div>
-        
-        <div
-          data-scroll-section
-          data-section-id="contact"
-          data-section-title="Contact"
-          data-scroll-mode="panel"
-        >
-          <Footer />
+          <About />
         </div>
       </div>
     </>

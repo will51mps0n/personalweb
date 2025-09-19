@@ -324,6 +324,38 @@ body {
     padding-top: clamp(11.5rem, 23vw, 17rem);
   }
 
+  .about-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+  }
+
+  .about-inner {
+    max-width: clamp(42rem, 68vw, 70rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.75rem);
+  }
+
+  .about-title {
+    font-family: var(--font-body);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-black-100);
+  }
+
+  .about-copy {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    line-height: 1.75;
+    color: var(--color-default);
+  }
+
   .work-count-floating {
     position: absolute;
     top: clamp(4.5rem, 12vw, 7.5rem);
@@ -418,6 +450,18 @@ body {
   .ref-media-placeholder {
     @apply w-full h-full flex items-center justify-center text-[color:var(--color-black-50)];
     background: repeating-linear-gradient(45deg, #f3f3f3, #f3f3f3 8px, #ececec 8px, #ececec 16px);
+  }
+
+  .experience-scroll {
+    height: 100%;
+    overflow-y: auto;
+    padding-top: clamp(6rem, 12vh, 8rem);
+    padding-bottom: clamp(5rem, 10vh, 7rem);
+  }
+
+  .experience-scroll::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
 
   /* App Showcase (kept) */

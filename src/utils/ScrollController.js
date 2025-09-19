@@ -26,6 +26,9 @@ class ScrollController {
     this.minScrollStrength = 3;
     this.glitchTextDuration = 1.2;
     this.initialRevealPlayed = false;
+    this.boundaryHoldStart = null;
+    this.boundaryHoldDirection = null;
+    this.boundaryHoldDuration = 420;
 
     this.handleSectionRequest = this.handleSectionRequest.bind(this);
     this.onTouchStart = this.onTouchStart.bind(this);
@@ -44,7 +47,8 @@ class ScrollController {
       title: section.dataset.sectionTitle || section.dataset.title || section.id || `Section ${index + 1}`,
       variant: section.dataset.titleVariant || 'standard',
       difficulty: section.dataset.scrollDifficulty || 'normal',
-      mode: section.dataset.scrollMode || 'panel'
+      mode: section.dataset.scrollMode || 'panel',
+      boundary: section.dataset.scrollBoundary ? parseFloat(section.dataset.scrollBoundary) : null
     }));
 
     this.prepareGlitchContentDefaults();
@@ -242,7 +246,10 @@ class ScrollController {
     const strongThreshold = difficulty === 'hard' ? this.strongScrollThreshold : this.minScrollStrength;
 
     if (!force) {
-      if (mode === 'scrollable' && !this.isAtScrollableBoundary(direction)) {
+      const atBoundary = mode === 'scrollable' && this.isAtScrollableBoundary(direction, meta);
+
+      if (mode === 'scrollable' && !atBoundary) {
+        this.resetBoundaryHold();
         return false;
       }
 
@@ -255,6 +262,13 @@ class ScrollController {
 
       if (mode === 'scrollable' && strength < this.minScrollStrength) {
         return false;
+      }
+
+      if (mode === 'scrollable' && difficulty === 'hard') {
+        const holdReady = this.handleBoundaryHold(now, direction, strength);
+        if (!holdReady) {
+          return false;
+        }
       }
     }
 
@@ -271,7 +285,7 @@ class ScrollController {
     return false;
   }
 
-  isAtScrollableBoundary(direction) {
+  isAtScrollableBoundary(direction, meta = null) {
     const currentSection = this.sections[this.currentSection];
     if (!currentSection) return true;
 
@@ -279,7 +293,8 @@ class ScrollController {
     const windowHeight = window.innerHeight;
     const sectionTop = currentSection.offsetTop;
     const sectionHeight = currentSection.offsetHeight;
-    const threshold = Math.min(this.scrollThreshold, windowHeight * 0.35);
+    const boundary = meta && Number.isFinite(meta.boundary) ? meta.boundary : this.scrollThreshold;
+    const threshold = Math.min(boundary, windowHeight * 0.35);
 
     if (direction === 'down') {
       return scrollTop + windowHeight >= sectionTop + sectionHeight - threshold;
@@ -329,6 +344,7 @@ class ScrollController {
     if (!targetSection) return;
 
     this.isScrolling = true;
+    this.resetBoundaryHold();
     this.lastScrollTime = Date.now();
     this.currentSection = index;
 
@@ -582,6 +598,31 @@ class ScrollController {
     if (!target || !target.__glitchTimeoutId) return;
     clearTimeout(target.__glitchTimeoutId);
     target.__glitchTimeoutId = null;
+  }
+
+  handleBoundaryHold(now, direction, strength) {
+    if (this.boundaryHoldDirection !== direction) {
+      this.boundaryHoldDirection = direction;
+      this.boundaryHoldStart = now;
+      return false;
+    }
+
+    if (this.boundaryHoldStart === null) {
+      this.boundaryHoldStart = now;
+      return false;
+    }
+
+    const elapsed = now - this.boundaryHoldStart;
+    if (elapsed < this.boundaryHoldDuration) {
+      return false;
+    }
+
+    return strength >= this.strongScrollThreshold;
+  }
+
+  resetBoundaryHold() {
+    this.boundaryHoldStart = null;
+    this.boundaryHoldDirection = null;
   }
 
   destroy() {
