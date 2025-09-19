@@ -1,5 +1,5 @@
 // src/sections/ShowcaseSection.jsx
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const GITHUB_BASE = "https://github.com/will51mps0n"; // <-- change this once
 
@@ -48,14 +48,21 @@ export default function AppShowcase() {
 
   const total = projects.length;
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("projectCounterChange", {
+      detail: {
+        current: activeIndex,
+        total,
+      }
+    }));
+
+    return () => {
+      window.dispatchEvent(new CustomEvent("projectCounterChange", { detail: null }));
+    };
+  }, [activeIndex, total]);
+
   return (
     <section id="work" data-title="Projects" ref={sectionRef} className="work-section ref-wrap">
-      <div className="work-count-floating" data-glitch-content>
-        <span className="work-current">{pad(activeIndex)}</span>
-        <span className="work-divider">/</span>
-        <span className="work-total">{pad(total)}</span>
-      </div>
-
       <div className="ref-body">
         {/* LEFT: list */}
         <ol

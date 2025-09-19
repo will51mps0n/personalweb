@@ -227,33 +227,43 @@ body {
   /* Navbar */
   .navbar {
     position: fixed;
-    top: clamp(1rem, 3vw, 2.5rem);
+    top: clamp(1rem, 3vw, 2.25rem);
     left: 0;
     width: 100%;
     padding: 0 clamp(1.5rem, 4vw, 3rem);
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     z-index: 100;
     pointer-events: none;
   }
 
   .navbar-title {
     pointer-events: auto;
+    font-family: var(--font-body);
+    font-size: clamp(2.25rem, 6vw, 4rem);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: .22em;
+    text-transform: uppercase;
     color: var(--color-black-100);
     transition: transform .4s ease, opacity .4s ease;
+    display: flex;
+    align-items: center;
+    gap: clamp(0.55rem, 2vw, 1.6rem);
+    margin-left: clamp(1rem, 6vw, 3.75rem);
   }
 
-  .navbar-title.hero {
-    font-size: clamp(3.5rem, 9vw, 6rem);
-    line-height: 1;
+  .navbar-title__text {
+    display: inline-flex;
+    align-items: center;
   }
 
-  .navbar-title.standard {
-    font-size: clamp(2.25rem, 6vw, 4rem);
-    line-height: 1.05;
+  .navbar-title__counter {
+    font-size: clamp(1rem, 2.2vw, 1.45rem);
+    font-weight: 600;
+    letter-spacing: .18em;
+    color: rgba(28,28,33,0.55);
+    text-transform: uppercase;
   }
 
   .mini-nav {
@@ -262,10 +272,10 @@ body {
     flex-direction: column;
     align-items: flex-end;
     gap: .35rem;
-    margin-top: .35rem;
   }
 
   .mini-nav__item {
+    font-family: var(--font-body);
     font-size: .7rem;
     letter-spacing: .24em;
     text-transform: uppercase;
@@ -295,12 +305,10 @@ body {
       padding-inline: clamp(1rem, 5vw, 1.5rem);
     }
 
-    .navbar-title.hero {
-      font-size: clamp(2.5rem, 11vw, 4.5rem);
-    }
-
-    .navbar-title.standard {
-      font-size: clamp(1.8rem, 8vw, 3.25rem);
+    .navbar-title {
+      font-size: clamp(1.9rem, 9vw, 3.1rem);
+      letter-spacing: .18em;
+      margin-left: clamp(0.75rem, 4vw, 2rem);
     }
 
     .mini-nav {
@@ -309,19 +317,38 @@ body {
   }
 
   /* Showcase / Work index */
-  .work-section { @apply w-full md:px-20 px-5 min-h-screen pt-20 md:pt-28; scroll-snap-align: start; }
-  .work-count-floating {
-    display: flex;
-    justify-content: flex-end;
-    align-items: baseline;
-    gap: .35rem;
-    font-size: clamp(1.8rem, 5vw, 3.4rem);
-    font-weight: 600;
-    color: var(--color-black-100);
-    margin-bottom: clamp(1.5rem, 4vw, 3.5rem);
+  .work-section {
+    @apply w-full md:px-20 px-5 min-h-screen;
+    scroll-snap-align: start;
+    position: relative;
+    padding-top: clamp(11.5rem, 23vw, 17rem);
   }
-  .work-count-floating .work-divider { opacity: .35; margin: 0 .15rem; }
-  .work-count-floating .work-total { color: rgba(28,28,33,0.4); }
+
+  .work-count-floating {
+    position: absolute;
+    top: clamp(4.5rem, 12vw, 7.5rem);
+    left: clamp(1.25rem, 5vw, 2.5rem);
+    display: inline-flex;
+    align-items: baseline;
+    gap: clamp(0.4rem, 1.2vw, 0.7rem);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 3vw, 2.45rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-black-100);
+    pointer-events: none;
+  }
+
+  .work-count-floating .work-divider {
+    opacity: 0.35;
+    font-size: clamp(1.2rem, 2.3vw, 2rem);
+  }
+
+  .work-count-floating .work-total {
+    opacity: 0.35;
+    font-size: clamp(1.2rem, 2.3vw, 2rem);
+  }
 
   .ref-wrap { @apply min-h-screen md:px-20 px-5; scroll-snap-align: start; }
   .ref-body {
