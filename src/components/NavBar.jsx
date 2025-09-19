@@ -3,53 +3,67 @@ import { useState, useEffect } from "react";
 import { navLinks } from "../constants";
 
 const NavBar = () => {
-  // track if the user has scrolled down the page
-  const [scrolled, setScrolled] = useState(false);
+  const [sectionTitle, setSectionTitle] = useState("Adam Simpson");
+  const [titleVariant, setTitleVariant] = useState("hero");
+  const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
-    // create an event listener for when the user scrolls
-    const handleScroll = () => {
-      // check if the user has scrolled down at least 10px
-      // if so, set the state to true
-      const isScrolled = window.scrollY > 10;
-      setScrolled(isScrolled);
+    const handleSectionChange = (event) => {
+      const { id, title, variant } = event.detail || {};
+
+      if (id) {
+        setActiveSection(id);
+      }
+
+      if (title) {
+        setSectionTitle(title);
+      }
+
+      setTitleVariant(variant || "standard");
     };
 
-    // add the event listener to the window
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("sectionChange", handleSectionChange);
 
-    // cleanup the event listener when the component is unmounted
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("sectionChange", handleSectionChange);
+    };
   }, []);
 
+  const handleNavClick = (target) => {
+    const targetId = target.replace('#', '');
+    window.dispatchEvent(
+      new CustomEvent('requestSectionScroll', {
+        detail: { id: targetId },
+      })
+    );
+  };
+
   return (
-    <header className={`navbar ${scrolled ? "scrolled" : "not-scrolled"}`}>
-      <div className="inner">
-        <a href="#hero" className="logo">
-          Adam Simpson 
-        </a>
-
-        <nav className="desktop">
-          <ul>
-            {navLinks.map(({ link, name }) => (
-              <li key={name} className="group">
-                <a href={link}>
-                  <span>{name}</span>
-                  <span className="underline" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <a href="#contact" className="contact-btn group">
-          <div className="inner">
-            <span>Contact me</span>
-          </div>
-        </a>
+    <header className="navbar" role="banner">
+      <div className={`navbar-title ${titleVariant === 'hero' ? 'hero' : 'standard'}`}>
+        {sectionTitle}
       </div>
+
+      <nav className="mini-nav" aria-label="Section navigation">
+        {navLinks.map(({ link, name }) => {
+          const id = link.replace('#', '');
+          const isActive = activeSection === id;
+
+          return (
+            <button
+              key={name}
+              type="button"
+              className={`mini-nav__item ${isActive ? 'is-active' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+              onClick={() => handleNavClick(link)}
+            >
+              {name}
+            </button>
+          );
+        })}
+      </nav>
     </header>
   );
-}
+};
 
 export default NavBar;

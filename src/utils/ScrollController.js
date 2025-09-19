@@ -19,14 +19,31 @@ class ScrollController {
     this.minSwipeDistance = 50;
     this.scrollThreshold = 100;
     this.lastScrollTime = 0;
-    this.scrollCooldown = 800; // Longer cooldown for snap effect
+    this.scrollCooldown = 900; // Longer cooldown for snap effect
     this.glitchOverlay = null;
+    this.sectionMeta = [];
+    this.strongScrollThreshold = 35;
+    this.minScrollStrength = 3;
+
+    this.handleSectionRequest = this.handleSectionRequest.bind(this);
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchEnd = this.onTouchEnd.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
   }
 
   init() {
     this.sections = gsap.utils.toArray('[data-scroll-section]');
     
     if (this.sections.length === 0) return;
+
+    this.sectionMeta = this.sections.map((section, index) => ({
+      element: section,
+      id: section.dataset.sectionId || section.id || `section-${index}`,
+      title: section.dataset.sectionTitle || section.dataset.title || section.id || `Section ${index + 1}`,
+      variant: section.dataset.titleVariant || 'standard',
+      difficulty: section.dataset.scrollDifficulty || 'normal',
+      mode: section.dataset.scrollMode || 'panel'
+    }));
 
     // Create glitch overlay
     this.createGlitchOverlay();
@@ -46,7 +63,10 @@ class ScrollController {
     // Set up keyboard navigation
     this.setupKeyboardEvents();
 
-    console.log(`ScrollController initialized with ${this.sections.length} sections`);
+    window.addEventListener('requestSectionScroll', this.handleSectionRequest);
+
+    this.dispatchSectionChange();
+
   }
 
   createGlitchOverlay() {
@@ -72,10 +92,13 @@ class ScrollController {
         trigger: section,
         start: "top center",
         end: "bottom center",
-        onEnter: () => this.updateCurrentSection(index),
-        onEnterBack: () => this.updateCurrentSection(index),
+        onToggle: (self) => {
+          if (self.isActive) {
+            this.updateCurrentSection(index);
+          }
+        }
       });
-      
+
       this.scrollTriggers.push(trigger);
     });
   }
@@ -87,175 +110,258 @@ class ScrollController {
   }
 
   setupTouchEvents() {
-    let startY = 0;
-    let endY = 0;
+    document.addEventListener('touchstart', this.onTouchStart, { passive: true });
+    document.addEventListener('touchend', this.onTouchEnd, { passive: false });
+  }
 
-    document.addEventListener('touchstart', (e) => {
-      startY = e.touches[0].clientY;
-    }, { passive: true });
+  onTouchStart(e) {
+    this.touchStartY = e.touches[0].clientY;
+  }
 
-    document.addEventListener('touchend', (e) => {
-      endY = e.changedTouches[0].clientY;
-      const diff = startY - endY;
-      
-      if (Math.abs(diff) > this.minSwipeDistance) {
-        if (diff > 0) {
-          this.handleScroll('down');
-        } else {
-          this.handleScroll('up');
-        }
+  onTouchEnd(e) {
+    this.touchEndY = e.changedTouches[0].clientY;
+    const diff = this.touchStartY - this.touchEndY;
+
+    if (Math.abs(diff) > this.minSwipeDistance) {
+      const direction = diff > 0 ? 'down' : 'up';
+      const changed = this.attemptSectionChange(direction, { strength: this.strongScrollThreshold + 1 });
+      if (changed) {
+        e.preventDefault();
       }
-    }, { passive: true });
+    }
   }
 
   setupKeyboardEvents() {
-    document.addEventListener('keydown', (e) => {
-      switch(e.key) {
-        case 'ArrowDown':
-        case 'PageDown':
-        case ' ':
-          e.preventDefault();
-          this.handleScroll('down');
-          break;
-        case 'ArrowUp':
-        case 'PageUp':
-          e.preventDefault();
-          this.handleScroll('up');
-          break;
-        case 'Home':
-          e.preventDefault();
-          this.scrollToSection(0);
-          break;
-        case 'End':
-          e.preventDefault();
-          this.scrollToSection(this.sections.length - 1);
-          break;
-      }
-    });
+    document.addEventListener('keydown', this.handleKeydown);
   }
 
-  handleSwipe() {
-    const diff = this.touchStartY - this.touchEndY;
-    
-    if (Math.abs(diff) > this.minSwipeDistance) {
-      if (diff > 0) {
+  handleKeydown(e) {
+    switch(e.key) {
+      case 'ArrowDown':
+      case 'PageDown':
+      case ' ':
+        e.preventDefault();
         this.handleScroll('down');
-      } else {
+        break;
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault();
         this.handleScroll('up');
-      }
+        break;
+      case 'Home':
+        e.preventDefault();
+        this.scrollToSection(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        this.scrollToSection(this.sections.length - 1);
+        break;
+      default:
+        break;
     }
   }
 
   handleWheel(e) {
     const now = Date.now();
-    if (this.isScrolling || now - this.lastScrollTime < this.scrollCooldown) return;
 
+    if (this.isScrolling || now - this.lastScrollTime < this.scrollCooldown) {
+      e.preventDefault();
+      return;
+    }
+
+    const meta = this.sectionMeta[this.currentSection];
+    if (!meta) return;
+
+    const direction = e.deltaY > 0 ? 'down' : 'up';
+    const strength = Math.abs(e.deltaY);
+
+    if (meta.mode !== 'scrollable') {
+      e.preventDefault();
+    }
+
+    const changed = this.attemptSectionChange(direction, { strength });
+
+    if (changed) {
+      e.preventDefault();
+    }
+  }
+
+  attemptSectionChange(direction, { strength = this.strongScrollThreshold + 1, force = false } = {}) {
+    const now = Date.now();
+
+    if (this.isScrolling || now - this.lastScrollTime < this.scrollCooldown) {
+      return false;
+    }
+
+    const meta = this.sectionMeta[this.currentSection];
+    if (!meta) return false;
+
+    const mode = meta.mode || 'panel';
+    const difficulty = meta.difficulty || 'normal';
+    const strongThreshold = difficulty === 'hard' ? this.strongScrollThreshold : this.minScrollStrength;
+
+    if (!force) {
+      if (mode === 'scrollable' && !this.isAtScrollableBoundary(direction)) {
+        return false;
+      }
+
+      if (mode !== 'scrollable' && strength < strongThreshold) {
+        if (difficulty === 'hard') {
+          this.teaseTransition(direction);
+        }
+        return false;
+      }
+
+      if (mode === 'scrollable' && strength < this.minScrollStrength) {
+        return false;
+      }
+    }
+
+    if (direction === 'down' && this.currentSection < this.sections.length - 1) {
+      this.scrollToSection(this.currentSection + 1);
+      return true;
+    }
+
+    if (direction === 'up' && this.currentSection > 0) {
+      this.scrollToSection(this.currentSection - 1);
+      return true;
+    }
+
+    return false;
+  }
+
+  isAtScrollableBoundary(direction) {
     const currentSection = this.sections[this.currentSection];
+    if (!currentSection) return true;
+
     const scrollTop = window.scrollY;
     const windowHeight = window.innerHeight;
     const sectionTop = currentSection.offsetTop;
     const sectionHeight = currentSection.offsetHeight;
-    
-    // Check if we can scroll within the current section
-    const isAtTop = scrollTop <= sectionTop + 50; // Increased threshold
-    const isAtBottom = scrollTop + windowHeight >= sectionTop + sectionHeight - 50;
-    
-    // Only snap to next/prev section if we're at the boundaries AND scroll is strong enough
-    const scrollStrength = Math.abs(e.deltaY);
-    const minScrollStrength = 3; // Minimum scroll strength to trigger section change
-    
-    if (scrollStrength > minScrollStrength) {
-      if (e.deltaY > 0 && isAtBottom && this.currentSection < this.sections.length - 1) {
-        // Scrolling down, at bottom of section
-        e.preventDefault();
-        this.lastScrollTime = now;
-        this.scrollToSection(this.currentSection + 1);
-      } else if (e.deltaY < 0 && isAtTop && this.currentSection > 0) {
-        // Scrolling up, at top of section
-        e.preventDefault();
-        this.lastScrollTime = now;
-        this.scrollToSection(this.currentSection - 1);
-      }
+    const threshold = Math.min(this.scrollThreshold, windowHeight * 0.35);
+
+    if (direction === 'down') {
+      return scrollTop + windowHeight >= sectionTop + sectionHeight - threshold;
     }
+
+    if (direction === 'up') {
+      return scrollTop <= sectionTop + threshold;
+    }
+
+    return false;
+  }
+
+  teaseTransition() {
+    if (!this.glitchOverlay || this.isScrolling) return;
+
+    gsap.killTweensOf(this.glitchOverlay);
+
+    gsap.timeline()
+      .set(this.glitchOverlay, {
+        opacity: 0,
+        scale: 1.01,
+        filter: 'contrast(1.2) saturate(1.05)'
+      })
+      .to(this.glitchOverlay, {
+        opacity: 0.28,
+        duration: 0.18,
+        ease: 'power2.out'
+      })
+      .to(this.glitchOverlay, {
+        opacity: 0,
+        duration: 0.4,
+        ease: 'power1.in'
+      });
   }
 
   handleScroll(direction) {
-    // Keep this for compatibility but the wheel handler is doing the work now
-    const now = Date.now();
-    if (this.isScrolling || now - this.lastScrollTime < this.scrollCooldown) return;
-
-    if (direction === 'down' && this.currentSection < this.sections.length - 1) {
-      this.lastScrollTime = now;
-      this.scrollToSection(this.currentSection + 1);
-    } else if (direction === 'up' && this.currentSection > 0) {
-      this.lastScrollTime = now;
-      this.scrollToSection(this.currentSection - 1);
-    }
+    return this.attemptSectionChange(direction, { strength: this.strongScrollThreshold + 1 });
   }
 
-  scrollToSection(index, duration = 0.4) {
-    if (this.isScrolling || index < 0 || index >= this.sections.length) return;
+  scrollToSection(index) {
+    if (this.isScrolling || index < 0 || index >= this.sections.length || index === this.currentSection) return;
+
+    const previousSection = this.currentSection;
+    const outgoingSection = this.sections[previousSection];
+    const targetSection = this.sections[index];
+
+    if (!targetSection) return;
 
     this.isScrolling = true;
-    const previousSection = this.currentSection;
+    this.lastScrollTime = Date.now();
     this.currentSection = index;
 
-    const targetSection = this.sections[index];
-    const currentSectionEl = this.sections[previousSection];
-    
+    this.dispatchSectionChange();
+
     // Start glitch transition
-    this.triggerGlitchTransition();
-    
-    // Add transition classes
-    currentSectionEl.classList.add('transitioning-out');
+    this.triggerGlitchTransition(outgoingSection, targetSection);
+
+    if (outgoingSection) {
+      outgoingSection.classList.add('transitioning-out');
+    }
     targetSection.classList.add('transitioning-in');
-    
-    // Instant snap to section with slight delay for effect
-    setTimeout(() => {
+
+    gsap.delayedCall(0.35, () => {
       window.scrollTo({
         top: targetSection.offsetTop,
-        behavior: 'auto' // Instant, no smooth scrolling
+        behavior: 'auto'
       });
-      
-      // Remove transition classes and add reveal
-      setTimeout(() => {
-        currentSectionEl.classList.remove('transitioning-out');
-        targetSection.classList.remove('transitioning-in');
-        
-        // Trigger content reveal animation
-        this.animateSectionContent(targetSection, index);
-        
-        this.isScrolling = false;
-      }, 100);
-      
-    }, 200); // Brief delay for glitch effect
-  }
-
-  triggerGlitchTransition() {
-    if (!this.glitchOverlay) return;
-    
-    // Show glitch overlay
-    gsap.set(this.glitchOverlay, { opacity: 1 });
-    
-    // Hide it after animation
-    gsap.to(this.glitchOverlay, {
-      opacity: 0,
-      duration: 0.5,
-      delay: 0.3,
-      ease: "power2.out"
     });
-    
-    // Add glitch effect to current section
-    const currentSectionEl = this.sections[this.currentSection];
-    if (currentSectionEl) {
-      currentSectionEl.classList.add('glitching');
-      setTimeout(() => {
-        currentSectionEl.classList.remove('glitching');
-      }, 400);
-    }
+
+    gsap.delayedCall(0.95, () => {
+      if (outgoingSection) {
+        outgoingSection.classList.remove('transitioning-out');
+      }
+      targetSection.classList.remove('transitioning-in');
+      this.animateSectionContent(targetSection);
+      this.isScrolling = false;
+    });
   }
 
-  animateSectionContent(section, index) {
+  triggerGlitchTransition(outgoingSection, incomingSection) {
+    if (!this.glitchOverlay) return;
+
+    gsap.killTweensOf(this.glitchOverlay);
+
+    const tl = gsap.timeline();
+
+    tl.set(this.glitchOverlay, {
+      opacity: 0,
+      scale: 1.02,
+      filter: 'contrast(1.4) saturate(1.2)'
+    })
+      .to(this.glitchOverlay, {
+        opacity: 0.9,
+        duration: 0.18,
+        ease: 'power4.out'
+      })
+      .to(this.glitchOverlay, {
+        opacity: 0.75,
+        duration: 0.28,
+        ease: 'expo.out'
+      })
+      .to(this.glitchOverlay, {
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power1.out',
+        delay: 0.25
+      });
+
+    const addGlitchClass = (el) => {
+      if (!el) return;
+      el.classList.add('glitching');
+      setTimeout(() => {
+        el.classList.remove('glitching');
+      }, 900);
+    };
+
+    addGlitchClass(outgoingSection);
+    addGlitchClass(incomingSection);
+  }
+
+  animateSectionContent(section) {
+    if (!section) return;
+
     // Find elements to animate within the section
     const fadeElements = section.querySelectorAll('[data-fade-in]');
     const slideElements = section.querySelectorAll('[data-slide-up]');
@@ -268,8 +374,8 @@ class ScrollController {
         el.classList.add('glitch-text');
         setTimeout(() => {
           el.classList.remove('glitch-text');
-        }, 300);
-      }, i * 50);
+        }, 850);
+      }, i * 60);
     });
 
     // Reset and animate fade elements with stagger
@@ -319,14 +425,36 @@ class ScrollController {
     sectionContent.classList.add('section-content');
   }
 
+  dispatchSectionChange() {
+    const meta = this.sectionMeta[this.currentSection];
+    if (!meta) return;
+
+    window.dispatchEvent(new CustomEvent('sectionChange', {
+      detail: {
+        index: this.currentSection,
+        id: meta.id,
+        title: meta.title,
+        variant: meta.variant,
+        total: this.sections.length
+      }
+    }));
+  }
+
   updateCurrentSection(index) {
-    if (!this.isScrolling) {
-      this.currentSection = index;
-    }
+    if (this.isScrolling || index === this.currentSection) return;
+
+    this.currentSection = index;
+    this.dispatchSectionChange();
   }
 
   // Public method to manually go to a section
   goToSection(index) {
+    this.scrollToSection(index);
+  }
+
+  scrollToSectionById(id) {
+    const index = this.sectionMeta.findIndex((meta) => meta.id === id);
+    if (index === -1) return;
     this.scrollToSection(index);
   }
 
@@ -339,6 +467,13 @@ class ScrollController {
     };
   }
 
+  handleSectionRequest(event) {
+    const { id } = event.detail || {};
+    if (!id) return;
+
+    this.scrollToSectionById(id);
+  }
+
   destroy() {
     // Clean up
     if (this.observer) {
@@ -349,7 +484,9 @@ class ScrollController {
     if (this.handleWheel) {
       window.removeEventListener('wheel', this.handleWheel);
     }
-    
+
+    window.removeEventListener('requestSectionScroll', this.handleSectionRequest);
+
     // Remove glitch overlay
     if (this.glitchOverlay && this.glitchOverlay.parentNode) {
       this.glitchOverlay.parentNode.removeChild(this.glitchOverlay);
@@ -361,9 +498,9 @@ class ScrollController {
     this.enableNativeScrollSnap();
     
     // Remove other event listeners
-    document.removeEventListener('keydown', this.setupKeyboardEvents);
-    document.removeEventListener('touchstart', this.setupTouchEvents);
-    document.removeEventListener('touchend', this.setupTouchEvents);
+    document.removeEventListener('keydown', this.handleKeydown);
+    document.removeEventListener('touchstart', this.onTouchStart);
+    document.removeEventListener('touchend', this.onTouchEnd);
   }
 }
 

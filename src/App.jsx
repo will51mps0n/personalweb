@@ -35,24 +35,53 @@ const App = () => {
         <Navbar />
         
         {/* Add data-scroll-section to each main section */}
-        <div data-scroll-section>
+        <div
+          data-scroll-section
+          data-section-id="hero"
+          data-section-title="Adam Simpson"
+          data-title-variant="hero"
+          data-scroll-difficulty="hard"
+          data-scroll-mode="panel"
+        >
           <Hero />
         </div>
         
-        <div data-scroll-section>
+        <div
+          data-scroll-section
+          data-section-id="work"
+          data-section-title="Select Projects"
+          data-scroll-difficulty="hard"
+          data-scroll-mode="panel"
+        >
           <ShowcaseSection />
         </div>
         
-        <div data-scroll-section>
+        <div
+          data-scroll-section
+          data-section-id="experience"
+          data-section-title="Experience"
+          data-scroll-mode="scrollable"
+        >
           <Experience />
         </div>
         
-        <div data-scroll-section>
+        <div
+          data-scroll-section
+          data-section-id="skills"
+          data-section-title="Tech Stack"
+          data-scroll-mode="panel"
+        >
           <TechStack />
         </div>
         
-        
+        <div
+          data-scroll-section
+          data-section-id="contact"
+          data-section-title="Contact"
+          data-scroll-mode="panel"
+        >
           <Footer />
+        </div>
       </div>
     </>
   );

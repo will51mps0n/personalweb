@@ -60,14 +60,11 @@ export default function AppShowcase() {
 
   return (
     <section id="work" data-title="Projects" ref={sectionRef} className="work-section ref-wrap">
-      <header className="work-header">
-        <h2 className="work-title">Select projects</h2>
-        <div className="work-count">
-          <span className="work-current">{pad(activeIndex)}</span>
-          <span className="work-divider">/</span>
-          <span className="work-total">{pad(total)}</span>
-        </div>
-      </header>
+      <div className="work-count-floating">
+        <span className="work-current">{pad(activeIndex)}</span>
+        <span className="work-divider">/</span>
+        <span className="work-total">{pad(total)}</span>
+      </div>
 
       <div className="ref-body">
         {/* LEFT: list */}
