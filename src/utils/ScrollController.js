@@ -24,6 +24,8 @@ class ScrollController {
     this.sectionMeta = [];
     this.strongScrollThreshold = 35;
     this.minScrollStrength = 3;
+    this.glitchTextDuration = 1.2;
+    this.initialRevealPlayed = false;
 
     this.handleSectionRequest = this.handleSectionRequest.bind(this);
     this.onTouchStart = this.onTouchStart.bind(this);
@@ -44,6 +46,8 @@ class ScrollController {
       difficulty: section.dataset.scrollDifficulty || 'normal',
       mode: section.dataset.scrollMode || 'panel'
     }));
+
+    this.prepareGlitchContentDefaults();
 
     // Create glitch overlay
     this.createGlitchOverlay();
@@ -67,6 +71,8 @@ class ScrollController {
 
     this.dispatchSectionChange();
 
+    this.runInitialReveal();
+
   }
 
   createGlitchOverlay() {
@@ -74,6 +80,20 @@ class ScrollController {
     this.glitchOverlay = document.createElement('div');
     this.glitchOverlay.className = 'glitch-overlay';
     document.body.appendChild(this.glitchOverlay);
+  }
+
+  prepareGlitchContentDefaults() {
+    this.sections.forEach((section) => {
+      const elements = this.getGlitchElements(section);
+      if (elements.length === 0) return;
+
+      gsap.set(elements, {
+        opacity: 0,
+        y: 14,
+        filter: 'blur(4px)',
+        pointerEvents: 'none'
+      });
+    });
   }
 
   disableNativeScrollSnap() {
@@ -133,6 +153,26 @@ class ScrollController {
 
   setupKeyboardEvents() {
     document.addEventListener('keydown', this.handleKeydown);
+  }
+
+  runInitialReveal() {
+    if (this.initialRevealPlayed) return;
+
+    const initialSection = this.sections[0];
+    if (!initialSection) return;
+
+    this.initialRevealPlayed = true;
+
+    gsap.delayedCall(0.2, () => {
+      const introTimeline = this.triggerGlitchTransition(null, initialSection);
+
+      introTimeline.add(() => {
+        this.animateSectionContent(initialSection);
+        this.isScrolling = false;
+      });
+
+      introTimeline.play(0);
+    });
   }
 
   handleKeydown(e) {
@@ -293,22 +333,22 @@ class ScrollController {
 
     this.dispatchSectionChange();
 
-    // Start glitch transition
-    this.triggerGlitchTransition(outgoingSection, targetSection);
+    const transitionTimeline = this.triggerGlitchTransition(outgoingSection, targetSection);
 
-    if (outgoingSection) {
-      outgoingSection.classList.add('transitioning-out');
-    }
-    targetSection.classList.add('transitioning-in');
+    transitionTimeline.add(() => {
+      if (outgoingSection) {
+        outgoingSection.classList.add('transitioning-out');
+      }
+      targetSection.classList.add('transitioning-in');
+    }, 0);
 
-    gsap.delayedCall(0.35, () => {
-      window.scrollTo({
-        top: targetSection.offsetTop,
-        behavior: 'auto'
-      });
-    });
+    transitionTimeline.to(window, {
+      scrollTo: { y: targetSection, autoKill: false },
+      duration: 0.9,
+      ease: 'power2.inOut'
+    }, 0.38);
 
-    gsap.delayedCall(0.95, () => {
+    transitionTimeline.add(() => {
       if (outgoingSection) {
         outgoingSection.classList.remove('transitioning-out');
       }
@@ -316,47 +356,94 @@ class ScrollController {
       this.animateSectionContent(targetSection);
       this.isScrolling = false;
     });
+
+    transitionTimeline.play(0);
   }
 
   triggerGlitchTransition(outgoingSection, incomingSection) {
-    if (!this.glitchOverlay) return;
+    if (this.glitchOverlay) {
+      gsap.killTweensOf(this.glitchOverlay);
+    }
 
-    gsap.killTweensOf(this.glitchOverlay);
+    const timeline = gsap.timeline({ paused: true });
 
-    const tl = gsap.timeline();
+    if (this.glitchOverlay) {
+      timeline
+        .set(this.glitchOverlay, {
+          opacity: 0,
+          scale: 1.02,
+          filter: 'contrast(1.45) saturate(1.25)'
+        }, 0)
+        .to(this.glitchOverlay, {
+          opacity: 0.95,
+          duration: 0.24,
+          ease: 'power4.out'
+        }, 0)
+        .to(this.glitchOverlay, {
+          opacity: 0.75,
+          duration: 0.32,
+          ease: 'expo.out'
+        }, 0.24)
+        .to(this.glitchOverlay, {
+          opacity: 0.42,
+          duration: 0.28,
+          ease: 'sine.out'
+        }, 0.56)
+        .to(this.glitchOverlay, {
+          opacity: 0,
+          duration: 0.74,
+          ease: 'power1.out'
+        }, 0.84);
+    }
 
-    tl.set(this.glitchOverlay, {
-      opacity: 0,
-      scale: 1.02,
-      filter: 'contrast(1.4) saturate(1.2)'
-    })
-      .to(this.glitchOverlay, {
-        opacity: 0.9,
-        duration: 0.18,
-        ease: 'power4.out'
-      })
-      .to(this.glitchOverlay, {
-        opacity: 0.75,
-        duration: 0.28,
-        ease: 'expo.out'
-      })
-      .to(this.glitchOverlay, {
+    this.applySectionGlitchClass(outgoingSection, 1.6);
+    this.applySectionGlitchClass(incomingSection, 1.6);
+
+    this.buildGlitchContentTimeline(timeline, outgoingSection, incomingSection);
+
+    return timeline;
+  }
+
+  buildGlitchContentTimeline(timeline, outgoingSection, incomingSection) {
+    if (!timeline) return;
+
+    const outgoingElements = this.getGlitchElements(outgoingSection);
+    const incomingElements = this.getGlitchElements(incomingSection);
+
+    if (outgoingElements.length > 0) {
+      timeline.set(outgoingElements, { pointerEvents: 'none' }, 0);
+      timeline.add(() => this.applyGlitchClass(outgoingElements, 1.35), 0.04);
+      timeline.to(outgoingElements, {
         opacity: 0,
-        duration: 0.8,
-        ease: 'power1.out',
-        delay: 0.25
-      });
+        y: -12,
+        filter: 'blur(6px)',
+        duration: 0.45,
+        ease: 'power2.in',
+        stagger: { each: 0.05, from: 'end' }
+      }, 0.14);
+    }
 
-    const addGlitchClass = (el) => {
-      if (!el) return;
-      el.classList.add('glitching');
-      setTimeout(() => {
-        el.classList.remove('glitching');
-      }, 900);
-    };
+    if (incomingElements.length > 0) {
+      timeline.set(incomingElements, {
+        opacity: 0,
+        y: 22,
+        filter: 'blur(6px)',
+        pointerEvents: 'none'
+      }, 0);
 
-    addGlitchClass(outgoingSection);
-    addGlitchClass(incomingSection);
+      timeline.add(() => this.applyGlitchClass(incomingElements, 1.35), 0.34);
+
+      timeline.to(incomingElements, {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 0.78,
+        ease: 'power3.out',
+        stagger: 0.06
+      }, 0.6);
+
+      timeline.set(incomingElements, { pointerEvents: 'auto' }, 1.42);
+    }
   }
 
   animateSectionContent(section) {
@@ -366,17 +453,6 @@ class ScrollController {
     const fadeElements = section.querySelectorAll('[data-fade-in]');
     const slideElements = section.querySelectorAll('[data-slide-up]');
     const scaleElements = section.querySelectorAll('[data-scale-in]');
-    const textElements = section.querySelectorAll('h1, h2, h3, p');
-    
-    // Add glitch text effect to headings during transition
-    textElements.forEach((el, i) => {
-      setTimeout(() => {
-        el.classList.add('glitch-text');
-        setTimeout(() => {
-          el.classList.remove('glitch-text');
-        }, 850);
-      }, i * 60);
-    });
 
     // Reset and animate fade elements with stagger
     if (fadeElements.length > 0) {
@@ -472,6 +548,44 @@ class ScrollController {
     if (!id) return;
 
     this.scrollToSectionById(id);
+  }
+
+  getGlitchElements(section) {
+    if (!section) return [];
+    return Array.from(section.querySelectorAll('[data-glitch-content]'));
+  }
+
+  applyGlitchClass(elements, durationMultiplier = 1) {
+    const nodes = Array.isArray(elements) ? elements : Array.from(elements || []);
+    const duration = this.glitchTextDuration * durationMultiplier * 1000;
+
+    nodes.forEach((node) => {
+      if (!node) return;
+      this.clearGlitchTimeout(node);
+      node.classList.add('glitch-text');
+      node.__glitchTimeoutId = setTimeout(() => {
+        node.classList.remove('glitch-text');
+        node.__glitchTimeoutId = null;
+      }, duration);
+    });
+  }
+
+  applySectionGlitchClass(section, durationMultiplier = 1) {
+    if (!section) return;
+    const duration = this.glitchTextDuration * durationMultiplier * 1000;
+
+    this.clearGlitchTimeout(section);
+    section.classList.add('glitching');
+    section.__glitchTimeoutId = setTimeout(() => {
+      section.classList.remove('glitching');
+      section.__glitchTimeoutId = null;
+    }, duration);
+  }
+
+  clearGlitchTimeout(target) {
+    if (!target || !target.__glitchTimeoutId) return;
+    clearTimeout(target.__glitchTimeoutId);
+    target.__glitchTimeoutId = null;
   }
 
   destroy() {

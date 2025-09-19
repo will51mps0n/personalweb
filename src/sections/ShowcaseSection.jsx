@@ -1,7 +1,5 @@
 // src/sections/ShowcaseSection.jsx
 import { useMemo, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
 
 const GITHUB_BASE = "https://github.com/will51mps0n"; // <-- change this once
 
@@ -50,17 +48,9 @@ export default function AppShowcase() {
 
   const total = projects.length;
 
-  useGSAP(() => {
-    gsap.fromTo(
-      sectionRef.current.querySelectorAll(".ref-list li"),
-      { y: 10, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.45, stagger: 0.04, ease: "power2.out" }
-    );
-  }, []);
-
   return (
     <section id="work" data-title="Projects" ref={sectionRef} className="work-section ref-wrap">
-      <div className="work-count-floating">
+      <div className="work-count-floating" data-glitch-content>
         <span className="work-current">{pad(activeIndex)}</span>
         <span className="work-divider">/</span>
         <span className="work-total">{pad(total)}</span>
@@ -83,6 +73,7 @@ export default function AppShowcase() {
                 className={isActive ? "is-active" : ""}
                 onMouseEnter={() => setActiveIndex(idx)}    // set, but never clear on leave
                 onFocus={() => setActiveIndex(idx)}         // keyboard focus also sets it
+                data-glitch-content
               >
                 <span className="num">{pad(idx)}</span>
                 <a className="ref-link" href={p.href} title={p.title} target={p.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
@@ -94,7 +85,7 @@ export default function AppShowcase() {
         </ol>
 
         {/* RIGHT: sticky media viewer (can swap to image for activeIndex later) */}
-        <aside className="ref-media">
+        <aside className="ref-media" data-glitch-content>
           <div className="ref-media-frame">
             <div className="ref-media-placeholder">Coming soon</div>
           </div>

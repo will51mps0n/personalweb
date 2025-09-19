@@ -762,5 +762,13 @@ body {
 }
 
 .glitch-text {
-  animation: rgb-split 0.85s ease-in-out;
+  animation: rgb-split 1.2s ease-in-out;
+}
+
+[data-glitch-content] {
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(4px);
+  will-change: opacity, transform, filter;
+  pointer-events: none;
 }

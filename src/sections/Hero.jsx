@@ -5,13 +5,6 @@ import HeroExperience from "../components/models/hero_models/HeroExperience";
 
 const Hero = () => {
   useGSAP(() => {
-    // Initial page load animation
-    gsap.fromTo(
-      ".hero-text p",
-      { y: 24, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", stagger: 0.06 }
-    );
-
     // Animate the 3D model container
     gsap.fromTo(
       ".hero-3d-layout",
@@ -49,6 +42,7 @@ const Hero = () => {
             pt-16 md:pt-14 lg:pt-12
           "
           data-fade-in
+          data-glitch-content
         >
           <div className="max-w-xl md:max-w-2xl lg:max-w-3xl">
             <div
@@ -93,7 +87,7 @@ const Hero = () => {
         </header>
 
         {/* RIGHT: 3D model */}
-        <figure data-scale-in>
+        <figure data-scale-in data-glitch-content>
           <div className="hero-3d-layout">
             <HeroExperience />
           </div>
@@ -111,6 +105,7 @@ const Hero = () => {
           select-none
         "
         data-fade-in
+        data-glitch-content
       >
         <div>University of Michigan CSE 2025</div>
         <div>Available for work</div>
