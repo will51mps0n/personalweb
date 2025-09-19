@@ -164,12 +164,13 @@ class ScrollController {
     this.initialRevealPlayed = true;
 
     gsap.delayedCall(0.2, () => {
-      const introTimeline = this.triggerGlitchTransition(null, initialSection);
+      const introTimeline = this.triggerGlitchTransition(null, initialSection) || gsap.timeline({ paused: true });
+
+      this.animateSectionContent(initialSection, introTimeline);
 
       introTimeline.add(() => {
-        this.animateSectionContent(initialSection);
         this.isScrolling = false;
-      });
+      }, '>');
 
       introTimeline.play(0);
     });
@@ -333,7 +334,9 @@ class ScrollController {
 
     this.dispatchSectionChange();
 
-    const transitionTimeline = this.triggerGlitchTransition(outgoingSection, targetSection);
+    const transitionTimeline = this.triggerGlitchTransition(outgoingSection, targetSection) || gsap.timeline({ paused: true });
+
+    this.animateSectionContent(targetSection, transitionTimeline);
 
     transitionTimeline.add(() => {
       if (outgoingSection) {
@@ -353,9 +356,8 @@ class ScrollController {
         outgoingSection.classList.remove('transitioning-out');
       }
       targetSection.classList.remove('transitioning-in');
-      this.animateSectionContent(targetSection);
       this.isScrolling = false;
-    });
+    }, '>');
 
     transitionTimeline.play(0);
   }
@@ -442,61 +444,55 @@ class ScrollController {
         stagger: 0.06
       }, 0.6);
 
-      timeline.set(incomingElements, { pointerEvents: 'auto' }, 1.42);
+      timeline.set(incomingElements, { pointerEvents: 'auto' }, '>');
     }
   }
 
-  animateSectionContent(section) {
+  animateSectionContent(section, timeline = null) {
     if (!section) return;
 
-    // Find elements to animate within the section
-    const fadeElements = section.querySelectorAll('[data-fade-in]');
-    const slideElements = section.querySelectorAll('[data-slide-up]');
-    const scaleElements = section.querySelectorAll('[data-scale-in]');
+    const fadeElements = Array.from(section.querySelectorAll('[data-fade-in]'));
+    const slideElements = Array.from(section.querySelectorAll('[data-slide-up]'));
+    const scaleElements = Array.from(section.querySelectorAll('[data-scale-in]'));
 
-    // Reset and animate fade elements with stagger
-    if (fadeElements.length > 0) {
-      gsap.set(fadeElements, { opacity: 0, y: 20, scale: 0.95 });
-      gsap.to(fadeElements, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: "power2.out",
-        delay: 0.4
-      });
-    }
+    const hasTimeline = Boolean(timeline);
+    const baseTimelineStart = hasTimeline ? 0.92 : 0;
 
-    // Reset and animate slide elements
-    if (slideElements.length > 0) {
-      gsap.set(slideElements, { opacity: 0, y: 40, rotationX: 10 });
-      gsap.to(slideElements, {
-        opacity: 1,
-        y: 0,
-        rotationX: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: "back.out(1.2)",
-        delay: 0.5
-      });
-    }
+    const animateGroup = (elements, setProps, toProps, timelinePosition, fallbackDelay) => {
+      if (elements.length === 0) return;
+      gsap.set(elements, setProps);
 
-    // Reset and animate scale elements
-    if (scaleElements.length > 0) {
-      gsap.set(scaleElements, { opacity: 0, scale: 0.7, rotation: 5 });
-      gsap.to(scaleElements, {
-        opacity: 1,
-        scale: 1,
-        rotation: 0,
-        duration: 0.9,
-        stagger: 0.1,
-        ease: "elastic.out(1, 0.5)",
-        delay: 0.3
-      });
-    }
+      if (hasTimeline) {
+        timeline.to(elements, { ...toProps }, timelinePosition);
+      } else {
+        gsap.to(elements, { ...toProps, delay: fallbackDelay });
+      }
+    };
 
-    // Add overall section content reveal
+    animateGroup(
+      fadeElements,
+      { opacity: 0, y: 20, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.08, ease: 'power2.out' },
+      baseTimelineStart,
+      0.4
+    );
+
+    animateGroup(
+      slideElements,
+      { opacity: 0, y: 40, rotationX: 10 },
+      { opacity: 1, y: 0, rotationX: 0, duration: 0.8, stagger: 0.12, ease: 'back.out(1.2)' },
+      baseTimelineStart + 0.12,
+      0.5
+    );
+
+    animateGroup(
+      scaleElements,
+      { opacity: 0, scale: 0.7, rotation: 5 },
+      { opacity: 1, scale: 1, rotation: 0, duration: 0.9, stagger: 0.1, ease: 'elastic.out(1, 0.5)' },
+      Math.max(baseTimelineStart - 0.08, 0),
+      0.3
+    );
+
     const sectionContent = section.querySelector('.section-content') || section;
     sectionContent.classList.add('section-content');
   }
