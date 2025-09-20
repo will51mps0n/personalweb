@@ -57,21 +57,22 @@ const App = () => {
         
         <div
           data-scroll-section
+          data-section-id="about"
+          data-section-title="About"
+          data-scroll-difficulty="hard"
+          data-scroll-mode="panel"
+        >
+          <About />
+        </div>
+
+        <div
+          data-scroll-section
           data-section-id="experience"
           data-section-title="Experience"
           data-scroll-difficulty="hard"
           data-scroll-mode="scrollable"
         >
           <Experience />
-        </div>
-        
-        <div
-          data-scroll-section
-          data-section-id="about"
-          data-section-title="About"
-          data-scroll-mode="panel"
-        >
-          <About />
         </div>
       </div>
     </>

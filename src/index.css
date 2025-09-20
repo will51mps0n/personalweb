@@ -6,31 +6,31 @@
    ========================= */
 :root {
   /* existing */
-  --gradient: radial-gradient(circle, #e5e5e5 0%, #fff 100%);
+  --gradient: radial-gradient(circle at 20% 20%, rgba(109,226,255,0.16) 0%, rgba(32,47,79,0.78) 55%, #05070a 100%);
   --nav-h: 72px;
-  --page-bg: #f1efec;
+  --page-bg: #04060b;
 
   /* additions for background */
-  --ink: #1c1c21;
-  --ink-60: rgba(28,28,33,0.6);
+  --ink: #eef3ff;
+  --ink-60: rgba(238,243,255,0.6);
   --led-size: 2.2;            /* LED/dot density (increase for bigger dots) */
-  --grain-intensity: 0.08;    /* film grain strength 0–1 */
-  --bg-contrast: 1;           /* tune with video/WebGL if needed */
+  --grain-intensity: 0.12;    /* film grain strength 0–1 */
+  --bg-contrast: 1.05;        /* tune with video/WebGL if needed */
 
-  /* your greyish black used as “text-ink” */
-   --color-default: #3a3a3a;   /* the paragraph grey you like */
+  /* default body copy tone for dark mode */
+  --color-default: #d9e2fb;
   --font-body: "Mona Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; /* same as bottom-left */
 }
 
 /* Tailwind design tokens (kept as you had) */
 @theme {
   --font-sans: "Mona Sans", sans-serif;
-  --color-white-50: #066bbd;   /* your blue */
-  --color-black-50: #6e6d6d;   /* grey */
-  --color-black-100: #1c1c21;  /* near black */
-  --color-black-200: #0e0e10;  /* darker black */
-  --color-blue-50: #839cb5;    /* muted blue-grey */
-  --color-blue-100: #2d2d38;   /* deep slate */
+  --color-white-50: #66e0ff;   /* electric cyan accent */
+  --color-black-50: rgba(255,255,255,0.22);   /* soft outline */
+  --color-black-100: #f4f7ff;  /* high-emphasis text */
+  --color-black-200: #ffffff;  /* pure white */
+  --color-blue-50: rgba(160,195,255,0.75);    /* muted cyan-lavender */
+  --color-blue-100: rgba(255,255,255,0.06);   /* glass surface */
 }
 
 /* =========================
@@ -43,6 +43,7 @@ html, body {
   color: var(--ink);
   scroll-behavior: smooth;
   font-family: "Mona Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color-scheme: dark;
 }
 section { width: 100dvw; }
 
@@ -129,7 +130,7 @@ body {
   z-index: 0;
   pointer-events: none;
   isolation: isolate;
-  background: var(--page-bg);
+  background: var(--gradient);
   filter: contrast(var(--bg-contrast));
 }
 
@@ -221,7 +222,7 @@ body {
   .hero-text {
     @apply flex flex-col justify-center md:text-[60px] text-[30px] font-semibold relative z-10 pointer-events-none;
   }
-  .hero-badge { @apply bg-white text-black py-2 px-4 rounded-full w-fit text-sm md:text-base text-nowrap; }
+  .hero-badge { @apply bg-white/10 backdrop-blur-md text-white py-2 px-4 rounded-full w-fit text-sm md:text-base text-nowrap border border-white/20; }
   .hero-3d-layout { @apply xl:w-[70%] w-full h-full min-h-[50vh] absolute xl:-top-4 top-36 xl:-right-20 right-0; }
 
   /* Navbar */
@@ -262,7 +263,7 @@ body {
     font-size: clamp(1rem, 2.2vw, 1.45rem);
     font-weight: 600;
     letter-spacing: .18em;
-    color: rgba(28,28,33,0.55);
+    color: rgba(244,247,255,0.55);
     text-transform: uppercase;
   }
 
@@ -281,7 +282,7 @@ body {
     text-transform: uppercase;
     background: transparent;
     border: none;
-    color: rgba(28,28,33,0.65);
+    color: var(--ink-60);
     padding: .25rem .5rem .25rem .75rem;
     cursor: pointer;
     transition: opacity .2s ease, transform .2s ease, color .2s ease;
@@ -446,10 +447,12 @@ body {
   .ref-list[data-hover="true"] li.is-active { opacity: 1; filter: none; }
 
   .ref-media { position: sticky; align-self: start; top: 8rem; }
-  .ref-media-frame { @apply w-full bg-white rounded-xl border border-black-50 overflow-hidden; aspect-ratio: 16 / 9; }
+  .ref-media-frame { @apply w-full bg-white/5 rounded-xl border border-white/10 overflow-hidden; aspect-ratio: 16 / 9; }
   .ref-media-placeholder {
     @apply w-full h-full flex items-center justify-center text-[color:var(--color-black-50)];
-    background: repeating-linear-gradient(45deg, #f3f3f3, #f3f3f3 8px, #ececec 8px, #ececec 16px);
+    background: repeating-linear-gradient(45deg,
+      rgba(255,255,255,0.14), rgba(255,255,255,0.14) 8px,
+      rgba(255,255,255,0.05) 8px, rgba(255,255,255,0.05) 16px);
   }
 
   .experience-scroll {
@@ -481,7 +484,7 @@ body {
   /* CTA Button (kept) */
   .cta-wrapper { @apply relative z-20 cursor-pointer; }
   .cta-button {
-    @apply px-4 py-4 rounded-lg bg-white text-white-50 flex justify-center items-center relative cursor-pointer overflow-hidden;
+    @apply px-4 py-4 rounded-lg bg-white/5 text-white flex justify-center items-center relative cursor-pointer overflow-hidden border border-white/10 backdrop-blur-md;
   }
   .cta-button .bg-circle {
     @apply absolute -right-10 origin-center top-1/2 -translate-y-1/2 w-[120%] h-[120%]
@@ -512,13 +515,13 @@ body {
 
   /* Timeline (Experience.jsx) */
   .timeline-wrapper { @apply absolute top-0 xl:left-[35.5vw] md:left-10 left-5 h-full flex justify-center; }
-  .timeline       { @apply absolute z-30 h-[130%] -top-20 bg-[#f1efeb] w-[5.5rem] md:w-[9rem] xl:w-[10rem]; }
+  .timeline       { @apply absolute z-30 h-[130%] -top-20 bg-white/5 w-[5.5rem] md:w-[9rem] xl:w-[10rem] border border-white/10 rounded-full; }
   .timeline-logo  { @apply md:size-28 size-7 flex-none flex justify-center items-center md:-translate-y-7 md:-translate-x-5; }
   .exp-card-wrapper { @apply flex flex-col-reverse xl:flex-row xl:gap-20 gap-10 justify-between; }
 
   /* Tech grid (TechStack.jsx) */
   .tech-grid { @apply grid xl:grid-cols-5 md:grid-cols-3 grid-cols-1 xl:gap-16 md:gap-10 gap-5 mt-16; }
-  .tech-card-animated-bg { @apply absolute left-0 bottom-[-100%] w-full h-full bg-[#c1c1c1] group-hover:bottom-0 transition-all duration-700; }
+  .tech-card-animated-bg { @apply absolute left-0 bottom-[-100%] w-full h-full bg-white/10 group-hover:bottom-0 transition-all duration-700; }
   .tech-card-content { @apply flex flex-col md:justify-center items-center xl:gap-5 xl:h-[50vh] overflow-hidden relative z-10 group-hover:cursor-grab; }
   .tech-card-content p { @apply text-lg 2xl:text-2xl pb-5 xl:pb-0 font-semibold text-white-50 text-center; }
   .tech-icon-wrapper { @apply flex justify-center items-center w-52 h-60 relative; }
@@ -526,7 +529,7 @@ body {
   /* Forms (Contact.jsx) */
   form label { @apply block text-white-50 mb-2; }
   form input, form textarea { @apply w-full px-4 py-4 md:text-base text-sm placeholder:text-blue-50 bg-blue-100 rounded-md; }
-  form a { @apply w-full py-4 bg-white text-black font-semibold rounded-md flex justify-center items-center gap-2; }
+  form a { @apply w-full py-4 bg-white-50 text-black font-semibold rounded-md flex justify-center items-center gap-2; }
   form a img { @apply inline-block; }
 
   /* Footer (Footer.jsx) */
@@ -534,7 +537,7 @@ body {
   .footer .footer-container { @apply grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-0 w-full; }
   .footer p { @apply text-center md:text-start; }
   .footer .socials { @apply flex items-center justify-center gap-5; }
-  .footer .socials .icon { @apply border border-black-50 bg-black-100 flex justify-center items-center rounded-xl size-10 md:size-12 cursor-pointer transition-all duration-500 hover:bg-black-50; }
+  .footer .socials .icon { @apply border border-white/10 bg-white/5 flex justify-center items-center rounded-xl size-10 md:size-12 cursor-pointer transition-all duration-500 hover:bg-white/20; }
   .footer .socials img { @apply inline-block; }
 }
 
