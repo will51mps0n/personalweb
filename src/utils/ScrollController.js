@@ -29,11 +29,13 @@ class ScrollController {
     this.boundaryHoldStart = null;
     this.boundaryHoldDirection = null;
     this.boundaryHoldDuration = 420;
+    this.pageShell = null;
 
     this.handleSectionRequest = this.handleSectionRequest.bind(this);
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onTouchEnd = this.onTouchEnd.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
+    this.handleBlinkEnd = this.handleBlinkEnd.bind(this);
   }
 
   init() {
@@ -52,9 +54,7 @@ class ScrollController {
     }));
 
     this.prepareGlitchContentDefaults();
-
-    // Create glitch overlay
-    this.createGlitchOverlay();
+    this.pageShell = document.querySelector('.page-shell');
 
     // Disable native scroll snap completely for snap effect
     this.disableNativeScrollSnap();
@@ -168,15 +168,8 @@ class ScrollController {
     this.initialRevealPlayed = true;
 
     gsap.delayedCall(0.2, () => {
-      const introTimeline = this.triggerGlitchTransition(null, initialSection) || gsap.timeline({ paused: true });
-
-      this.animateSectionContent(initialSection, introTimeline);
-
-      introTimeline.add(() => {
-        this.isScrolling = false;
-      }, '>');
-
-      introTimeline.play(0);
+      this.animateSectionContent(initialSection);
+      this.isScrolling = false;
     });
   }
 
@@ -413,7 +406,7 @@ class ScrollController {
 
     this.dispatchSectionChange();
 
-    const transitionTimeline = this.triggerGlitchTransition(outgoingSection, targetSection) || gsap.timeline({ paused: true });
+    const transitionTimeline = this.triggerBlinkTransition(outgoingSection, targetSection) || gsap.timeline({ paused: true });
 
     this.animateSectionContent(targetSection, transitionTimeline);
 
@@ -426,9 +419,9 @@ class ScrollController {
 
     transitionTimeline.to(window, {
       scrollTo: { y: targetSection, autoKill: false },
-      duration: 0.9,
-      ease: 'power2.inOut'
-    }, 0.38);
+      duration: 0.01,
+      ease: 'none'
+    }, 0.12);
 
     transitionTimeline.add(() => {
       if (outgoingSection) {
@@ -450,51 +443,22 @@ class ScrollController {
     transitionTimeline.play(0);
   }
 
-  triggerGlitchTransition(outgoingSection, incomingSection) {
-    if (this.glitchOverlay) {
-      gsap.killTweensOf(this.glitchOverlay);
-    }
-
+  triggerBlinkTransition(outgoingSection, incomingSection) {
     const timeline = gsap.timeline({ paused: true });
 
-    if (this.glitchOverlay) {
-      timeline
-        .set(this.glitchOverlay, {
-          opacity: 0,
-          scale: 1.02,
-          filter: 'contrast(1.45) saturate(1.25)'
-        }, 0)
-        .to(this.glitchOverlay, {
-          opacity: 0.95,
-          duration: 0.24,
-          ease: 'power4.out'
-        }, 0)
-        .to(this.glitchOverlay, {
-          opacity: 0.75,
-          duration: 0.32,
-          ease: 'expo.out'
-        }, 0.24)
-        .to(this.glitchOverlay, {
-          opacity: 0.42,
-          duration: 0.28,
-          ease: 'sine.out'
-        }, 0.56)
-        .to(this.glitchOverlay, {
-          opacity: 0,
-          duration: 0.74,
-          ease: 'power1.out'
-        }, 0.84);
-    }
+    timeline.add(() => {
+      this.startBlinkTransition();
+    }, 0);
 
-    this.applySectionGlitchClass(outgoingSection, 1.6);
-    this.applySectionGlitchClass(incomingSection, 1.6);
+    this.applySectionGlitchClass(outgoingSection, 1);
+    this.applySectionGlitchClass(incomingSection, 1);
 
-    this.buildGlitchContentTimeline(timeline, outgoingSection, incomingSection);
+    this.buildBlinkContentTimeline(timeline, outgoingSection, incomingSection);
 
     return timeline;
   }
 
-  buildGlitchContentTimeline(timeline, outgoingSection, incomingSection) {
+  buildBlinkContentTimeline(timeline, outgoingSection, incomingSection) {
     if (!timeline) return;
 
     const outgoingElements = this.getGlitchElements(outgoingSection);
@@ -502,15 +466,15 @@ class ScrollController {
 
     if (outgoingElements.length > 0) {
       timeline.set(outgoingElements, { pointerEvents: 'none' }, 0);
-      timeline.add(() => this.applyGlitchClass(outgoingElements, 1.35), 0.04);
+      timeline.add(() => this.applyGlitchClass(outgoingElements, 1.1), 0.02);
       timeline.to(outgoingElements, {
         opacity: 0,
         y: -12,
         filter: 'blur(6px)',
-        duration: 0.45,
+        duration: 0.32,
         ease: 'power2.in',
         stagger: { each: 0.05, from: 'end' }
-      }, 0.14);
+      }, 0.12);
     }
 
     if (incomingElements.length > 0) {
@@ -521,19 +485,35 @@ class ScrollController {
         pointerEvents: 'none'
       }, 0);
 
-      timeline.add(() => this.applyGlitchClass(incomingElements, 1.35), 0.34);
+      timeline.add(() => this.applyGlitchClass(incomingElements, 1.05), 0.22);
 
       timeline.to(incomingElements, {
         opacity: 1,
         y: 0,
         filter: 'blur(0px)',
-        duration: 0.78,
+        duration: 0.45,
         ease: 'power3.out',
         stagger: 0.06
-      }, 0.6);
+      }, 0.38);
 
       timeline.set(incomingElements, { pointerEvents: 'auto' }, '>');
     }
+  }
+
+  startBlinkTransition() {
+    if (!this.pageShell) return;
+
+    this.pageShell.removeEventListener('animationend', this.handleBlinkEnd);
+    this.pageShell.classList.remove('is-blinking');
+    // Force reflow so repeated transitions restart the animation cleanly
+    void this.pageShell.offsetWidth;
+    this.pageShell.classList.add('is-blinking');
+    this.pageShell.addEventListener('animationend', this.handleBlinkEnd, { once: true });
+  }
+
+  handleBlinkEnd() {
+    if (!this.pageShell) return;
+    this.pageShell.classList.remove('is-blinking');
   }
 
   animateSectionContent(section, timeline = null) {
@@ -544,7 +524,7 @@ class ScrollController {
     const scaleElements = Array.from(section.querySelectorAll('[data-scale-in]'));
 
     const hasTimeline = Boolean(timeline);
-    const baseTimelineStart = hasTimeline ? 0.92 : 0;
+    const baseTimelineStart = hasTimeline ? 0.34 : 0;
 
     const animateGroup = (elements, setProps, toProps, timelinePosition, fallbackDelay) => {
       if (elements.length === 0) return;
@@ -713,6 +693,11 @@ class ScrollController {
     // Remove glitch overlay
     if (this.glitchOverlay && this.glitchOverlay.parentNode) {
       this.glitchOverlay.parentNode.removeChild(this.glitchOverlay);
+    }
+    
+    if (this.pageShell) {
+      this.pageShell.removeEventListener('animationend', this.handleBlinkEnd);
+      this.pageShell.classList.remove('is-blinking');
     }
     
     this.scrollTriggers.forEach(trigger => trigger.kill());

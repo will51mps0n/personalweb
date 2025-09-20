@@ -1,0 +1,197 @@
+I want to create a section of moving text that looks like code. The later goal of this is that on the select projecsts page, when you hover over a project, the code noice will clear up and turn into text. Specifically it will say the name of the prokect at the top, then what the project is about in a few bullet points, and then the teck stack. So the general idea is that on the select projects page, on the right side where there is space for an image, we will have moving text that on project hover cleans up and does these things. Is this possible? this is som rerference code from an earlier discussion with chat gpt:
+Is it possible to have code that loks like background of the codex image. As in a bunch of characters moving, in that classic coding look. Do you know what I mean? like cna we create a box of random moving characters to add to my website?
+ChatGPT said:
+Thought for 8s
+
+absolutely — we can drop in a little “code rain / drifting glyphs” box anywhere on your site. here’s a tidy, copy-paste component (vanilla HTML/CSS/JS) that renders a responsive canvas of gently moving random characters, with soft trails and a pastel vibe like the Codex image.
+
+how to use
+
+paste this whole snippet near the bottom of your page (or split it up if you prefer).
+
+change the height on .code-noise or set it with inline styles to fit your layout.
+
+tweak the colors/opacity in the THEME section.
+
+<!-- Code Noise Box -->
+<div class="code-noise" id="codex-noise" aria-hidden="true"></div>
+
+<style>
+  /* Container */
+  .code-noise{
+    position:relative;
+    width:100%;
+    height:360px;              /* adjust as needed */
+    border-radius:20px;
+    overflow:hidden;
+    background:
+      radial-gradient(1200px 600px at 20% 10%, rgba(255,255,255,.35), transparent 60%),
+      radial-gradient(900px 500px at 70% 70%, rgba(255,255,255,.25), transparent 60%),
+      linear-gradient(135deg, #53c9ff 0%, #66d7ff 35%, #6fe3ff 60%, #7de3ff 100%); /* sky-ish */
+    box-shadow: 0 20px 45px rgba(0,0,0,.18);
+    isolation:isolate; /* keeps blends inside */
+  }
+  .code-noise canvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    display:block;
+    mix-blend-mode:screen;      /* makes light glyphs bloom */
+  }
+  /* optional: soft overlay blur like the Codex look */
+  .code-noise::after{
+    content:"";
+    position:absolute; inset:-20%;
+    background:
+      radial-gradient(400px 280px at 40% 40%, rgba(255,192,252,.25), transparent 60%),
+      radial-gradient(520px 360px at 70% 60%, rgba(255,242,180,.20), transparent 65%),
+      radial-gradient(620px 400px at 30% 75%, rgba(186,255,232,.22), transparent 60%);
+    filter: blur(30px);
+    pointer-events:none;
+    z-index:0;
+  }
+</style>
+
+<script>
+(function(){
+  const container = document.getElementById('codex-noise');
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  container.appendChild(canvas);
+
+  // ------- THEME / TUNING -------
+  const opts = {
+    fontSizeMin: 14,         // px, minimum glyph size
+    fontSizeMax: 22,         // px, maximum glyph size
+    columnGap: 2,            // px gap between columns
+    speedMin: 40,            // px/sec
+    speedMax: 120,           // px/sec
+    fade: 0.08,              // 0..1 trail persistence per frame (lower = longer trails)
+    density: 0.9,            // 0..1 chance a column is active
+    glyphs: 'abcdefghijklmnopqrstuvwxyz0123456789+=/*<>[]{}()$#&?!@%:;.,'.split(''),
+    // pastel mint ink like Codex:
+    color: 'rgba(235, 255, 214, 0.95)',    // glyph color
+    glow: true
+  };
+
+  // Respect reduced motion
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  let width, height, columns = [], running = !prefersReduced;
+
+  function resize(){
+    const {clientWidth:w, clientHeight:h} = container;
+    width = Math.floor(w * dpr);
+    height = Math.floor(h * dpr);
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    initColumns();
+  }
+
+  function rand(a,b){ return a + Math.random()*(b-a); }
+
+  function initColumns(){
+    columns = [];
+    // choose a base font size and stagger columns on a grid
+    const fs = rand(opts.fontSizeMin, opts.fontSizeMax);
+    const step = Math.round(fs + opts.columnGap) * dpr;
+    const count = Math.ceil(width / step);
+    for(let i=0;i<count;i++){
+      // each column has its own font size & speed within ranges to add variety
+      const fontPx = Math.round(rand(opts.fontSizeMin, opts.fontSizeMax)) * dpr;
+      const speed = rand(opts.speedMin, opts.speedMax) * dpr / 60; // px per frame
+      columns.push({
+        x: Math.round(i * step),
+        y: Math.round(rand(-height, 0)),
+        fontPx,
+        speed,
+        active: Math.random() < opts.density
+      });
+    }
+  }
+
+  function draw(){
+    // fade the canvas for trails
+    ctx.fillStyle = `rgba(0,0,0,${opts.fade})`;
+    ctx.fillRect(0,0,width,height);
+
+    for(const c of columns){
+      if(!c.active) continue;
+      // set font and style per column
+      ctx.font = `${c.fontPx}px ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace`;
+      ctx.textBaseline = 'top';
+
+      // random glyph each step
+      const g = opts.glyphs[(Math.random()*opts.glyphs.length)|0];
+
+      // subtle glow
+      if(opts.glow){
+        ctx.shadowColor = opts.color;
+        ctx.shadowBlur = 8 * dpr;
+      } else {
+        ctx.shadowBlur = 0;
+      }
+
+      ctx.fillStyle = opts.color;
+      ctx.fillText(g, c.x, c.y);
+
+      // advance column
+      c.y += c.speed;
+      // occasionally change glyph faster by skipping rows (adds “flicker”)
+      if(Math.random() < 0.03) c.y += c.speed * 2;
+
+      // wrap when off-screen
+      if(c.y > height){
+        c.y = Math.round(rand(-height * 0.2, 0));
+        // randomly toggle active/inactive to create gaps
+        c.active = Math.random() < opts.density;
+      }
+    }
+  }
+
+  let rafId, last;
+  function loop(ts){
+    if(!running) return;
+    if(last == null) last = ts;
+    // we’re using a frame-based speed above, so just draw
+    draw();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  // pause when offscreen to save battery
+  const io = new IntersectionObserver((entries)=>{
+    for(const e of entries){
+      if(e.isIntersecting && !prefersReduced){
+        running = true;
+        last = null;
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(loop);
+      } else {
+        running = false;
+        cancelAnimationFrame(rafId);
+      }
+    }
+  }, { threshold: 0.01 });
+  io.observe(container);
+
+  window.addEventListener('resize', resize, {passive:true});
+  resize();
+  if(running) rafId = requestAnimationFrame(loop);
+})();
+</script>
+
+customize quickly
+
+Size: change .code-noise { height: ... } or add a fixed height where you insert it.
+
+Colors: adjust opts.color (e.g., rgba(200,255,200,0.9)) and the container’s background gradients to match your palette.
+
+Vibe: increase opts.fade for shorter trails, or decrease to get longer streaks; change speedMin/Max for calmer or more frantic motion; change glyphs for a JS-only or hex-only look.
+
+Performance: it auto-pauses off-screen and respects prefers-reduced-motion.
+
+want a version that sits on a transparent background and just overlays glyphs on top of any section? remove the big gradient on .code-noise (keep it background: transparent), and the effect will float over whatever is behind it.
+
+if you’d rather have a “Matrix rain” variant (straight drops in neat columns) or a typewriter scatter (characters drift in random directions and fade), say the word and I’ll drop those as well.

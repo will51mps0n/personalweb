@@ -1,0 +1,253 @@
+Skip to the content.
+Adam Simpson
+Data Science & SWE Projects
+B.S. in Electrical Engineering & Computer Science
+University of Michigan, Class of 2025
+
+About Me
+I’m a recent graduate from the University of Michigan with a B.S. in Electrical Engineering and Computer Science, focused on systems engineering and infrastructure, software development, and data science and machine learning.
+
+My work spans low-level systems projects — including a virtual memory pager, a multithreaded file server, and custom threading libraries in C and C++ — as well as applied machine learning and full-stack development. I’ve built end-to-end applications like WaitFast, a mobile app with a live Flask/AWS backend, and explored deep learning through computer vision and reinforcement learning projects using PyTorch.
+
+This portfolio highlights a selection of these projects, with technical breakdowns, source code, and reflections on the challenges tackled and lessons learned.
+
+Click on the blue titles below to be redirected to the dedicated project pages.
+
+My Projects
+Systems & Infrastructure
+Multithreaded File Server – C++
+Designed and implemented a networked file server supporting concurrent client requests and hierarchical path traversal. The server communicates over TCP sockets and ensures crash consistency and correctness through atomic disk writes and thread-safe I/O using RAII and Boost locks.
+Skills: Multithreading, RAII, Boost Locks, Socket Programming, File Systems
+
+Virtual Memory Pager – C++
+Built a virtual memory subsystem that handles page faults, copy-on-write behavior, and page eviction using the clock algorithm. The pager simulates real-world memory management logic, including read/write protections and shared memory scenarios across processes.
+Skills: Virtual Memory, Page Tables, MMU Simulation, Copy-on-Write, Clock Algorithm
+
+Custom Thread Library – C++
+Developed a cooperative user-level threading library using ucontext.h, supporting thread scheduling, context switching, and synchronization primitives like mutexes and condition variables.
+Skills: Thread Scheduling, ucontext, Mutexes, Condition Variables
+
+LC-2K Assembler & Pipeline Simulator – C
+Wrote a full assembler and 5-stage pipelined simulator for the LC-2K instruction set, with support for label resolution, instruction decoding, and pipeline hazard mitigation. Skills: Systems Programming, Assembly, Pipeline Simulation
+
+LC-2K Cache Simulator – C
+Simulated a parameterized LRU cache system with support for configurable block and set sizes. Logged memory operations to validate eviction policy and cache performance under various workloads.
+Skills: Memory Management, Cache Simulation, LRU Policy
+
+Traveling Salesman Solver – C++
+Implemented a TSP solver combining minimum spanning tree heuristics, nearest insertion, and optimized branch & bound search to compute near-optimal tour paths.
+Skills: Algorithm Design, MST, Heuristics, Bash Scripting
+
+Data Science, Artificial Intelligence, & Machine Learning
+Power Outage Analysis – Python & ML
+Built a regression pipeline to estimate the financial cost of power outages using Random Forests. Focused on extensive feature engineering and hyperparameter optimization on real utility data.
+Skills: Scikit-learn, Pandas, Data Cleaning, Feature Engineering, Regression, Hyperparameter Tuning
+
+Stock Prediction Pipeline – Python
+Developed an end-to-end forecasting system for stock prices, integrating live data scraping, technical indicators, and models like LSTM and Random Forests to predict future price movements.
+Skills: Time Series Forecasting, API Integration, Linear Regression, Random Forest, LSTM
+
+AlphaZero Othello – Python & AI
+Trained an AlphaZero-inspired agent using Monte Carlo Tree Search and a deep neural network for board evaluation and policy guidance. Self-play loop built for continuous model improvement.
+Skills: PyTorch, Reinforcement Learning, MCTS, Neural Networks
+
+CIFAR-10 Classifier – Python & AI
+Built image classification models on CIFAR-10 using CNNs and fully connected networks. Ran grid search over architectures and training hyperparameters to compare accuracy and convergence.
+Skills: PyTorch, CNNs, Hyperparameter Tuning
+
+Connect Four AI – Python
+Engineered a perfect-play Connect Four AI using the Minimax algorithm with alpha-beta pruning and a hand-crafted evaluation function. Includes an interactive UI with Pygame.
+Skills: AI Search Algorithms, Game Theory, Pygame
+
+Mobile & Full-Stack Development
+WaitFast – Python, Swift, SQL
+Built an IOS mobile app that crowdsources and displays real-time wait times at local venues. Backend includes a live Flask API, PostgreSQL database, and AWS-hosted infrastructure.
+Skills: iOS UI/UX, Flask, AWS, PostgreSQL, Google & Apple APIs, Version Control
+Connect with Me
+Feel free to explore my work and reach out!
+
+GitHub • LinkedIn • Email
+
+ADAM SIMPSON
+Houston, TX | adwisi@umich.edu | (817) 832-9776 | LinkedIn | Portfolio | GitHub
+EDUCATION 
+University of Michigan, Computer Science and Engineering Division (CSE)	Ann Arbor, MI
+Bachelor of Science, Electrical Engineering and Computer Science	Aug 2022 - May 2025
+Graduated with Honors | GMC of Kappa Sigma-Alpha Zeta  |  U-M Data Science Team | EECS 281 & 370 Tutor
+Notable Courses: Operating Systems, Cyber Security, Artificial Intelligence, Data Science for Machine Learning
+Loyola Marymount University & UCLA Extension Program	Los Angeles, CA
+Bachelor of Fine Arts, Film and Television Production	Aug 2020 - May 2022
+Dean’s List for Four Consecutive Semesters | President's Merit Scholarship | LMU RHA Senator | LMU IEEE Club
+PROFESSIONAL EXPERIENCE
+Michigan Medicine, University of Michigan	Ann Arbor, MI
+Software Engineer - Research Collaborator	May 2025 - Aug 2025
+Designed OpenCV/Haar Cascade pipeline to automate hydrophobicity analysis, reducing manual error by 40%
+Trained classifiers on biomedical datasets to predict SNAT molecule solubility in catheter and ECMO tubing
+Built web interface to streamline experimental data logging and workflows for research teams
+Contributed to research that resulted in a peer-reviewed clinical publication on biomedical surface analysis
+American Airlines 	Hybrid
+Software Engineer - Data Scientist and Machine Learning Developer	Jan 2025 – May 2025
+Contracted to build and tune MLPClassifier to forecast baggage scan distributions, improving turnaround rate
+Conducted EDA on large flight datasets via SQL/Snowflake to uncover scan time patterns
+Mitigated class imbalance with clustering and scikit-learn, increasing model generalization by 25%
+Trained random forest models to improve classification across imbalanced and varied distributions
+Worked with ML leads to deploy predictive models across major hubs including Phoenix and Dallas
+Homestream	Ann Arbor, MI
+Software Engineer	Jul 2024 – Feb 2025
+Built MVP platform using Python ML + LLMs to automate document analysis and buyer support
+Automated document creation, analysis, and support to help buyers save an average of $10,000 per transaction
+Secured $15K in non-dilutive funding through Dare to Dream, Fuel Startup, and Michigan Business Challenge
+PROJECTS AND ACHIEVEMENTS
+WaitFast iOS	Jan 2025 – Present
+Launched Swift/Python app integrating Google & Apple APIs to track venue wait times in real time
+Managed SQL + AWS backend to dynamically update JSON objects; supports 200+ active users
+Network Server File System	Mar 2025 - Apr 2025
+Multithreaded networked file server with sockets, using hierarchical path traversal and block level operations
+Ensured concurrency safety and crash recovery via Boost locks, RAII, and hand-over-hand traversal
+Pager Implementation	Feb 2025 - Mar 2025
+Programmed a virtual memory pager in C++, managing page tables, physical memory, and per-process metadata
+Added fairness via clock-based eviction policy, improving system stability under heavy load
+NASA Ames Science Accelerator	Oct 2019 - Apr 2020
+Researched and developed models for the use of mycelium in aerospace applications under NASA mentorship
+Research selected for microgravity analysis and data comparison on the International Space Station
+Presented post-flight analysis at the Kennedy Space Center and pitched project concepts to NASA Ames
+ADDITIONAL
+Technical Skills: C++, Python, SQL, Bash, and Assembly; scikit-learn, PyTorch, Pandas, NumPy for ML/DS; NLP (Regex, SpaCy, LLMs); multithreaded systems, memory management, and file servers in C++; web/app dev with HTML/CSS, JavaScript, Swift, and AWS; experience with databases, computer architecture, and cybersecurity
+Creative Experience: University of Michigan Jazz Ensemble, past work experience in film and video production
+
+// src/sections/Hero.jsx
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import HeroExperience from "../components/models/hero_models/HeroExperience";
+
+
+const Hero = () => {
+ useGSAP(() => {
+   // Initial page load animation
+   gsap.fromTo(
+     ".hero-text p",
+     { y: 24, opacity: 0 },
+     { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", stagger: 0.06 }
+   );
+
+
+   // Animate the 3D model container
+   gsap.fromTo(
+     ".hero-3d-layout",
+     { scale: 0.8, opacity: 0 },
+     { scale: 1, opacity: 1, duration: 1.2, ease: "power2.out", delay: 0.3 }
+   );
+
+
+   // Animate the availability badge
+   gsap.fromTo(
+     ".availability-badge",
+     { y: 20, opacity: 0 },
+     { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", delay: 0.6 }
+   );
+ }, []);
+
+
+ return (
+   <section
+     id="hero"
+     className="relative overflow-hidden snap-section"
+     style={{ height: '100dvh' }}
+   >
+     <div
+       className="
+         hero-layout
+         min-h-[80vh] md:min-h-[82vh]
+         items-start
+       "
+     >
+       {/* LEFT: text column */}
+       <header
+         className="
+           flex flex-col justify-start
+           md:w-full w-screen
+           md:px-20 px-5
+           pt-16 md:pt-14 lg:pt-12
+         "
+         data-fade-in
+       >
+         <div className="max-w-xl md:max-w-2xl lg:max-w-3xl">
+           <div
+             className="
+               hero-text
+               font-semibold text-[color:var(--color-black-100)]
+               text-[15px] md:text-[16px] leading-[1.45]
+               -mt-1
+             "
+           >
+             <p
+               className="text-base leading-snug text-ink max-w-md font-semibold mt-34 ml-32"
+               data-slide-up
+             >
+               Systems-driven developer with a focus on <br />
+               low-level infrastructure and intelligent software. <br />
+               Building virtual memory pagers, multithreaded <br />
+               servers, and custom thread libraries in C and C++.
+             </p>
+             <br />
+             <p
+               className="text-base leading-snug text-ink max-w-md font-semibold ml-32"
+               data-slide-up
+             >
+               Experienced in applied machine learning, from <br />
+               airline operations forecasting at American Airlines <br />
+               to computer vision, reinforcement learning, and <br />
+               predictive modeling in Python and PyTorch.
+             </p>
+             <br />
+             <p
+               className="text-base leading-snug text-ink max-w-md font-semibold ml-32"
+               data-slide-up
+             >
+               Creator of full-stack and mobile products including <br />
+               WaitFast, a real-time iOS app with a Flask/AWS backend. <br />
+               Graduate of the University of Michigan, B.S. in <br />
+               Electrical Engineering &amp; Computer Science, Class of 2025.
+             </p>
+           </div>
+         </div>
+       </header>
+
+
+       {/* RIGHT: 3D model */}
+       <figure data-scale-in>
+         <div className="hero-3d-layout">
+           <HeroExperience />
+         </div>
+       </figure>
+     </div>
+
+
+     {/* Bottom-left availability */}
+     <aside
+       className="
+         availability-badge
+         fixed left-5 md:left-6 bottom-5 md:bottom-6 z-[60]
+         text-[12px] md:text-[13px]
+         text-[color:var(--color-black-100)]
+         opacity-80 hover:opacity-100 transition
+         select-none
+       "
+       data-fade-in
+     >
+       <div>University of Michigan CSE 2025</div>
+       <div>Available for work</div>
+       <a
+         href="mailto:adwisi@umich.edu"
+         className="underline underline-offset-2 decoration-[color:var(--color-white-50)]"
+       >
+         adwisi@umich.edu
+       </a>
+     </aside>
+   </section>
+ );
+};
+
+
+export default Hero;
+

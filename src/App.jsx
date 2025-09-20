@@ -30,7 +30,7 @@ const App = () => {
   return (
     <>
       <Background />
-      <div style={{ position: "relative", zIndex: 10 }}>
+      <div className="page-shell" style={{ position: "relative", zIndex: 10 }}>
         <Navbar />
         
         {/* Add data-scroll-section to each main section */}
