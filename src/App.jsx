@@ -32,47 +32,49 @@ const App = () => {
       <Background />
       <div className="page-shell" style={{ position: "relative", zIndex: 10 }}>
         <Navbar />
-        
-        {/* Add data-scroll-section to each main section */}
-        <div
-          data-scroll-section
-          data-section-id="hero"
-          data-section-title="Adam Simpson"
-          data-title-variant="hero"
-          data-scroll-difficulty="hard"
-          data-scroll-mode="panel"
-        >
-          <Hero />
-        </div>
-        
-        <div
-          data-scroll-section
-          data-section-id="work"
-          data-section-title="Select Projects"
-          data-scroll-difficulty="hard"
-          data-scroll-mode="panel"
-        >
-          <ShowcaseSection />
-        </div>
-        
-        <div
-          data-scroll-section
-          data-section-id="about"
-          data-section-title="About"
-          data-scroll-difficulty="hard"
-          data-scroll-mode="panel"
-        >
-          <About />
-        </div>
 
-        <div
-          data-scroll-section
-          data-section-id="experience"
-          data-section-title="Experience"
-          data-scroll-difficulty="hard"
-          data-scroll-mode="scrollable"
-        >
-          <Experience />
+        <div className="page-main">
+          {/* Add data-scroll-section to each main section */}
+          <div
+            data-scroll-section
+            data-section-id="hero"
+            data-section-title="Adam Simpson"
+            data-title-variant="hero"
+            data-scroll-difficulty="hard"
+            data-scroll-mode="panel"
+          >
+            <Hero />
+          </div>
+
+          <div
+            data-scroll-section
+            data-section-id="work"
+            data-section-title="Select Projects"
+            data-scroll-difficulty="hard"
+            data-scroll-mode="panel"
+          >
+            <ShowcaseSection />
+          </div>
+
+          <div
+            data-scroll-section
+            data-section-id="about"
+            data-section-title="About"
+            data-scroll-difficulty="hard"
+            data-scroll-mode="panel"
+          >
+            <About />
+          </div>
+
+          <div
+            data-scroll-section
+            data-section-id="experience"
+            data-section-title="Experience"
+            data-scroll-difficulty="hard"
+            data-scroll-mode="scrollable"
+          >
+            <Experience />
+          </div>
         </div>
       </div>
     </>

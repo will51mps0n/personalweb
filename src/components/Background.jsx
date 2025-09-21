@@ -12,7 +12,7 @@ export default function Background() {
   loop
   playsInline
   preload="auto"
-  src="/bgloopInv.mp4"
+  src="/bg2.mp4"
 />
     </div>
   );

@@ -100,7 +100,7 @@ const Hero = () => {
           availability-badge
           fixed left-5 md:left-6 bottom-5 md:bottom-6 z-[60]
           text-[12px] md:text-[13px]
-          text-[color:var(--color-black-100)]
+          text-[color:rgba(47,54,66,0.82)]
           opacity-80 hover:opacity-100 transition
           select-none
         "
@@ -111,7 +111,7 @@ const Hero = () => {
         <div>Available for work</div>
         <a
           href="mailto:adwisi@umich.edu"
-          className="underline underline-offset-2 decoration-[color:var(--color-white-50)]"
+          className="no-underline text-[color:rgba(47,54,66,0.82)] hover:text-[color:var(--color-white-50)]"
         >
           adwisi@umich.edu
         </a>

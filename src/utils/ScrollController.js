@@ -54,7 +54,7 @@ class ScrollController {
     }));
 
     this.prepareGlitchContentDefaults();
-    this.pageShell = document.querySelector('.page-shell');
+    this.pageShell = document.querySelector('.page-main');
 
     // Disable native scroll snap completely for snap effect
     this.disableNativeScrollSnap();
