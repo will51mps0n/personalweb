@@ -251,3 +251,128 @@ const Hero = () => {
 
 export default Hero;
 
+
+will51mps0n/README.md
+Hi! I'm Adam Simpson
+Python C++ PyTorch Linux Git
+
+I'm a software engineer who recently graduated from the University of Michigan with a B.S. in Computer Science (Class of 2025). My work bridges real-world machine learning applications with deep technical fluency in systems and infrastructure.
+
+AI/ML Projects: Reinforcement learning, PyTorch CNNs, LSTM and tree-based models for forecasting, AlphaZero-style game agents
+Data Science: Feature engineering, EDA, regression/classification pipelines, time series modeling
+Full-stack Tools: Flask APIs, SQL, AWS integrations, iOS development (App Store deployed)
+Systems Engineering: C++ memory managers, threading libraries, file servers, cache simulators
+I'm currently seeking roles where I can build intelligent systems—from modeling to deployment—and work with teams solving meaningful real-world problems.
+
+GitHub Stats
+Adam's GitHub stats
+
+Featured Projects
+AI & ML Projects
+Othello-AG0: Reinforcement learning agent for Othello using Monte Carlo Tree Search and a deep neural network trained via self-play, inspired by AlphaZero.
+Image-CNN: PyTorch-based CIFAR-10 classifier comparing fully connected networks and CNNs. Includes hyperparameter tuning and visualizations.
+Maze-Solver-AI: Intelligent agent solving grid mazes using BFS, DFS, UCS, and A* with pathfinding visualizations in Matplotlib.
+Data Science & Forecasting
+Power-Outage-Analysis: Full ML pipeline for predicting power outage costs using Random Forests and engineered climate/economic features. Includes EDA and cost modeling.
+Stock-Prediction-Pipeline: Time series forecasting pipeline using financial indicators and models like LSTM, Linear Regression, and Random Forest.
+App Store Project
+WaitFast (iOS App): Real-time wait time tracker for restaurants and bars. Built with Swift frontend, Flask backend, AWS hosting, SQL database, and secure API integrations.
+Systems Projects
+Networked-Fs-Cpp: C++ file server using Boost threads, TCP sockets, concurrency-safe I/O, and block-based file operations.
+Concurrency-Lib: Cooperative threading library using ucontext.h in C++. Implements thread scheduling, synchronization primitives, and voluntary context switches.
+MemoryManager-VM-OSPager: Virtual memory pager for a simulated OS kernel. Supports swap/file-backed memory, page tables, and copy-on-write with a clock eviction policy.
+Let's Connect
+Personal Website
+LinkedIn
+Email Me
+This profile highlights some of my most technically representative work.
+For full project breakdowns and design showcases, visit my personal site above.
+
+If you're curious about real-world MVPs and App Store deployment, check out WaitFast, my iOS app for live restaurant wait times.
+Want to see the code or technical design? Contact me.
+
+PinnedLoading
+ Networked-Fs-Cpp Public
+A multithreaded networked file server implemented in C++. Supports hierarchical directories, concurrent client access, and safe file system operations over TCP sockets. Includes custom locking, dis…
+
+ C++  1
+
+ Power-Outage-Analysis Public
+Data science pipeline for predicting power outage costs. Includes EDA, feature engineering, and regression models using Pandas, Plotly, and Scikit-learn.
+
+ Python  1
+
+ Othello-AG0 Public
+AlphaZero-style Othello AI using PyTorch and Monte Carlo Tree Search. Trains policy and value networks via self-play and evaluates against rule-based agents.
+
+ Python
+
+ MemoryManager-VM-OSPager Public
+A virtual memory pager implemented in C++ for a custom OS. Supports swap-backed and file-backed memory, copy-on-write, page eviction (Clock algorithm), and per-process page tables.
+
+ C++  1
+
+ Concurrency-Lib Public
+A cooperative multithreaded library built in C++ using ucontext.h. Implements thread creation, yielding, joining, and synchronization primitives like mutexes and condition variables.
+
+ C++  1
+
+ Market-Indicator-Analysis Public
+A data-driven approach to analyze intraday stock movements using EMA, VWAP, RSI, MACD, and other indicators. Includes ML models to detect 2-hour price extremes and rank feature importance for intra…
+
+Market-Indicator-Analysis Public
+A data-driven approach to analyze intraday stock movements using EMA, VWAP, RSI, MACD, and other indicators. Includes ML models to detect 2-hour price extremes and rank feature importance for intra…
+Updated on Jul 21
+will51mps0n Public
+Updated on Jul 12
+MemoryManager-VM-OSPager Public
+A virtual memory pager implemented in C++ for a custom OS. Supports swap-backed and file-backed memory, copy-on-write, page eviction (Clock algorithm), and per-process page tables.
+ C++  1 Updated on Jun 22
+Networked-Fs-Cpp Public
+A multithreaded networked file server implemented in C++. Supports hierarchical directories, concurrent client access, and safe file system operations over TCP sockets. Includes custom locking, dis…
+networking
+sockets
+filesystem
+concurrency
+multithreading
+tcp-server
+systems-programming
+ C++  1 Updated on Jun 22
+Adam-Simpson-Portfolio Public
+Personal portfolio site showcasing selected projects, resume, and technical highlights. Built with HTML/CSS and deployed on GitHub Pages.
+ HTML  1 Updated on Jun 21
+Power-Outage-Analysis Public
+Data science pipeline for predicting power outage costs. Includes EDA, feature engineering, and regression models using Pandas, Plotly, and Scikit-learn.
+ Python  1 Updated on Jun 21
+Concurrency-Lib Public
+A cooperative multithreaded library built in C++ using ucontext.h. Implements thread creation, yielding, joining, and synchronization primitives like mutexes and condition variables.
+ C++  1 Updated on Jun 21
+Cache-Simulator Public
+Configurable cache simulator in C. Implements LRU replacement, dirty bit logic, and block-based memory access tracing.
+ C  1 Updated on Jun 21
+Maze-Solver-AI Public
+A Maze Solving AI implementing BFS, DFS, UCS, and A* Search Algorithms.
+ Python Updated on Jun 21
+Stock-Prediction-Pipeline Public
+Stock analysis and forecasting pipeline using API data, TA indicators, and ML models (Linear Regression, Random Forest, LSTM). Outputs forecasts and visualizations.
+ Jupyter Notebook  1 Updated on Jun 21
+Linker Public
+Implements a two-pass linker for custom ISA assembly. Resolves symbol tables, performs relocation, and outputs final binary machine code.
+ C  1 Updated on Jun 21
+Assembler-and-Simulator Public
+Assembler and instruction-level simulator for a custom ISA. Written in C with support for label resolution, memory access, and multi-stage execution.
+ C  1 Updated on Jun 21
+Othello-AG0 Public
+AlphaZero-style Othello AI using PyTorch and Monte Carlo Tree Search. Trains policy and value networks via self-play and evaluates against rule-based agents.
+ Python MIT License Updated on Jun 20
+Image-CNN Public
+Image classifier built with Python and PyTorch. Trains and evaluates CNN and fully connected models on CIFAR-10 with grid search and visualizations
+ Python  1 Updated on Jun 20
+TSP Public
+Solves the Traveling Salesman Problem using various algorithms including brute force and dynamic programming. Visualizes tour paths and compares runtime/accuracy.
+ C++ Updated on Mar 18
+Connect-Four-AI Public
+A Connect Four agent built with Minimax and Alpha-Beta Pruning. Includes a heuristic evaluation function and Pygame UI for interactive play.
+ Python  1 Updated on Mar 18
+
+ 

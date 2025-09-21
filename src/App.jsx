@@ -1,15 +1,17 @@
 // src/App.jsx
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import About from "./sections/About";
 import Experience from "./sections/Experience";
 import Hero from "./sections/Hero";
 import ShowcaseSection from "./sections/ShowcaseSection";
 import Navbar from "./components/NavBar";
 import Background from "./components/Background";
+import AvailabilityBadge from "./components/AvailabilityBadge";
 import ScrollController from './utils/ScrollController';
 
 const App = () => {
   const scrollControllerRef = useRef(null);
+  const [showBadge, setShowBadge] = useState(true);
 
   useEffect(() => {
     // Initialize scroll controller after DOM is ready
@@ -27,11 +29,25 @@ const App = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleSectionChange = (event) => {
+      const id = event.detail?.id;
+      setShowBadge(id !== 'experience');
+    };
+
+    window.addEventListener('sectionChange', handleSectionChange);
+
+    return () => {
+      window.removeEventListener('sectionChange', handleSectionChange);
+    };
+  }, []);
+
   return (
     <>
       <Background />
       <div className="page-shell" style={{ position: "relative", zIndex: 10 }}>
         <Navbar />
+        <AvailabilityBadge visible={showBadge} />
 
         <div className="page-main">
           {/* Add data-scroll-section to each main section */}
