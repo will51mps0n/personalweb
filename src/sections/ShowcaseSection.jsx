@@ -8,6 +8,7 @@ const pad = (n) => String(n).padStart(2, "0");
 
 const PROJECT_DETAILS = {
   "Power Outage Prediction": {
+    category: "Machine Learning",
     summary: [
       "Built a regression pipeline that estimates outage cost from weather and grid telemetry feeds",
       "Engineered feature sets in Pandas and tuned random forest models with cross-validated search",
@@ -16,6 +17,7 @@ const PROJECT_DETAILS = {
     stack: ["Python", "scikit-learn", "Pandas", "Feature Engineering"],
   },
   "Stock Prediction Pipeline": {
+    category: "Machine Learning",
     summary: [
       "Developed an end-to-end time-series pipeline with live scraping and technical indicator generation",
       "Benchmarked LSTM, linear, and tree ensembles using walk-forward validation on rolling windows",
@@ -24,6 +26,7 @@ const PROJECT_DETAILS = {
     stack: ["Python", "Time Series", "APIs", "LSTM"],
   },
   "Market Indicator Analysis": {
+    category: "Machine Learning",
     summary: [
       "Correlated macroeconomic indicators with leading and lagging market behavior across sectors",
       "Applied PCA, cointegration, and clustering to isolate resilient trading signals",
@@ -32,6 +35,7 @@ const PROJECT_DETAILS = {
     stack: ["Python", "NumPy", "Matplotlib", "Statsmodels"],
   },
   "AlphaZero Othello": {
+    category: "Artificial Intelligence",
     summary: [
       "Implemented an AlphaZero-inspired Othello agent with batched Monte Carlo Tree Search",
       "Executed self-play training loops that continually improved policy and value networks",
@@ -40,6 +44,7 @@ const PROJECT_DETAILS = {
     stack: ["Python", "PyTorch", "Reinforcement Learning", "MCTS"],
   },
   "CIFAR-10 Classifier": {
+    category: "Artificial Intelligence",
     summary: [
       "Designed residual CNN baselines and fully connected models to study CIFAR-10 performance",
       "Performed grid searches across depth, augmentation, and schedulers to surpass 92% accuracy",
@@ -48,6 +53,7 @@ const PROJECT_DETAILS = {
     stack: ["PyTorch", "CNN", "Hyperparameter Tuning", "Weights & Biases"],
   },
   "Connect Four AI": {
+    category: "Artificial Intelligence",
     summary: [
       "Engineered a perfect-play Connect Four engine using minimax with alpha-beta pruning",
       "Crafted heuristic evaluation functions so mid-game searches remain responsive",
@@ -56,6 +62,7 @@ const PROJECT_DETAILS = {
     stack: ["Python", "AI Search", "Game Theory", "Pygame"],
   },
   "Multithreaded File Server": {
+    category: "Operating Systems",
     summary: [
       "Implemented a multithreaded network file server with socket I/O and hierarchical traversal",
       "Guaranteed concurrency safety and crash consistency via RAII locks and atomic write paths",
@@ -64,6 +71,7 @@ const PROJECT_DETAILS = {
     stack: ["C++", "Multithreading", "Boost", "Socket Programming"],
   },
   "Virtual Memory Pager": {
+    category: "Operating Systems",
     summary: [
       "Programmed a C++ virtual memory pager managing page tables and per-process metadata",
       "Implemented copy-on-write handling and a fairness-aware clock eviction policy",
@@ -72,6 +80,7 @@ const PROJECT_DETAILS = {
     stack: ["C++", "Virtual Memory", "Clock Algorithm", "MMU Simulation"],
   },
   "Custom Thread Library": {
+    category: "Operating Systems",
     summary: [
       "Developed a user-level threading library on top of ucontext for cooperative scheduling",
       "Implemented mutexes and condition variables to coordinate lightweight tasks",
@@ -80,6 +89,7 @@ const PROJECT_DETAILS = {
     stack: ["C", "ucontext", "Thread Scheduling", "Mutexes"],
   },
   "LC-2K Assembler & Pipeline": {
+    category: "Computer Architecture",
     summary: [
       "Built an assembler and five-stage pipeline simulator for the LC-2K instruction set",
       "Modeled forwarding, stalls, and hazard detection to mirror hardware execution",
@@ -88,6 +98,7 @@ const PROJECT_DETAILS = {
     stack: ["C", "Assembler", "Pipeline Simulation", "Systems"],
   },
   "LC-2K Cache Simulator": {
+    category: "Computer Architecture",
     summary: [
       "Implemented a configurable cache simulator supporting variable set and block sizes",
       "Captured hit/miss telemetry across benchmark workloads to study policy impact",
@@ -96,6 +107,7 @@ const PROJECT_DETAILS = {
     stack: ["C", "Cache Simulation", "LRU", "Performance Analysis"],
   },
   "Traveling Salesman Solver": {
+    category: "Algorithms",
     summary: [
       "Combined MST heuristics, nearest insertion, and branch-and-bound search for tour quality",
       "Applied 2-opt refinements to tighten solutions on TSPLIB benchmark sets",
@@ -104,6 +116,7 @@ const PROJECT_DETAILS = {
     stack: ["C++", "Algorithms", "Heuristics", "TSPLIB"],
   },
   "WaitFast iOS": {
+    category: "Full-Stack Development",
     summary: [
       "Launched an iOS and Flask/PostgreSQL stack that crowdsources venue wait times in real time",
       "Integrated Google and Apple APIs for maps, auth, and geofenced updates",
@@ -112,6 +125,7 @@ const PROJECT_DETAILS = {
     stack: ["SwiftUI", "Flask", "PostgreSQL", "AWS"],
   },
   "Michigan Medicine": {
+    category: "Data Science",
     summary: [
       "Collaborated with clinicians to analyze surgical throughput using predictive analytics",
       "Applied probabilistic queuing models to pinpoint bottlenecks in scheduling workflows",
@@ -120,6 +134,7 @@ const PROJECT_DETAILS = {
     stack: ["Python", "Operations Research", "Dashboards", "Pandas"],
   },
   "American Airlines": {
+    category: "Machine Learning",
     summary: [
       "Forecasted baggage scan distributions using disruption, weather, and crew telemetry",
       "Trained and tuned gradient boosting models deployed across major hubs",
