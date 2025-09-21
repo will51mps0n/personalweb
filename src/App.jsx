@@ -75,7 +75,7 @@ const App = () => {
           <div
             data-scroll-section
             data-section-id="about"
-            data-section-title="About"
+            data-section-title="About Me"
             data-scroll-difficulty="hard"
             data-scroll-mode="panel"
           >

@@ -3,26 +3,45 @@ const About = () => {
     <section id="about" className="snap-section full-height-only about-section">
       <div className="about-inner" data-glitch-content>
         <h2 className="about-title">Adam Simpson · Software Developer</h2>
-        <div className="about-copy">
-          <p>
-            Hi, I’m Adam Simpson — a systems-minded software developer with a love for
-            low-level infrastructure, intelligent tooling, and data-driven products. I studied
-            Electrical Engineering and Computer Science at the University of Michigan, where I dug
-            into operating systems, compilers, and distributed systems while building projects that
-            touched everything from virtual memory to real-time analytics.
-          </p>
-          <p>
-            My work spans C and C++ systems programming — building multithreaded file servers,
-            custom threading libraries, and virtual memory pagers — as well as applied machine
-            learning and full-stack development. I’ve shipped production-grade pipelines, delivered
-            forecasting tools for airline operations, and launched WaitFast, an iOS app with a live
-            Flask/PostgreSQL/AWS backend.
-          </p>
-          <p>
-            I’m happiest when I’m architecting reliable systems, profiling for performance, or
-            translating messy data into decisions. Whether it’s infrastructure, ML, or product, I
-            bring a focus on clarity, craftsmanship, and continuous learning to every build.
-          </p>
+        <div className="about-columns">
+          <div className="about-copy">
+            <p>
+              Hi! I’m Adam Simpson, a systems and ML focused software developer based in Houston, Texas, with a
+              B.S. in Electrical Engineering and Computer Science from the University of Michigan. I
+              gravitate toward the layer where operating systems, hardware, and intelligent software
+              intersect; hands-on work in kernel design, cybersecurity, and distributed systems keeps
+              me just as energized as product delivery.
+            </p>
+            <p>
+              My background spans multithreaded network file servers, user-level threading libraries,
+              and LC-2K assemblers, cache simulators, and pipelines that mirror real hardware. I enjoy
+              profiling race conditions, designing fair eviction policies for virtual memory pagers,
+              and documenting the architectural challenges to tackle with others.
+            </p>
+            <p>
+              I also build data-driven systems in Python and C++. From outage-cost regressors and
+              stock forecasting pipelines to AlphaZero-style game agents and CNNs for CIFAR-10, I’m
+              comfortable turning messy telemetry into deployable models. Recent work with American
+              Airlines and Michigan Medicine blended gradient boosting, queue theory, and dashboards
+              to help operations teams make better staffing and scheduling decisions.
+            </p>
+          </div>
+          <div className="about-copy">
+            <p>
+              Outside the terminal window, I shipped WaitFast, a SwiftUI app with a Flask and
+              PostgreSQL backend hosted on AWS that crowdsources venue wait times in real time. I’ve
+              contributed to research published with Michigan Medicine, helped secure startup funding
+              through Dare to Dream and the Michigan Business Challenge, and regularly mentor students
+              through EECS tutoring.
+            </p>
+            <p>
+              Whether breaking down low-level C++, production ML, or full-stack execution, I try
+              to bring a calm, detail-oriented mindset and clear communication with software development. I’m
+              always open to new collaborations, optimizing infrastructure, shipping new products, or
+              pushing research concepts into the wild. I enjoy coding with others and working on complex challenges,
+              or building interesting tools and interfaces.
+            </p>
+          </div>
         </div>
       </div>
     </section>
