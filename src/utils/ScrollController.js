@@ -224,7 +224,6 @@ class ScrollController {
 
   handleWheel(e) {
     if (this.mainScrollDisabled) {
-      e.preventDefault();
       return;
     }
     const now = Date.now();
@@ -335,27 +334,11 @@ class ScrollController {
       const threshold = 5; // Small threshold for boundary detection
 
       if (direction === 'down') {
-        const isAtBottom = scrollTop + clientHeight >= scrollHeight - threshold;
-        console.log('Checking down boundary:', { 
-          scrollTop, 
-          clientHeight, 
-          scrollHeight, 
-          threshold,
-          sum: scrollTop + clientHeight,
-          target: scrollHeight - threshold,
-          isAtBottom 
-        });
-        return isAtBottom;
+        return scrollTop + clientHeight >= scrollHeight - threshold;
       }
       
       if (direction === 'up') {
-        const isAtTop = scrollTop <= threshold;
-        console.log('Checking up boundary:', { 
-          scrollTop, 
-          threshold, 
-          isAtTop 
-        });
-        return isAtTop;
+        return scrollTop <= threshold;
       }
     }
 
