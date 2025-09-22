@@ -1,196 +1,142 @@
 // src/sections/Experience.jsx
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useMemo, useRef } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { expCards } from "../constants";
-import GlowCard from "../components/GlowCard";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Experience = () => {
-  const sectionRef = useRef(null);
-  const scrollContainerRef = useRef(null);
-  const timelineContentRef = useRef(null);
-  const duplicatedCards = useMemo(() => [...expCards, ...expCards], []);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const timelineRef = useRef(null);
 
-  useGSAP(() => {
-    const scroller = scrollContainerRef.current;
-    if (!scroller) return;
+  const handleNodeClick = (index) => {
+    setActiveIndex(index);
+  };
 
-    const ctx = gsap.context(() => {
-      gsap.utils.toArray(".timeline-card").forEach((card) => {
-        gsap.from(card, {
-          xPercent: -100,
-          opacity: 0,
-          transformOrigin: "left left",
-          duration: 1,
-          ease: "power2.inOut",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 80%",
-            scroller,
-          },
-        });
-      });
-
-      ScrollTrigger.create({
-        trigger: ".timeline-content",
-        start: "top top",
-        end: "bottom bottom",
-        scroller,
-        scrub: 1,
-        onUpdate: (self) => {
-          gsap.to(".timeline", {
-            scaleY: self.progress,
-            transformOrigin: "bottom bottom",
-            duration: 0.12,
-            ease: "none",
-          });
-        },
-      });
-
-      gsap.utils.toArray(".expText").forEach((text) => {
-        gsap.from(text, {
-          opacity: 0,
-          xPercent: 0,
-          duration: 1,
-          ease: "power2.inOut",
-          scrollTrigger: {
-            trigger: text,
-            start: "top 60%",
-            scroller,
-          },
-        });
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const handleScroll = (direction) => {
+    if (direction === "left" && activeIndex > 0) {
+      setActiveIndex((prev) => prev - 1);
+    } else if (direction === "right" && activeIndex < expCards.length - 1) {
+      setActiveIndex((prev) => prev + 1);
+    }
+  };
 
   useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    const timelineContent = timelineContentRef.current;
-    if (!scrollContainer || !timelineContent) return;
-
-    const totalHeight = timelineContent.scrollHeight;
-    const containerHeight = scrollContainer.clientHeight;
-    const halfHeight = totalHeight / 2;
-
-    let lock = false;
-
-    const handleScroll = () => {
-      if (lock) return;
-      const { scrollTop } = scrollContainer;
-
-      if (scrollTop >= halfHeight) {
-        lock = true;
-        scrollContainer.scrollTop = scrollTop - halfHeight;
-        setTimeout(() => {
-          lock = false;
-        }, 40);
-      } else if (scrollTop <= 0) {
-        lock = true;
-        scrollContainer.scrollTop = halfHeight - containerHeight;
-        setTimeout(() => {
-          lock = false;
-        }, 40);
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        handleScroll("left");
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        handleScroll("right");
       }
     };
 
-    const handleWheel = (event) => {
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      scrollContainer.scrollTop += event.deltaY;
-      event.preventDefault();
-    };
-
-    scrollContainer.addEventListener("wheel", handleWheel, { passive: false, capture: true });
-    scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
-    scrollContainer.scrollTop = 40;
-    ScrollTrigger.refresh();
-
-    return () => {
-      scrollContainer.removeEventListener("wheel", handleWheel, true);
-      scrollContainer.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeIndex]);
 
   useEffect(() => {
-    const handleSectionChange = (event) => {
-      const { id } = event.detail || {};
-      if (id === "experience") {
-        document.body.classList.add("experience-active");
-        window.dispatchEvent(new CustomEvent("disableMainScroll"));
-      } else {
-        document.body.classList.remove("experience-active");
-        window.dispatchEvent(new CustomEvent("enableMainScroll"));
-      }
-    };
+    if (!timelineRef.current) return;
 
-    window.addEventListener("sectionChange", handleSectionChange);
+    const nodeWidth = 120; // Approximate width + gap per node
+    const containerWidth = timelineRef.current.offsetWidth;
+    const scrollPosition = activeIndex * nodeWidth - containerWidth / 2 + nodeWidth / 2;
 
-    return () => {
-      window.removeEventListener("sectionChange", handleSectionChange);
-      document.body.classList.remove("experience-active");
-      window.dispatchEvent(new CustomEvent("enableMainScroll"));
-    };
-  }, []);
+    timelineRef.current.scrollTo({
+      left: Math.max(0, scrollPosition),
+      behavior: "smooth",
+    });
+  }, [activeIndex]);
+
+  const activeExperience = expCards[activeIndex];
 
   return (
     <section
-      ref={sectionRef}
       id="experience"
-      className="snap-section experience-isolated"
+      className="snap-section full-height-only"
       style={{ height: "100vh", overflow: "hidden" }}
+      data-glitch-content
     >
-      <div
-        ref={scrollContainerRef}
-        className="experience-scroll w-full h-full md:px-20 px-5"
-      >
-        <h1 className="sr-only">Professional Work Experience</h1>
-        <div className="mt-12 md:mt-20 relative pb-20">
-          <div ref={timelineContentRef} className="timeline-content">
-            <div className="relative z-50 xl:space-y-32 space-y-10">
-            {duplicatedCards.map((card, index) => (
-                <div key={`${card.title}-${index}`} className="exp-card-wrapper timeline-card">
-                  <div className="xl:w-2/6">
-                    <GlowCard card={card} index={index}>
-                      <div>
-                        <img src={card.imgPath} alt={card.title} />
-                      </div>
-                    </GlowCard>
+      <div className="horizontal-experience-container">
+        <button
+          className="nav-arrow nav-arrow-left"
+          onClick={() => handleScroll("left")}
+          disabled={activeIndex === 0}
+          aria-label="Previous experience"
+        >
+          ←
+        </button>
+
+        <div ref={timelineRef} className="horizontal-timeline">
+          <div className="timeline-track">
+            <div className="timeline-line" />
+
+            <div className="timeline-nodes">
+              {expCards.map((card, index) => (
+                <div
+                  key={index}
+                  className={`timeline-node ${index === activeIndex ? "active" : ""}`}
+                  onClick={() => handleNodeClick(index)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      handleNodeClick(index);
+                    }
+                  }}
+                >
+                  <div className="node-circle">
+                    <img
+                      src={card.logoPath}
+                      alt={`${card.company} logo`}
+                      className="node-logo"
+                    />
                   </div>
-                  <div className="xl:w-4/6">
-                    <div className="flex items-start">
-                      <div className="timeline-wrapper">
-                        <div className="timeline" />
-                        <div className="gradient-line w-1 h-full" />
-                      </div>
-                      <div className="expText flex xl:gap-20 md:gap-10 gap-5 relative z-20">
-                        <div className="timeline-logo">
-                          <img src={card.logoPath} alt={`${card.company} logo`} />
-                        </div>
-                        <div>
-                          <h2 className="font-semibold text-3xl text-[color:var(--color-white-50)]">{card.title}</h2>
-                          <p className="my-5 text-white-50">&nbsp;{card.date}</p>
-                          <p className="text-blue-50 italic">Responsibilities</p>
-                          <ul className="list-disc ms-5 mt-5 flex flex-col gap-5 text-[color:var(--color-black-100)]">
-                            {card.responsibilities.map((responsibility, idx) => (
-                              <li key={idx} className="text-lg">
-                                {responsibility}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <div className="node-label">{card.company}</div>
                 </div>
               ))}
             </div>
           </div>
+        </div>
+
+        <button
+          className="nav-arrow nav-arrow-right"
+          onClick={() => handleScroll("right")}
+          disabled={activeIndex === expCards.length - 1}
+          aria-label="Next experience"
+        >
+          →
+        </button>
+
+        <div className="experience-details">
+          {activeExperience && (
+            <div className="experience-card">
+              <div className="experience-header">
+                <img
+                  src={activeExperience.logoPath}
+                  alt={`${activeExperience.company} logo`}
+                  className="experience-logo"
+                />
+                <div>
+                  <h2 className="experience-title">{activeExperience.title}</h2>
+                  <p className="experience-company">{activeExperience.company}</p>
+                  <p className="experience-date">{activeExperience.date}</p>
+                </div>
+              </div>
+
+              <div className="experience-content">
+                <h3>Responsibilities</h3>
+                <ul className="responsibilities-list">
+                  {activeExperience.responsibilities.map((responsibility, index) => (
+                    <li key={index}>{responsibility}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="progress-indicator">
+          {activeIndex + 1} of {expCards.length}
         </div>
       </div>
     </section>

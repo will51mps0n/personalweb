@@ -30,9 +30,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const handleSectionChange = (event) => {
-      const id = event.detail?.id;
-      setShowBadge(id !== 'experience');
+    const handleSectionChange = () => {
+      setShowBadge(true);
     };
 
     window.addEventListener('sectionChange', handleSectionChange);
@@ -87,7 +86,7 @@ const App = () => {
             data-section-id="experience"
             data-section-title="Experience"
             data-scroll-difficulty="hard"
-            data-scroll-mode="scrollable"
+            data-scroll-mode="panel"
           >
             <Experience />
           </div>
