@@ -1,0 +1,537 @@
+Hello. I have a personal portfolio website, but I have a few issues. They all have to do with my ast work experience section. I am doing it in.a way that every section of my project takes up one full page. so if you scroll, it snaps to the next section. This works great - however, the experience page is different. THat page needs to scroll, because I have a time line that I want to appear and reveal itself as a user scrolls. But I want to isolate this page - basically once your on this page, you cant scroll back up or scroll down. I want the content to be an infinite loop, like if you scroll down to teh bottom of the time line t just scrolls back to the first instance, etc. One would have to rely on the navbar navigation to go back if they wanted to go back to the home page. Is this possible/? I dont want to change the way the other sections work - those are perfect. LEt me know if this is possivle and exactly what to change.
+
+Looking at your code, this is definitely possible! You want to create an isolated, infinite-scrolling experience section while keeping the snap behavior for all other sections. Here's exactly what you need to change:
+
+Modified Experience Section with Infinite Scroll
+Code 
+Now, you need to update your ScrollController to handle the isolation properly:
+
+Updated ScrollController with Experience Isolation
+Code 
+Finally, add this CSS to enhance the infinite scroll behavior:
+
+Additional CSS for Experience Section
+Code 
+Summary of Changes
+Here's what this implementation does:
+
+Isolates the Experience Section: When users enter the experience section, it completely disables the main scroll controller and prevents any section-to-section navigation via scrolling.
+Creates Infinite Scroll: The experience section duplicates its content and uses seamless scrolling logic to create an infinite loop effect.
+Prevents Navigation: Users cannot scroll out of the experience section naturally - they must use the navbar to navigate away.
+Maintains Other Sections: All other sections continue to work exactly as they did before with the snap-to-section behavior.
+Key Features:
+True Isolation: The experience section captures all wheel events and prevents them from bubbling up
+Infinite Timeline: Content duplicates and loops seamlessly when reaching the end
+Navbar-Only Exit: Users can only leave via navbar navigation
+Timeline Animation: The timeline still reveals progressively as users scroll
+Smooth Performance: Uses efficient scroll handling to prevent jank during rapid scrolling
+The user experience will be: scroll into experience section → get "trapped" in infinite scrolling timeline → must use navbar to navigate elsewhere → other sections work normally with snap behavior.
+
+This is reference code: 
+
+// src/sections/Experience.jsx
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef } from 'react';
+
+import { expCards } from "../constants";
+import GlowCard from "../components/GlowCard";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const Experience = () => {
+  const sectionRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const timelineContentRef = useRef(null);
+
+  useGSAP(() => {
+    // Loop through each timeline card and animate them in
+    gsap.utils.toArray(".timeline-card").forEach((card) => {
+      gsap.from(card, {
+        xPercent: -100,
+        opacity: 0,
+        transformOrigin: "left left",
+        duration: 1,
+        ease: "power2.inOut",
+        scrollTrigger: {
+          trigger: card,
+          start: "top 80%",
+          scroller: scrollContainerRef.current,
+        },
+      });
+    });
+
+    // Animate the timeline height as the user scrolls within the container
+    gsap.to(".timeline", {
+      scaleY: 0,
+      transformOrigin: "bottom bottom",
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".timeline-content",
+        start: "top top",
+        end: "bottom bottom",
+        scroller: scrollContainerRef.current,
+        scrub: 1,
+        onUpdate: (self) => {
+          gsap.to(".timeline", {
+            scaleY: self.progress,
+            duration: 0.1,
+            ease: "none"
+          });
+        },
+      },
+    });
+
+    gsap.utils.toArray(".expText").forEach((text) => {
+      gsap.from(text, {
+        opacity: 0,
+        xPercent: 0,
+        duration: 1,
+        ease: "power2.inOut",
+        scrollTrigger: {
+          trigger: text,
+          start: "top 60%",
+          scroller: scrollContainerRef.current,
+        },
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    const timelineContent = timelineContentRef.current;
+    if (!scrollContainer || !timelineContent) return;
+
+    // Create duplicate content for seamless looping
+    const originalCards = timelineContent.innerHTML;
+    timelineContent.innerHTML = originalCards + originalCards; // Duplicate the content
+
+    const totalHeight = timelineContent.scrollHeight;
+    const containerHeight = scrollContainer.clientHeight;
+    const halfHeight = totalHeight / 2; // Since we duplicated content
+
+    let isScrolling = false;
+
+    const handleScroll = () => {
+      if (isScrolling) return;
+
+      const scrollTop = scrollContainer.scrollTop;
+
+      // If we've scrolled past the original content, reset to beginning
+      if (scrollTop >= halfHeight) {
+        isScrolling = true;
+        scrollContainer.scrollTop = scrollTop - halfHeight;
+        setTimeout(() => {
+          isScrolling = false;
+        }, 50);
+      }
+      // If we've scrolled above the beginning, jump to the end
+      else if (scrollTop <= 0) {
+        isScrolling = true;
+        scrollContainer.scrollTop = halfHeight - containerHeight;
+        setTimeout(() => {
+          isScrolling = false;
+        }, 50);
+      }
+    };
+
+    const handleWheel = (event) => {
+      // Always prevent the wheel event from bubbling up to the main scroll controller
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      
+      // Allow normal scrolling within this container
+      const { deltaY } = event;
+      scrollContainer.scrollTop += deltaY;
+      
+      // Prevent default to stop any other scroll behaviors
+      event.preventDefault();
+    };
+
+    // Capture wheel events at the container level
+    scrollContainer.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Set initial scroll position to show first item clearly
+    scrollContainer.scrollTop = 50;
+
+    return () => {
+      scrollContainer.removeEventListener('wheel', handleWheel, true);
+      scrollContainer.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Block section navigation when this section is active
+  useEffect(() => {
+    const handleSectionChange = (event) => {
+      const { id } = event.detail || {};
+      
+      if (id === 'experience') {
+        // Disable main scroll controller when in experience section
+        document.body.style.overflow = 'hidden';
+        window.dispatchEvent(new CustomEvent('disableMainScroll'));
+      } else {
+        // Re-enable main scroll controller when leaving experience section
+        document.body.style.overflow = '';
+        window.dispatchEvent(new CustomEvent('enableMainScroll'));
+      }
+    };
+
+    window.addEventListener('sectionChange', handleSectionChange);
+
+    return () => {
+      window.removeEventListener('sectionChange', handleSectionChange);
+      document.body.style.overflow = ''; // Clean up on unmount
+    };
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="experience"
+      className="snap-section"
+      style={{ height: '100vh', overflow: 'hidden' }}
+    >
+      <div 
+        ref={scrollContainerRef}
+        className="experience-scroll w-full h-full md:px-20 px-5"
+        style={{ 
+          height: '100%', 
+          overflowY: 'auto',
+          overflowX: 'hidden'
+        }}
+      >
+        <h1 className="sr-only">Professional Work Experience</h1>
+        <div className="mt-12 md:mt-20 relative pb-20">
+          <div ref={timelineContentRef} className="timeline-content">
+            <div className="relative z-50 xl:space-y-32 space-y-10">
+              {expCards.map((card, index) => (
+                <div key={`${card.title}-${index}`} className="exp-card-wrapper timeline-card">
+                  <div className="xl:w-2/6">
+                    <GlowCard card={card}>
+                      <div>
+                        <img src={card.imgPath} alt="exp-img" />
+                      </div>
+                    </GlowCard>
+                  </div>
+                  <div className="xl:w-4/6">
+                    <div className="flex items-start">
+                      <div className="timeline-wrapper">
+                        <div className="timeline" />
+                        <div className="gradient-line w-1 h-full" />
+                      </div>
+                      <div className="expText flex xl:gap-20 md:gap-10 gap-5 relative z-20">
+                        <div className="timeline-logo">
+                          <img src={card.logoPath} alt="logo" />
+                        </div>
+                        <div>
+                          <h1 className="font-semibold text-3xl text-[color:var(--color-white-50)]">{card.title}</h1>
+                          <p className="my-5 text-white-50">
+                            &nbsp;{card.date}
+                          </p>
+                          <p className="text-blue-50 italic">
+                            Responsibilities
+                          </p>
+                          <ul className="list-disc ms-5 mt-5 flex flex-col gap-5 text-[color:var(--color-black-100)]">
+                            {card.responsibilities.map((responsibility, index) => (
+                              <li key={index} className="text-lg">
+                                {responsibility}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Experience;
+
+
+// Add these new methods and properties to your existing ScrollController.js
+
+class ScrollController {
+  constructor() {
+    // ... existing constructor code ...
+    this.mainScrollDisabled = false;
+    this.handleMainScrollToggle = this.handleMainScrollToggle.bind(this);
+  }
+
+  init() {
+    // ... existing init code ...
+    
+    // Add listeners for experience section isolation
+    window.addEventListener('disableMainScroll', this.handleMainScrollToggle);
+    window.addEventListener('enableMainScroll', this.handleMainScrollToggle);
+  }
+
+  handleMainScrollToggle(event) {
+    this.mainScrollDisabled = event.type === 'disableMainScroll';
+  }
+
+  handleWheel(e) {
+    const now = Date.now();
+
+    // If main scroll is disabled (we're in experience section), completely ignore wheel events
+    if (this.mainScrollDisabled) {
+      return; // Let the experience section handle its own scrolling
+    }
+
+    if (this.isScrolling || now - this.lastScrollTime < this.scrollCooldown) {
+      e.preventDefault();
+      return;
+    }
+
+    const meta = this.sectionMeta[this.currentSection];
+    if (!meta) return;
+
+    const direction = e.deltaY > 0 ? 'down' : 'up';
+    const strength = Math.abs(e.deltaY);
+
+    // For scrollable sections that aren't experience, check boundaries
+    if (meta.mode === 'scrollable' && meta.id !== 'experience') {
+      if (!this.isAtScrollableBoundary(direction, meta)) {
+        return;
+      }
+    }
+
+    // For non-scrollable sections, always prevent default
+    if (meta.mode !== 'scrollable') {
+      e.preventDefault();
+    }
+
+    const changed = this.attemptSectionChange(direction, { strength });
+
+    if (changed) {
+      e.preventDefault();
+    }
+  }
+
+  attemptSectionChange(direction, { strength = this.strongScrollThreshold + 1, force = false } = {}) {
+    const now = Date.now();
+
+    // Completely block section changes if main scroll is disabled
+    if (this.mainScrollDisabled && !force) {
+      return false;
+    }
+
+    if (this.isScrolling || now - this.lastScrollTime < this.scrollCooldown) {
+      return false;
+    }
+
+    const meta = this.sectionMeta[this.currentSection];
+    if (!meta) return false;
+
+    // Special handling for experience section - it should be isolated
+    if (!force && meta.id === 'experience') {
+      return false; // Never allow natural scrolling out of experience
+    }
+
+    const mode = meta.mode || 'panel';
+    const difficulty = meta.difficulty || 'normal';
+    const strongThreshold = difficulty === 'hard' ? this.strongScrollThreshold : this.minScrollStrength;
+
+    if (!force) {
+      const atBoundary = mode === 'scrollable' && this.isAtScrollableBoundary(direction, meta);
+
+      if (mode === 'scrollable' && !atBoundary && meta.id !== 'experience') {
+        this.resetBoundaryHold();
+        return false;
+      }
+
+      if (mode !== 'scrollable' && strength < strongThreshold) {
+        if (difficulty === 'hard') {
+          this.teaseTransition(direction);
+        }
+        return false;
+      }
+
+      if (mode === 'scrollable' && strength < this.minScrollStrength && meta.id !== 'experience') {
+        return false;
+      }
+
+      if (mode === 'scrollable' && difficulty === 'hard' && meta.id !== 'experience') {
+        const holdReady = this.handleBoundaryHold(now, direction, strength);
+        if (!holdReady) {
+          return false;
+        }
+      }
+    }
+
+    if (direction === 'down' && this.currentSection < this.sections.length - 1) {
+      this.scrollToSection(this.currentSection + 1);
+      return true;
+    }
+
+    if (direction === 'up' && this.currentSection > 0) {
+      this.scrollToSection(this.currentSection - 1);
+      return true;
+    }
+
+    return false;
+  }
+
+  scrollToSection(index) {
+    if (this.isScrolling || index < 0 || index >= this.sections.length || index === this.currentSection) return;
+
+    const previousSection = this.currentSection;
+    const outgoingSection = this.sections[previousSection];
+    const targetSection = this.sections[index];
+
+    if (!targetSection) return;
+
+    this.isScrolling = true;
+    this.resetBoundaryHold();
+    this.lastScrollTime = Date.now();
+    this.currentSection = index;
+
+    this.dispatchSectionChange();
+
+    const transitionTimeline = this.triggerBlinkTransition(outgoingSection, targetSection) || gsap.timeline({ paused: true });
+
+    this.animateSectionContent(targetSection, transitionTimeline);
+
+    transitionTimeline.add(() => {
+      if (outgoingSection) {
+        outgoingSection.classList.add('transitioning-out');
+      }
+      targetSection.classList.add('transitioning-in');
+    }, 0);
+
+    transitionTimeline.to(window, {
+      scrollTo: { y: targetSection, autoKill: false },
+      duration: 0.01,
+      ease: 'none'
+    }, 0.12);
+
+    transitionTimeline.add(() => {
+      if (outgoingSection) {
+        outgoingSection.classList.remove('transitioning-out');
+      }
+      targetSection.classList.remove('transitioning-in');
+      
+      // Special handling for experience section - don't reset scroll
+      if (targetSection.id === 'experience') {
+        const scrollContainer = targetSection.querySelector('.experience-scroll');
+        if (scrollContainer) {
+          // Let the experience section handle its own initial scroll position
+          // Don't reset to 0
+        }
+      }
+      
+      this.isScrolling = false;
+    }, '>');
+
+    transitionTimeline.play(0);
+  }
+
+  destroy() {
+    // ... existing destroy code ...
+    
+    // Remove experience section listeners
+    window.removeEventListener('disableMainScroll', this.handleMainScrollToggle);
+    window.removeEventListener('enableMainScroll', this.handleMainScrollToggle);
+  }
+}
+
+/* Add these styles to your existing CSS */
+
+/* Enhanced experience section isolation */
+#experience {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Ensure the experience scroll container captures all scroll events */
+#experience .experience-scroll {
+  position: relative;
+  z-index: 10;
+  /* Enhanced scroll capture */
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  scroll-behavior: auto; /* Disable smooth scrolling for seamless loops */
+}
+
+/* Hide scrollbar for cleaner infinite scroll experience */
+#experience .experience-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+#experience .experience-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Ensure timeline content flows smoothly for infinite scroll */
+#experience .timeline-content {
+  position: relative;
+  /* Remove any height constraints that might interfere with duplication */
+  min-height: auto;
+}
+
+/* Enhanced timeline cards for infinite scroll */
+#experience .exp-card-wrapper {
+  /* Ensure consistent spacing for seamless looping */
+  margin-bottom: clamp(2rem, 8vh, 4rem);
+  scroll-margin-top: 2rem;
+  scroll-margin-bottom: 2rem;
+  will-change: transform, opacity;
+}
+
+/* Special handling for the duplicated content */
+#experience .timeline-content > div:last-child .exp-card-wrapper:last-child {
+  margin-bottom: clamp(2rem, 8vh, 4rem); /* Same as others for seamless loop */
+}
+
+/* Prevent any accidental text selection during rapid scrolling */
+#experience * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Re-enable text selection for actual content */
+#experience h1,
+#experience h2,
+#experience h3,
+#experience p,
+#experience li {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Ensure experience section is truly isolated */
+body.experience-active {
+  overflow: hidden;
+}
+
+/* Timeline wrapper adjustments for infinite scroll */
+#experience .timeline-wrapper {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  height: auto;
+}
+
+/* Timeline adjustments for infinite content */
+#experience .timeline {
+  /* Make timeline more prominent for infinite scroll */
+  background: rgba(241, 239, 236, 0.9);
+  backdrop-filter: blur(8px);
+  box-shadow: 
+    0 0 0 1px rgba(28, 28, 33, 0.1),
+    0 8px 16px rgba(28, 28, 33, 0.05);
+}

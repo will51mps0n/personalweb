@@ -30,12 +30,14 @@ class ScrollController {
     this.boundaryHoldDirection = null;
     this.boundaryHoldDuration = 420;
     this.pageShell = null;
+    this.mainScrollDisabled = false;
 
     this.handleSectionRequest = this.handleSectionRequest.bind(this);
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onTouchEnd = this.onTouchEnd.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
     this.handleBlinkEnd = this.handleBlinkEnd.bind(this);
+    this.handleMainScrollToggle = this.handleMainScrollToggle.bind(this);
   }
 
   init() {
@@ -72,11 +74,17 @@ class ScrollController {
     this.setupKeyboardEvents();
 
     window.addEventListener('requestSectionScroll', this.handleSectionRequest);
+    window.addEventListener('disableMainScroll', this.handleMainScrollToggle);
+    window.addEventListener('enableMainScroll', this.handleMainScrollToggle);
 
     this.dispatchSectionChange();
 
     this.runInitialReveal();
 
+  }
+
+  handleMainScrollToggle(event) {
+    this.mainScrollDisabled = event.type === 'disableMainScroll';
   }
 
   createGlitchOverlay() {
@@ -215,6 +223,10 @@ class ScrollController {
   }
 
   handleWheel(e) {
+    if (this.mainScrollDisabled) {
+      e.preventDefault();
+      return;
+    }
     const now = Date.now();
 
     if (this.isScrolling || now - this.lastScrollTime < this.scrollCooldown) {
@@ -249,6 +261,9 @@ class ScrollController {
   }
 
   attemptSectionChange(direction, { strength = this.strongScrollThreshold + 1, force = false } = {}) {
+    if (this.mainScrollDisabled && !force) {
+      return false;
+    }
     const now = Date.now();
 
     if (this.isScrolling || now - this.lastScrollTime < this.scrollCooldown) {
@@ -689,6 +704,8 @@ class ScrollController {
     }
 
     window.removeEventListener('requestSectionScroll', this.handleSectionRequest);
+    window.removeEventListener('disableMainScroll', this.handleMainScrollToggle);
+    window.removeEventListener('enableMainScroll', this.handleMainScrollToggle);
 
     // Remove glitch overlay
     if (this.glitchOverlay && this.glitchOverlay.parentNode) {
