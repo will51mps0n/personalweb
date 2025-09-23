@@ -148,8 +148,8 @@ const techStackIcons = [
 const expCards = [
   {
     review:
-      "Built a computer-vision pipeline to automate hydrophobicity analysis for biomedical surfaces. Integrated real-time droplet detection/angle estimation with a lightweight UI to streamline lab workflows and data capture.",
-    imgPath: "/images/UM2.jpeg",
+      "Built computer-vision pipeline to automate hydrophobicity analysis for biomedical surfaces. Integrated real-time droplet detection with lightweight UI for streamlined lab workflows.",
+    imgPath: "/images/MM.jpeg",
     logoPath: "/images/M.png",
     title: "Software Engineer",
     date: "May 2025 - August 2025",
@@ -195,7 +195,7 @@ const expCards = [
   {
     review:
       "Co-founded a hyper-local advertising startup paying homeowners to host digital displays. Built the content and monitoring infra; grew a pilot network across Ann Arbor.",
-    imgPath: "/images/HS2.", // <- looks like a typo in your original path; confirm your asset name
+    imgPath: "/images/AV2.png", 
     logoPath: "/images/AV.png",
     title: "Co-Founder",
     date: "Jul 2023 - Apr 2024",
