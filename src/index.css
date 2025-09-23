@@ -1477,7 +1477,7 @@ body {
     gap: 0.6rem;
     color: var(--color-default);
     opacity: 0;
-    animation: experienceInfoSlideUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: experienceInfoSlideUp 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     text-align: left;
   }
 
@@ -1497,7 +1497,7 @@ body {
     box-shadow: 0 0 0 2px rgba(102, 224, 255, 0.22), 0 24px 48px rgba(13, 76, 125, 0.18);
     backdrop-filter: blur(18px);
     opacity: 0;
-    animation: experienceSummarySlideDown 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: experienceSummarySlideDown 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
   }
 
   .experience-summary__banner {
@@ -1527,55 +1527,110 @@ body {
   @keyframes experienceInfoSlideUp {
     0% {
       opacity: 0;
-      transform: translate(-50%, -160px) scale(0.1);
+      transform: translate(-50%, -110px) scale(0.1);
+      filter: blur(2px);
     }
-    25% {
+    30% {
       opacity: 0.4;
-      transform: translate(-50%, -110px) scale(0.3);
+      transform: translate(-50%, -70px) scale(0.5);
+      filter: blur(1px);
     }
-    50% {
-      opacity: 0.7;
-      transform: translate(-50%, -70px) scale(0.6);
+    60% {
+      opacity: 0.8;
+      transform: translate(-50%, -30px) scale(0.8);
+      filter: blur(0px);
     }
-    75% {
+    80% {
       opacity: 0.9;
-      transform: translate(-50%, -35px) scale(0.85);
+      transform: translate(-50%, -8px) scale(0.95);
+      filter: blur(0px) hue-rotate(90deg);
     }
-    95% {
+    90% {
       opacity: 1;
-      transform: translate(-50%, 0px) scale(1.02);
+      transform: translate(-50%, -2px) scale(1.02);
+      filter: blur(0px) hue-rotate(180deg);
     }
     100% {
       opacity: 1;
       transform: translate(-50%, 0px) scale(1);
+      filter: blur(0px) hue-rotate(0deg);
     }
   }
 
   @keyframes experienceSummarySlideDown {
     0% {
       opacity: 0;
-      transform: translate(-50%, 160px) scale(0.1);
+      transform: translate(-50%, 220px) scale(0.1);
+      filter: blur(2px);
     }
-    25% {
+    30% {
       opacity: 0.4;
-      transform: translate(-50%, 110px) scale(0.3);
+      transform: translate(-50%, 140px) scale(0.5);
+      filter: blur(1px);
     }
-    50% {
-      opacity: 0.7;
-      transform: translate(-50%, 70px) scale(0.6);
+    60% {
+      opacity: 0.8;
+      transform: translate(-50%, 60px) scale(0.8);
+      filter: blur(0px);
     }
-    75% {
+    80% {
       opacity: 0.9;
-      transform: translate(-50%, 35px) scale(0.85);
+      transform: translate(-50%, 20px) scale(0.95);
+      filter: blur(0px) hue-rotate(90deg);
     }
-    95% {
+    90% {
       opacity: 1;
-      transform: translate(-50%, 0px) scale(1.02);
+      transform: translate(-50%, 5px) scale(1.02);
+      filter: blur(0px) hue-rotate(180deg);
     }
     100% {
       opacity: 1;
       transform: translate(-50%, 0px) scale(1);
+      filter: blur(0px) hue-rotate(0deg);
     }
+  }
+
+  @keyframes experienceGlitchText {
+    0% {
+      text-shadow: none;
+    }
+    10% {
+      text-shadow:
+        -2px 0 rgba(255, 0, 255, 0.7),
+        2px 0 rgba(0, 255, 255, 0.7);
+    }
+    20% {
+      text-shadow:
+        -1px 0 rgba(255, 0, 255, 0.5),
+        1px 0 rgba(0, 255, 255, 0.5);
+    }
+    30% {
+      text-shadow:
+        -3px 0 rgba(255, 0, 255, 0.8),
+        3px 0 rgba(0, 255, 255, 0.8);
+    }
+    40% {
+      text-shadow: none;
+    }
+    60% {
+      text-shadow:
+        -1px 0 rgba(255, 0, 255, 0.6),
+        1px 0 rgba(0, 255, 255, 0.6);
+    }
+    80% {
+      text-shadow: none;
+    }
+    100% {
+      text-shadow: none;
+    }
+  }
+
+  /* Apply glitch effect to experience text elements */
+  .experience-info h2,
+  .experience-info-company,
+  .experience-info-date,
+  .experience-summary p {
+    animation: experienceGlitchText 1.2s ease-in-out 0.3s;
   }
 
   .experience-info-header {
