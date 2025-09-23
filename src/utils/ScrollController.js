@@ -272,10 +272,6 @@ class ScrollController {
     const meta = this.sectionMeta[this.currentSection];
     if (!meta) return false;
 
-    if (!force && meta.id === 'experience') {
-      return false;
-    }
-
     const mode = meta.mode || 'panel';
     const difficulty = meta.difficulty || 'normal';
     const strongThreshold = difficulty === 'hard' ? this.strongScrollThreshold : this.minScrollStrength;
