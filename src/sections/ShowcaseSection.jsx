@@ -142,6 +142,15 @@ const PROJECT_DETAILS = {
     ],
     stack: ["Python", "Gradient Boosting", "Airflow", "AWS"],
   },
+  "Portfolio Website": {
+    category: "Web Development",
+    summary: [
+      "Built a modern personal portfolio with custom scroll animations and responsive design",
+      "Implemented smooth section transitions using GSAP and custom scroll controllers",
+      "Designed with mobile-first approach featuring dynamic navbar and interactive project showcases",
+    ],
+    stack: ["React", "GSAP", "Tailwind CSS", "JavaScript"],
+  },
 };
 
 export default function AppShowcase() {
@@ -155,21 +164,20 @@ export default function AppShowcase() {
 
   const projects = useMemo(() => {
     const base = [
-      { title: "Power Outage Prediction", href: `${GITHUB_BASE}/Power-Outage-Analysis`, img: "" },
-      { title: "Stock Prediction Pipeline", href: `${GITHUB_BASE}/Stock-Prediction-Pipeline`, img: "" },
-      { title: "Market Indicator Analysis", href: `${GITHUB_BASE}/Market-Indicator-Analysis`, img: "" },
-      { title: "AlphaZero Othello", href: `${GITHUB_BASE}/Othello-AG0`, img: "" },
-      { title: "CIFAR-10 Classifier", href: `${GITHUB_BASE}/Image-CNN`, img: "" },
-      { title: "Connect Four AI", href: `${GITHUB_BASE}/Connect-Four-AI`, img: "" },
       { title: "Multithreaded File Server", href: `${GITHUB_BASE}/Networked-Fs-Cpp`, img: "" },
       { title: "Virtual Memory Pager", href: `${GITHUB_BASE}/MemoryManager-VM-OSPager`, img: "" },
       { title: "Custom Thread Library", href: `${GITHUB_BASE}/Concurrency-Lib`, img: "" },
+      { title: "AlphaZero Othello", href: `${GITHUB_BASE}/Othello-AG0`, img: "" },
+      { title: "CIFAR-10 Classifier", href: `${GITHUB_BASE}/Image-CNN`, img: "" },
+      { title: "Connect Four AI", href: `${GITHUB_BASE}/Connect-Four-AI`, img: "" },
+      { title: "Power Outage Prediction", href: `${GITHUB_BASE}/Power-Outage-Analysis`, img: "" },
+      { title: "Stock Prediction Pipeline", href: `${GITHUB_BASE}/Stock-Prediction-Pipeline`, img: "" },
+      { title: "Market Indicator Analysis", href: `${GITHUB_BASE}/Market-Indicator-Analysis`, img: "" },
       { title: "LC-2K Assembler & Pipeline", href: `${GITHUB_BASE}/Assembler-and-Simulator`, img: "" },
       { title: "LC-2K Cache Simulator", href: `${GITHUB_BASE}/Cache-Simulator`, img: "" },
       { title: "Traveling Salesman Solver", href: `${GITHUB_BASE}/TSP`, img: "" },
-      { title: "WaitFast iOS", href: "#waitfast", img: "" },
-      { title: "Michigan Medicine", href: "#experience", img: "" },
-      { title: "American Airlines", href: "#experience", img: "" },
+      { title: "WaitFast iOS", href: "https://www.linkedin.com/feed/update/urn:li:activity:7316569467478593537/", img: "" },
+      { title: "Portfolio Website", href: `${GITHUB_BASE}/personalweb`, img: "" },
     ];
 
     return base.map((item) => ({

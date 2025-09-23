@@ -1,0 +1,590 @@
+have a website. I have an about me page, but I want to change it a little. I want it to look more like the reference image I have attached: I want maybe something about technologies, then I want a few buttons about my technologies (and places for tech stacks or something, like the logos similar to the reference. I want this however in the style of a page on my website, like the boxes for technologies should be similar to the boxes that pop up for select projects on my website. Refer to those projects for tech stack, and also for the actual about me text I want to keep the text I have, but just make it more like this i suppose. But the whole page is about me, so you can keep the adam simpson title, im not really sure. and for my page, theres no scroll up and down so it should all fit to the page
+
+Looking at your current About section and the reference image, I can help you redesign it to match that style while keeping your existing content. I'll create a layout with a technologies section using boxes similar to your project panels, and organize your content better.
+
+Redesigned About Section
+Interactive artifact 
+Now I need to update your CSS to support the new styles for this redesigned About section:
+
+Redesigned About Section
+Interactive artifact ∙ Version 2 
+Perfect! I've redesigned your About section to match the reference image style while maintaining your website's aesthetic. Here's what I've created:
+
+Key Features:
+Technologies Section Header - Similar to the reference with a subtitle about your tech experience
+Interactive Technology Cards - Three main categories that users can hover/click:
+Systems Programming (C, C++, Assembly, etc.)
+Machine Learning (Python, PyTorch, scikit-learn, etc.)
+Full-Stack Development (SwiftUI, Flask, AWS, etc.)
+Dynamic Detail Panel - Uses your existing code-noise-panel styling to show detailed information about the selected technology stack
+Preserved About Content - Keeps all your original text but organizes it better under an "About Me" section
+Responsive Design - Works on both desktop and mobile, with the grid stacking on smaller screens
+Interactive Elements - Hover effects and active states similar to your project showcase
+The design maintains your site's visual identity with the same border styles, colors, and hover effects as your project panels, but organizes the content more like the reference image. The layout fits within a single viewport height as requested, and the technology categories provide a nice interactive element that showcases your diverse skill set.
+
+Would you like me to adjust any of the technology categorizations, add more specific technologies, or modify the layout in any way?
+
+For this redesigned page, I dont want it to be an about me page. I want it to be a technologies page. I like the 3 buttons like low level systems, AI and datascience, engineering, etc. For this page I want some things to be different, mayb e more reactive and attention grabbing, and this wont be the same as the about me section so we can ignore that part at the end with just the text. Alot of tech sections people have use things like carousels going off for technology stacks they use, maybe have some buttons that do cool things ( though im not sure). Feel free to talk about the education i have and waht i studied, computer architecture, OS, machine learning, AI, theory, cyber security, DS and Algorithms, etc.
+
+I'll redesign this as a dedicated Technologies page with more interactive and attention-grabbing elements. Let me create something with animated carousels, reactive buttons, and showcase your technical education.
+
+Technologies Page
+Interactive artifact ∙ Version 3 
+Perfect! I've completely redesigned this as a dedicated Technologies page with much more interactive and attention-grabbing elements:
+
+✨ New Features:
+1. Animated Technology Carousel
+Continuously scrolling through all your technologies
+Center item scales up and glows
+Shows your breadth of technical skills at a glance
+2. Enhanced Interactive Categories
+Systems Programming: C, C++, Assembly, Linux Kernel, Threading
+AI & Machine Learning: PyTorch, Computer Vision, Reinforcement Learning
+Software Engineering: SwiftUI, React, AWS, Full-stack development
+3. Reactive Visual Effects
+Glowing borders and hover animations
+Cards that lift and scale on interaction
+Gradient backgrounds that fade in on hover
+Enhanced icons with more detail
+4. Academic Foundation Integration
+Each category shows relevant coursework and education
+Mentions specific areas like Computer Architecture, OS, ML Theory, Cybersecurity
+Notable projects listed for each stack
+5. Floating Education Animation
+Academic subjects float up the right side continuously
+Covers all your educational background: OS, Algorithms, AI, Cybersecurity, etc.
+Subtle but eye-catching background animation
+6. Modern Design Elements
+Gradient text for the main title
+Enhanced glassmorphism effects
+Smooth cubic-bezier transitions
+Better visual hierarchy
+The page is now much more dynamic and showcases your technical expertise in an engaging way while highlighting your strong academic foundation from University of Michigan. The floating education elements and carousel create movement that draws attention, while the interactive category cards let visitors explore your different technical areas in depth.
+
+Would you like me to adjust any of the animations, add more technologies to the carousel, or modify any of the visual effects?
+
+This is the code for this section: import React, { useState, useEffect } from 'react';
+
+const Technologies = () => {
+  const [activeStack, setActiveStack] = useState(0);
+  const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
+
+  const techStacks = [
+    {
+      category: "Systems Programming",
+      title: "Low-Level Systems",
+      description: "Operating systems, kernel development, and hardware-software interfaces",
+      technologies: ["C", "C++", "Assembly", "POSIX", "Linux Kernel", "Memory Management", "Threading", "Socket Programming"],
+      education: "Deep coursework in Operating Systems, Computer Architecture, and Systems Programming",
+      projects: "Virtual Memory Pager • Multithreaded File Server • Custom Thread Library • LC-2K Pipeline"
+    },
+    {
+      category: "AI & Machine Learning",
+      title: "Intelligent Systems",
+      description: "Machine learning, computer vision, and artificial intelligence applications",
+      technologies: ["Python", "PyTorch", "TensorFlow", "scikit-learn", "OpenCV", "Pandas", "NumPy", "Reinforcement Learning"],
+      education: "Machine Learning Theory, Computer Vision, AI Search Algorithms, and Statistical Learning",
+      projects: "AlphaZero Othello • CIFAR-10 CNN • Stock Prediction • Power Outage Analysis • Computer Vision Pipeline"
+    },
+    {
+      category: "Software Engineering",
+      title: "Full-Stack Development",
+      description: "End-to-end software development from mobile to cloud infrastructure",
+      technologies: ["SwiftUI", "React", "Flask", "PostgreSQL", "AWS", "Docker", "Git", "RESTful APIs"],
+      education: "Software Engineering Practices, Database Systems, Web Development, and Cloud Computing",
+      projects: "WaitFast iOS App • Real-time Analytics Dashboard • Distributed Systems • Cloud Deployment"
+    }
+  ];
+
+  const allTechnologies = [
+    "C", "C++", "Python", "Swift", "JavaScript", "Assembly", "SQL", "Bash",
+    "PyTorch", "TensorFlow", "scikit-learn", "OpenCV", "Pandas", "NumPy",
+    "React", "SwiftUI", "Flask", "PostgreSQL", "MongoDB", "AWS", "Docker",
+    "Linux", "Git", "RESTful APIs", "Socket Programming", "Multithreading",
+    "Computer Vision", "Machine Learning", "Deep Learning", "Reinforcement Learning",
+    "Operating Systems", "Computer Architecture", "Algorithms", "Data Structures",
+    "Cybersecurity", "Distributed Systems", "Cloud Computing", "Mobile Development"
+  ];
+
+  const educationAreas = [
+    "Computer Architecture", "Operating Systems", "Machine Learning Theory",
+    "Artificial Intelligence", "Computer Vision", "Data Structures & Algorithms",
+    "Cybersecurity", "Database Systems", "Distributed Systems", "Software Engineering",
+    "Statistical Learning", "Linear Algebra", "Discrete Mathematics", "Signal Processing"
+  ];
+
+  const activeStackData = techStacks[activeStack];
+
+  // Carousel animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCarouselIndex((prev) => (prev + 1) % allTechnologies.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getVisibleTechs = () => {
+    const visibleCount = 5;
+    const techs = [];
+    for (let i = 0; i < visibleCount; i++) {
+      const index = (currentCarouselIndex + i) % allTechnologies.length;
+      techs.push(allTechnologies[index]);
+    }
+    return techs;
+  };
+
+  return (
+    <section id="technologies" className="snap-section full-height-only">
+      <div className="tech-page-container" data-glitch-content>
+        {/* Header */}
+        <header className="tech-header">
+          <h1 className="tech-main-title">Technologies</h1>
+          <p className="tech-subtitle">
+            I've worked with a range of technologies across systems programming,
+            AI/ML, and full-stack development. From low-level C++ to production ML pipelines.
+          </p>
+        </header>
+
+        {/* Animated Tech Carousel */}
+        <div className="tech-carousel-section">
+          <div className="carousel-label">Experience with</div>
+          <div className="tech-carousel">
+            <div className="carousel-track">
+              {getVisibleTechs().map((tech, index) => (
+                <div
+                  key={`${tech}-${currentCarouselIndex}-${index}`}
+                  className={`carousel-item ${index === 2 ? 'active' : ''}`}
+                  style={{
+                    transform: `translateX(${(index - 2) * 120}px) scale(${index === 2 ? 1.1 : 0.9})`,
+                    opacity: index === 2 ? 1 : 0.6,
+                    zIndex: index === 2 ? 10 : 1
+                  }}
+                >
+                  {tech}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Technology Categories */}
+        <div className="tech-categories-grid">
+          <div className="tech-categories">
+            {techStacks.map((stack, index) => (
+              <div
+                key={index}
+                className={`tech-category-card ${index === activeStack ? 'active' : ''}`}
+                onClick={() => setActiveStack(index)}
+                onMouseEnter={() => setActiveStack(index)}
+              >
+                <div className="tech-category-icon">
+                  {index === 0 && <SystemsIcon />}
+                  {index === 1 && <AIIcon />}
+                  {index === 2 && <EngineeringIcon />}
+                </div>
+                <div className="tech-category-info">
+                  <h3 className="tech-category-title">{stack.title}</h3>
+                  <p className="tech-category-desc">{stack.description}</p>
+                </div>
+                <div className="tech-category-glow"></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Active Stack Details */}
+          <div className="tech-stack-details">
+            <div className="code-noise-panel is-active">
+              <div className="code-noise-panel__content">
+                <div className="code-noise-panel__inner">
+                  <div className="code-noise-panel__label">{activeStackData.category}</div>
+                  <h3 className="code-noise-panel__title">{activeStackData.title}</h3>
+                  
+                  {/* Education Background */}
+                  <div className="education-section">
+                    <h4 className="education-title">Academic Foundation</h4>
+                    <p className="education-desc">{activeStackData.education}</p>
+                  </div>
+                  
+                  {/* Technology Stack */}
+                  <div className="code-noise-panel__stack">
+                    <p>Core Technologies</p>
+                    <ul>
+                      {activeStackData.technologies.map((tech, i) => (
+                        <li key={i}>{tech}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Notable Projects */}
+                  <div className="projects-section">
+                    <h4 className="projects-title">Notable Projects</h4>
+                    <p className="projects-desc">{activeStackData.projects}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Education Areas Floating Animation */}
+        <div className="education-floating">
+          <div className="floating-label">Academic Background</div>
+          <div className="education-items">
+            {educationAreas.map((area, index) => (
+              <div
+                key={area}
+                className="education-item"
+                style={{
+                  animationDelay: `${index * 0.2}s`,
+                }}
+              >
+                {area}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        .snap-section {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: clamp(2rem, 4vw, 3rem);
+          overflow: hidden;
+          position: relative;
+        }
+
+        .tech-page-container {
+          max-width: clamp(70rem, 90vw, 100rem);
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: clamp(2rem, 4vw, 3rem);
+          position: relative;
+        }
+
+        .tech-header {
+          text-align: center;
+          margin-bottom: 1rem;
+        }
+
+        .tech-main-title {
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: var(--color-black-100);
+          margin-bottom: 1rem;
+          background: linear-gradient(135deg, var(--color-black-100), rgba(6, 107, 189, 0.8));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .tech-subtitle {
+          font-size: clamp(1.1rem, 2vw, 1.3rem);
+          color: rgba(47, 54, 66, 0.8);
+          max-width: 50rem;
+          margin: 0 auto;
+          line-height: 1.5;
+        }
+
+        /* Animated Carousel */
+        .tech-carousel-section {
+          text-align: center;
+          margin: 2rem 0;
+        }
+
+        .carousel-label {
+          font-size: 1rem;
+          color: rgba(6, 79, 148, 0.7);
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          margin-bottom: 1rem;
+          font-weight: 600;
+        }
+
+        .tech-carousel {
+          position: relative;
+          height: 60px;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .carousel-track {
+          position: relative;
+          width: 600px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .carousel-item {
+          position: absolute;
+          padding: 0.75rem 1.25rem;
+          background: rgba(6, 107, 189, 0.1);
+          border: 1px solid rgba(6, 107, 189, 0.3);
+          border-radius: 999px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--color-black-100);
+          white-space: nowrap;
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          backdrop-filter: blur(8px);
+        }
+
+        .carousel-item.active {
+          background: rgba(6, 107, 189, 0.2);
+          border-color: rgba(6, 107, 189, 0.6);
+          box-shadow: 0 8px 32px rgba(6, 107, 189, 0.25);
+        }
+
+        /* Main Grid */
+        .tech-categories-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: clamp(2.5rem, 5vw, 4rem);
+          align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+          .tech-categories-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+        }
+
+        .tech-categories {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .tech-category-card {
+          position: relative;
+          display: grid;
+          grid-template-columns: 4.5rem 1fr;
+          gap: 1.5rem;
+          align-items: center;
+          padding: 1.5rem;
+          border-radius: 1rem;
+          border: 1px solid rgba(255, 255, 255, 0.6);
+          background: transparent;
+          cursor: pointer;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow: hidden;
+        }
+
+        .tech-category-glow {
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(6, 107, 189, 0.1), rgba(102, 224, 255, 0.1));
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+
+        .tech-category-card:hover .tech-category-glow,
+        .tech-category-card.active .tech-category-glow {
+          opacity: 1;
+        }
+
+        .tech-category-card:hover,
+        .tech-category-card.active {
+          border-color: rgba(13, 76, 125, 0.8);
+          box-shadow: 
+            0 0 0 2px rgba(102, 224, 255, 0.3),
+            0 20px 40px rgba(13, 76, 125, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          transform: translateY(-4px) scale(1.02);
+        }
+
+        .tech-category-icon {
+          position: relative;
+          z-index: 2;
+          width: 3.5rem;
+          height: 3.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(6, 107, 189, 0.15);
+          border-radius: 0.75rem;
+          border: 1px solid rgba(6, 107, 189, 0.3);
+          transition: all 0.4s ease;
+        }
+
+        .tech-category-card:hover .tech-category-icon,
+        .tech-category-card.active .tech-category-icon {
+          background: rgba(6, 107, 189, 0.25);
+          border-color: rgba(6, 107, 189, 0.6);
+          transform: scale(1.1);
+        }
+
+        .tech-category-info {
+          position: relative;
+          z-index: 2;
+        }
+
+        .tech-category-title {
+          font-size: clamp(1.2rem, 2vw, 1.5rem);
+          font-weight: 700;
+          color: var(--color-black-100);
+          margin: 0 0 0.5rem 0;
+          letter-spacing: 0.02em;
+        }
+
+        .tech-category-desc {
+          font-size: clamp(0.9rem, 1.5vw, 1rem);
+          color: var(--color-default);
+          margin: 0;
+          line-height: 1.5;
+          opacity: 0.9;
+        }
+
+        .tech-stack-details {
+          position: sticky;
+          top: 2rem;
+        }
+
+        .education-section,
+        .projects-section {
+          margin-top: 1.5rem;
+          padding-top: 1.5rem;
+          border-top: 1px solid rgba(6, 107, 189, 0.2);
+        }
+
+        .education-title,
+        .projects-title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--color-black-100);
+          margin-bottom: 0.75rem;
+          letter-spacing: 0.05em;
+        }
+
+        .education-desc,
+        .projects-desc {
+          font-size: 0.9rem;
+          color: var(--color-default);
+          line-height: 1.6;
+          opacity: 0.9;
+        }
+
+        /* Floating Education Items */
+        .education-floating {
+          position: absolute;
+          top: 0;
+          right: -20%;
+          width: 300px;
+          height: 100%;
+          pointer-events: none;
+          opacity: 0.6;
+          z-index: 1;
+        }
+
+        @media (max-width: 1200px) {
+          .education-floating {
+            display: none;
+          }
+        }
+
+        .floating-label {
+          position: absolute;
+          top: 20%;
+          left: 0;
+          font-size: 0.8rem;
+          color: rgba(6, 79, 148, 0.5);
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+        }
+
+        .education-items {
+          position: absolute;
+          top: 25%;
+          left: 30px;
+          width: 200px;
+          height: 50%;
+        }
+
+        .education-item {
+          position: absolute;
+          padding: 0.4rem 0.8rem;
+          background: rgba(6, 107, 189, 0.08);
+          border: 1px solid rgba(6, 107, 189, 0.2);
+          border-radius: 999px;
+          font-size: 0.7rem;
+          color: rgba(6, 79, 148, 0.8);
+          white-space: nowrap;
+          animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+          0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-400px) rotate(360deg);
+            opacity: 0;
+          }
+        }
+
+        .education-item:nth-child(1) { left: 20px; animation-delay: 0s; }
+        .education-item:nth-child(2) { left: 80px; animation-delay: 2s; }
+        .education-item:nth-child(3) { left: 140px; animation-delay: 4s; }
+        .education-item:nth-child(4) { left: 40px; animation-delay: 6s; }
+        .education-item:nth-child(5) { left: 100px; animation-delay: 8s; }
+        .education-item:nth-child(6) { left: 160px; animation-delay: 10s; }
+        .education-item:nth-child(7) { left: 60px; animation-delay: 12s; }
+        .education-item:nth-child(8) { left: 120px; animation-delay: 14s; }
+        .education-item:nth-child(9) { left: 30px; animation-delay: 16s; }
+        .education-item:nth-child(10) { left: 90px; animation-delay: 18s; }
+        .education-item:nth-child(11) { left: 150px; animation-delay: 20s; }
+        .education-item:nth-child(12) { left: 70px; animation-delay: 22s; }
+        .education-item:nth-child(13) { left: 110px; animation-delay: 24s; }
+        .education-item:nth-child(14) { left: 50px; animation-delay: 26s; }
+      `}</style>
+    </section>
+  );
+};
+
+// Enhanced icon components with more detail
+const SystemsIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="3" width="20" height="14" rx="2" stroke="rgba(6, 79, 148, 0.8)" strokeWidth="1.5"/>
+    <path d="M8 21h8" stroke="rgba(6, 79, 148, 0.8)" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M12 17v4" stroke="rgba(6, 79, 148, 0.8)" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M7 8h10M7 12h6" stroke="rgba(6, 79, 148, 0.8)" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="18" cy="8" r="1" fill="rgba(6, 107, 189, 0.6)"/>
+    <circle cx="18" cy="12" r="1" fill="rgba(6, 107, 189, 0.6)"/>
+  </svg>
+);
+
+const AIIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="3" stroke="rgba(6, 79, 148, 0.8)" strokeWidth="1.5"/>
+    <path d="M12 1v6m0 8v6M4.22 4.22l4.24 4.24m8.48 0l4.24-4.24M1 12h6m8 0h6m-2.78 6.78l-4.24-4.24m-8.48 0L4.22 19.78" stroke="rgba(6, 79, 148, 0.8)" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="12" cy="12" r="1" fill="rgba(6, 107, 189, 0.8)"/>
+  </svg>
+);
+
+const EngineeringIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.77 3.77z" stroke="rgba(6, 79, 148, 0.8)" strokeWidth="1.5"/>
+    <path d="M2 12h2M22 12h-2M12 2v2M12 20v2" stroke="rgba(6, 79, 148, 0.8)" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
+export default Technologies;
