@@ -9,6 +9,9 @@ const NavBar = () => {
   const [titleVariant, setTitleVariant] = useState("hero");
   const [activeSection, setActiveSection] = useState("hero");
   const [projectCounter, setProjectCounter] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleSectionChange = (event) => {
@@ -43,6 +46,44 @@ const NavBar = () => {
     };
   }, []);
 
+  // Mobile detection and scroll handling
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    const handleScroll = () => {
+      if (!isMobile) return;
+
+      const currentScrollY = window.scrollY;
+      const scrollDifference = Math.abs(currentScrollY - lastScrollY);
+
+      // Only hide/show if scroll difference is significant (avoid small jiggles)
+      if (scrollDifference > 10) {
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // Scrolling down & past 100px
+          setIsVisible(false);
+        } else {
+          // Scrolling up or near top
+          setIsVisible(true);
+        }
+        setLastScrollY(currentScrollY);
+      }
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add event listeners
+    window.addEventListener('resize', checkMobile);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMobile, lastScrollY]);
+
   const showCounter = useMemo(() => {
     return activeSection === "work" && projectCounter;
   }, [activeSection, projectCounter]);
@@ -57,7 +98,10 @@ const NavBar = () => {
   };
 
   return (
-    <header className="navbar" role="banner">
+    <header
+      className={`navbar ${isMobile ? (isVisible ? 'navbar--visible' : 'navbar--hidden') : ''}`}
+      role="banner"
+    >
       <div className={`navbar-title ${titleVariant === 'hero' ? 'hero' : 'standard'}`}>
         <span className="navbar-title__text">{sectionTitle}</span>
         {showCounter ? (

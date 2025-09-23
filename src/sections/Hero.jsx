@@ -54,7 +54,7 @@ const Hero = () => {
               "
             >
               <p
-                className="text-base leading-snug text-ink max-w-md font-semibold mt-30 ml-32"
+                className="text-base leading-snug text-ink max-w-md font-semibold mt-30 ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
                 Systems-driven developer with a focus on <br />
@@ -64,7 +64,7 @@ const Hero = () => {
               </p>
               <br />
               <p 
-                className="text-base leading-snug text-ink max-w-md font-semibold ml-32"
+                className="text-base leading-snug text-ink max-w-md font-semibold ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
                 Experienced in applied machine learning, from <br />
@@ -74,7 +74,7 @@ const Hero = () => {
               </p>
               <br />
               <p 
-                className="text-base leading-snug text-ink max-w-md font-semibold ml-32"
+                className="text-base leading-snug text-ink max-w-md font-semibold ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
                 Creator of full-stack and mobile products including <br />

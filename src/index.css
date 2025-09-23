@@ -45,6 +45,24 @@ html, body {
 }
 section { width: 100dvw; }
 
+/* Mobile viewport handling */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    touch-action: pan-y;
+  }
+
+  /* Ensure mobile sections don't have scroll conflicts */
+  .snap-section {
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+}
+
 /* Snap hints (preserved and lightly tidied) */
 html {
   scroll-snap-type: y proximity; /* This will be toggled by JS */
@@ -314,7 +332,7 @@ body {
   }
 
   .hero-socials {
-    margin: clamp(3rem, 5vw, 4rem) 0 0 8rem;
+    margin: clamp(3rem, 5vw, 4rem) 0 0 clamp(2.5rem, 7vw, 8.5rem);
     display: flex;
     flex-direction: row;
     gap: clamp(1.1rem, 4vw, 1.8rem);
@@ -358,9 +376,16 @@ body {
 
   @media (max-width: 1024px) {
     .hero-socials {
-      margin: clamp(2.2rem, 6vw, 3.6rem) 0 0 0;
+      margin: clamp(2.2rem, 6vw, 3.6rem) 0 0 clamp(1.25rem, 5vw, 2rem);
       justify-content: flex-start;
       gap: clamp(0.95rem, 4.5vw, 1.4rem);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-socials {
+      margin: clamp(2rem, 8vw, 3rem) 0 0 clamp(1rem, 4vw, 1.5rem);
+      gap: clamp(0.8rem, 5vw, 1.2rem);
     }
   }
 
@@ -381,6 +406,16 @@ body {
     align-items: center;
     z-index: 100;
     pointer-events: none;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  /* Mobile navbar hide/show behavior */
+  .navbar--hidden {
+    transform: translateY(-100%);
+  }
+
+  .navbar--visible {
+    transform: translateY(0);
   }
 
   .navbar-title {
@@ -441,16 +476,22 @@ body {
   @media (max-width: 640px) {
     .navbar {
       padding-inline: clamp(1rem, 5vw, 1.5rem);
+      top: clamp(0.75rem, 2vw, 1.5rem);
     }
 
     .navbar-title {
-      font-size: clamp(1.9rem, 9vw, 3.1rem);
-      letter-spacing: .1em;
-      margin-left: clamp(0.75rem, 4vw, 2rem);
+      font-size: clamp(1.6rem, 8vw, 2.8rem);
+      letter-spacing: .08em;
+      margin-left: clamp(0.5rem, 3vw, 1.5rem);
     }
 
     .mini-nav {
-      gap: .25rem;
+      gap: .2rem;
+    }
+
+    .mini-nav__item {
+      font-size: .55rem;
+      padding: .15rem .35rem .15rem .5rem;
     }
   }
 
@@ -459,7 +500,7 @@ body {
     @apply w-full md:px-20 px-5 min-h-screen;
     scroll-snap-align: start;
     position: relative;
-    padding-top: clamp(8rem, 15vw, 12rem);
+    padding-top: clamp(7rem, 13vw, 13rem);
   }
 
   .about-section {
@@ -537,8 +578,11 @@ body {
 
   .ref-wrap { @apply min-h-screen md:px-20 px-5; scroll-snap-align: start; }
   .ref-body {
-    @apply grid gap-8 md:gap-12;
+    @apply grid gap-6 md:gap-8 lg:gap-12;
     grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px){
+    .ref-body { grid-template-columns: 1fr; }
   }
   @media (min-width: 1024px){
     .ref-body { grid-template-columns: 6fr 5fr; }
@@ -550,10 +594,19 @@ body {
     margin: 0; padding: 0;
     display: grid;
     grid-template-columns: 1fr;       /* 1 column mobile */
-    gap: 12px 40px;
+    gap: 8px 20px;
+  }
+  @media (min-width: 640px){
+    .ref-list {
+      grid-template-columns: 1fr 1fr; /* two columns small tablet+ */
+      gap: 10px 30px;
+    }
   }
   @media (min-width: 768px){
-    .ref-list { grid-template-columns: 1fr 1fr; } /* two columns tablet+ */
+    .ref-list {
+      grid-template-columns: 1fr 1fr; /* two columns tablet+ */
+      gap: 12px 40px;
+    }
   }
 
   .ref-list li {
@@ -615,6 +668,13 @@ body {
     @apply w-full rounded-xl border border-white/10 overflow-hidden;
     aspect-ratio: auto;
     background-color: transparent;
+  }
+
+  @media (max-width: 1023px) {
+    .ref-media {
+      position: static;
+      margin-top: 2rem;
+    }
   }
   .ref-media-placeholder {
     @apply w-full h-full flex items-center justify-center text-[color:var(--color-black-50)];
@@ -1659,3 +1719,39 @@ body {
     align-items: flex-end;
     gap: .35rem;
   }
+
+/* =========================
+   COMPREHENSIVE MOBILE FIXES
+   ========================= */
+@media (max-width: 768px) {
+  /* Prevent content from going behind navbar */
+  .work-section {
+    padding-top: clamp(5rem, 10vw, 8rem);
+  }
+
+  /* Better mobile spacing for hero */
+  .hero-layout {
+    margin-top: clamp(1rem, 4vw, 2rem);
+  }
+
+  /* Ensure mobile nav is always accessible */
+  .navbar {
+    z-index: 999;
+  }
+
+  /* Better mobile text sizing */
+  .hero-text {
+    font-size: clamp(24px, 6vw, 32px);
+  }
+
+  /* Mobile-friendly project panels */
+  .code-noise-panel {
+    height: clamp(300px, 40vh, 400px);
+  }
+
+  /* Mobile scroll improvements */
+  .snap-section {
+    min-height: auto;
+    height: auto;
+  }
+}

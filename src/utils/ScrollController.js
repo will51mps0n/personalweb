@@ -42,8 +42,11 @@ class ScrollController {
 
   init() {
     this.sections = gsap.utils.toArray('[data-scroll-section]');
-    
+
     if (this.sections.length === 0) return;
+
+    // Check if mobile device
+    this.isMobile = window.innerWidth <= 768;
 
     this.sectionMeta = this.sections.map((section, index) => ({
       element: section,
@@ -58,20 +61,25 @@ class ScrollController {
     this.prepareGlitchContentDefaults();
     this.pageShell = document.querySelector('.page-main');
 
-    // Disable native scroll snap completely for snap effect
-    this.disableNativeScrollSnap();
-    
+    // Only disable native scroll snap on desktop
+    if (!this.isMobile) {
+      this.disableNativeScrollSnap();
+    }
+
     // Set up scroll triggers for each section
     this.setupScrollTriggers();
-    
-    // Set up observer for wheel/touch events
-    this.setupObserver();
-    
-    // Set up touch events for mobile
-    this.setupTouchEvents();
-    
-    // Set up keyboard navigation
-    this.setupKeyboardEvents();
+
+    // Only set up custom scroll behavior on desktop
+    if (!this.isMobile) {
+      // Set up observer for wheel/touch events
+      this.setupObserver();
+
+      // Set up touch events for mobile
+      this.setupTouchEvents();
+
+      // Set up keyboard navigation
+      this.setupKeyboardEvents();
+    }
 
     window.addEventListener('requestSectionScroll', this.handleSectionRequest);
     window.addEventListener('disableMainScroll', this.handleMainScrollToggle);
@@ -223,7 +231,7 @@ class ScrollController {
   }
 
   handleWheel(e) {
-    if (this.mainScrollDisabled) {
+    if (this.mainScrollDisabled || this.isMobile) {
       return;
     }
     const now = Date.now();
