@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-const TextGlitchHover = ({ children, radius = 50 }) => {
+const TextGlitchHover = ({ children, radius = 80 }) => {
   const textRef = useRef(null);
   const charsRef = useRef([]);
+  const animationRef = useRef(null);
+  const isHoveringRef = useRef(false);
 
   useEffect(() => {
     const textElement = textRef.current;
@@ -26,10 +28,33 @@ const TextGlitchHover = ({ children, radius = 50 }) => {
       });
     };
 
+    // Continuous subtle shake animation for characters in radius
+    const continuousShake = () => {
+      if (!isHoveringRef.current) return;
+
+      charsRef.current.forEach((span) => {
+        if (span.dataset.inRadius === 'true') {
+          const intensity = parseFloat(span.dataset.intensity) || 0;
+          const baseOffset = Math.floor(intensity * 3);
+          const shakeX = (Math.random() - 0.5) * intensity * 0.5;
+          const shakeY = (Math.random() - 0.5) * intensity * 0.5;
+
+          span.style.textShadow = `
+            -${baseOffset + (Math.random() - 0.5)}px 0 red,
+            ${baseOffset + (Math.random() - 0.5)}px 0 cyan
+          `;
+          span.style.transform = `translate(${shakeX}px, ${shakeY}px)`;
+        }
+      });
+
+      animationRef.current = requestAnimationFrame(continuousShake);
+    };
+
     const handleMouseMove = (e) => {
       const rect = textElement.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
+      isHoveringRef.current = true;
 
       charsRef.current.forEach((span) => {
         const spanRect = span.getBoundingClientRect();
@@ -41,36 +66,53 @@ const TextGlitchHover = ({ children, radius = 50 }) => {
         );
 
         if (distance <= radius) {
-          // Apply glitch effect
+          // Mark as in radius and store intensity
           const intensity = 1 - (distance / radius);
-          const offset = Math.floor(intensity * 3);
-          span.style.textShadow = `
-            -${offset}px 0 red,
-            ${offset}px 0 cyan
-          `;
-          span.style.transform = `translate(${Math.random() * intensity - intensity/2}px, ${Math.random() * intensity - intensity/2}px)`;
+          span.dataset.inRadius = 'true';
+          span.dataset.intensity = intensity.toString();
         } else {
           // Remove glitch effect
+          span.dataset.inRadius = 'false';
           span.style.textShadow = 'none';
           span.style.transform = 'none';
         }
       });
+
+      // Start continuous animation if not already running
+      if (!animationRef.current) {
+        continuousShake();
+      }
+    };
+
+    const handleMouseEnter = () => {
+      isHoveringRef.current = true;
     };
 
     const handleMouseLeave = () => {
+      isHoveringRef.current = false;
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
       charsRef.current.forEach((span) => {
         span.style.textShadow = 'none';
         span.style.transform = 'none';
+        span.dataset.inRadius = 'false';
       });
     };
 
     initializeText();
     textElement.addEventListener('mousemove', handleMouseMove);
+    textElement.addEventListener('mouseenter', handleMouseEnter);
     textElement.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
       textElement.removeEventListener('mousemove', handleMouseMove);
+      textElement.removeEventListener('mouseenter', handleMouseEnter);
       textElement.removeEventListener('mouseleave', handleMouseLeave);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
     };
   }, [radius]);
 

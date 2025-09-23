@@ -8,7 +8,7 @@ const About = () => {
         <div className="about-columns">
           <div className="about-copy">
             <p>
-              <TextGlitchHover radius={60}>
+              <TextGlitchHover radius={100}>
                 Hi! I'm Adam Simpson, a systems and ML focused software developer based in Houston, Texas, with a
                 B.S. in Electrical Engineering and Computer Science from the University of Michigan. I
                 gravitate toward the layer where operating systems, hardware, and intelligent software
@@ -17,7 +17,7 @@ const About = () => {
               </TextGlitchHover>
             </p>
             <p>
-              <TextGlitchHover radius={60}>
+              <TextGlitchHover radius={100}>
                 My background spans multithreaded network file servers, user-level threading libraries,
                 and LC-2K assemblers, cache simulators, and pipelines that mirror real hardware. I enjoy
                 profiling race conditions, designing fair eviction policies for virtual memory pagers,
@@ -25,7 +25,7 @@ const About = () => {
               </TextGlitchHover>
             </p>
             <p>
-              <TextGlitchHover radius={60}>
+              <TextGlitchHover radius={100}>
                 I also build data-driven systems in Python and C++. From outage-cost regressors and
                 stock forecasting pipelines to AlphaZero-style game agents and CNNs for CIFAR-10, I'm
                 comfortable turning messy telemetry into deployable models. Recent work with American
@@ -36,7 +36,7 @@ const About = () => {
           </div>
           <div className="about-copy">
             <p>
-              <TextGlitchHover radius={60}>
+              <TextGlitchHover radius={100}>
                 Outside the terminal window, I shipped WaitFast, a SwiftUI app with a Flask and
                 PostgreSQL backend hosted on AWS that crowdsources venue wait times in real time. I've
                 contributed to research published with Michigan Medicine, helped secure startup funding
@@ -45,7 +45,7 @@ const About = () => {
               </TextGlitchHover>
             </p>
             <p>
-              <TextGlitchHover radius={60}>
+              <TextGlitchHover radius={100}>
                 Whether breaking down low-level C++, production ML, or full-stack execution, I try
                 to bring a calm, detail-oriented mindset and clear communication with software development. I'm
                 always open to new collaborations, optimizing infrastructure, shipping new products, or

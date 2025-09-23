@@ -58,7 +58,7 @@ const Hero = () => {
                 className="text-base leading-snug text-ink max-w-md font-semibold mt-30 ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
-                <TextGlitchHover radius={50}>
+                <TextGlitchHover radius={90}>
                   Systems-driven developer with a focus on
                   low-level infrastructure and intelligent software.
                   Building virtual memory pagers, multithreaded
@@ -70,7 +70,7 @@ const Hero = () => {
                 className="text-base leading-snug text-ink max-w-md font-semibold ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
-                <TextGlitchHover radius={50}>
+                <TextGlitchHover radius={90}>
                   Experienced in applied machine learning, from
                   airline operations forecasting at American Airlines
                   to computer vision, reinforcement learning, and
@@ -82,7 +82,7 @@ const Hero = () => {
                 className="text-base leading-snug text-ink max-w-md font-semibold ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
-                <TextGlitchHover radius={50}>
+                <TextGlitchHover radius={90}>
                   Creator of full-stack and mobile products including
                   WaitFast, a real-time iOS app with a Flask/AWS backend.
                   Graduate of the University of Michigan, B.S. in
