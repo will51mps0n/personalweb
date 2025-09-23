@@ -7,6 +7,7 @@ const Experience = () => {
   const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
   const timelineRef = useRef(null);
   const collapseTimeoutRef = useRef(null);
+  const displayedCards = [...expCards].reverse();
 
   const clearCollapseTimeout = () => {
     if (collapseTimeoutRef.current) {
@@ -47,6 +48,8 @@ const Experience = () => {
 
   const handleScroll = (direction) => {
     clearCollapseTimeout();
+    const lastIndex = displayedCards.length - 1;
+
     if (direction === "left") {
       if (activeIndex === null) return;
       if (activeIndex === 0) {
@@ -57,7 +60,7 @@ const Experience = () => {
     } else if (direction === "right") {
       if (activeIndex === null) {
         setActiveIndex(0);
-      } else if (activeIndex < expCards.length - 1) {
+      } else if (activeIndex < lastIndex) {
         setActiveIndex((prev) => (prev === null ? 0 : prev + 1));
       }
     }
@@ -131,7 +134,7 @@ const Experience = () => {
     };
   }, []);
 
-  const activeExperience = activeIndex !== null ? expCards[activeIndex] : null;
+  const activeExperience = activeIndex !== null ? displayedCards[activeIndex] : null;
 
   return (
     <section
@@ -150,7 +153,7 @@ const Experience = () => {
               />
 
               <div className="timeline-nodes">
-                {expCards.map((card, index) => (
+                {displayedCards.map((card, index) => (
                   <div
                     key={index}
                     className={`timeline-node ${index === activeIndex ? "active" : ""}`}
@@ -186,7 +189,7 @@ const Experience = () => {
 
         {activeExperience && (
           <div
-            key={activeIndex}
+            key={`${activeExperience.company}-${activeIndex}`}
             className="experience-info"
             onMouseEnter={handleDetailsEnter}
             onMouseLeave={handleDetailsLeave}
@@ -208,7 +211,7 @@ const Experience = () => {
 
         {activeExperience && (
           <div className="progress-indicator">
-            {activeIndex + 1} of {expCards.length}
+            {activeIndex + 1} of {displayedCards.length}
           </div>
         )}
       </div>
