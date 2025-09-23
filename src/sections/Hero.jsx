@@ -39,7 +39,7 @@ const Hero = () => {
             flex flex-col justify-start
             md:w-full w-screen
             md:px-20 px-5
-            pt-16 md:pt-14 lg:pt-12
+            pt-12 md:pt-10 lg:pt-8
           "
           data-fade-in
           data-glitch-content
@@ -53,8 +53,8 @@ const Hero = () => {
                 -mt-1
               "
             >
-              <p 
-                className="text-base leading-snug text-ink max-w-md font-semibold mt-34 ml-32"
+              <p
+                className="text-base leading-snug text-ink max-w-md font-semibold mt-30 ml-32"
                 data-slide-up
               >
                 Systems-driven developer with a focus on <br />
