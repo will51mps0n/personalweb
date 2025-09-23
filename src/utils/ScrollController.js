@@ -522,12 +522,15 @@ class ScrollController {
 
     const animateGroup = (elements, setProps, toProps, timelinePosition, fallbackDelay) => {
       if (elements.length === 0) return;
-      gsap.set(elements, setProps);
+      const initialProps = { filter: 'blur(12px)', pointerEvents: 'none', ...setProps };
+      const targetProps = { filter: 'blur(0px)', pointerEvents: 'auto', ...toProps };
+
+      gsap.set(elements, initialProps);
 
       if (hasTimeline) {
-        timeline.to(elements, { ...toProps }, timelinePosition);
+        timeline.to(elements, { ...targetProps }, timelinePosition);
       } else {
-        gsap.to(elements, { ...toProps, delay: fallbackDelay });
+        gsap.to(elements, { ...targetProps, delay: fallbackDelay });
       }
     };
 
