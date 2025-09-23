@@ -30,8 +30,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const handleSectionChange = () => {
-      setShowBadge(true);
+    const handleSectionChange = (event) => {
+      const nextId = event?.detail?.id;
+      setShowBadge(nextId !== 'experience');
     };
 
     window.addEventListener('sectionChange', handleSectionChange);

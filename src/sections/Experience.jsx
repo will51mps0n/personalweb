@@ -3,19 +3,63 @@ import { useEffect, useRef, useState } from "react";
 import { expCards } from "../constants";
 
 const Experience = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
   const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
   const timelineRef = useRef(null);
+  const collapseTimeoutRef = useRef(null);
+
+  const clearCollapseTimeout = () => {
+    if (collapseTimeoutRef.current) {
+      clearTimeout(collapseTimeoutRef.current);
+      collapseTimeoutRef.current = null;
+    }
+  };
+
+  const scheduleCollapse = () => {
+    clearCollapseTimeout();
+    collapseTimeoutRef.current = setTimeout(() => {
+      setActiveIndex(null);
+      collapseTimeoutRef.current = null;
+    }, 120);
+  };
 
   const handleNodeClick = (index) => {
+    clearCollapseTimeout();
     setActiveIndex(index);
   };
 
+  const handleNodeEnter = (index) => {
+    clearCollapseTimeout();
+    setActiveIndex(index);
+  };
+
+  const handleNodeLeave = () => {
+    scheduleCollapse();
+  };
+
+  const handleDetailsEnter = () => {
+    clearCollapseTimeout();
+  };
+
+  const handleDetailsLeave = () => {
+    scheduleCollapse();
+  };
+
   const handleScroll = (direction) => {
-    if (direction === "left" && activeIndex > 0) {
-      setActiveIndex((prev) => prev - 1);
-    } else if (direction === "right" && activeIndex < expCards.length - 1) {
-      setActiveIndex((prev) => prev + 1);
+    clearCollapseTimeout();
+    if (direction === "left") {
+      if (activeIndex === null) return;
+      if (activeIndex === 0) {
+        setActiveIndex(null);
+      } else {
+        setActiveIndex((prev) => (prev === null ? null : prev - 1));
+      }
+    } else if (direction === "right") {
+      if (activeIndex === null) {
+        setActiveIndex(0);
+      } else if (activeIndex < expCards.length - 1) {
+        setActiveIndex((prev) => (prev === null ? 0 : prev + 1));
+      }
     }
   };
 
@@ -37,6 +81,8 @@ const Experience = () => {
   useEffect(() => {
     if (!timelineRef.current) return;
 
+    if (activeIndex === null) return;
+
     const nodes = timelineRef.current.querySelectorAll('.timeline-node');
     const containerWidth = timelineRef.current.offsetWidth;
 
@@ -54,6 +100,8 @@ const Experience = () => {
     });
   }, [activeIndex]);
 
+  useEffect(() => () => clearCollapseTimeout(), []);
+
   useEffect(() => {
     if (!timelineRef.current) return;
 
@@ -68,12 +116,9 @@ const Experience = () => {
 
       const firstCenter = firstNode.offsetLeft + firstNode.offsetWidth / 2;
       const lastCenter = lastNode.offsetLeft + lastNode.offsetWidth / 2;
+      const width = Math.max(0, lastCenter - firstCenter);
 
-      const lineStart = firstCenter - firstNode.offsetWidth / 2;
-      const lineEnd = lastCenter + lastNode.offsetWidth / 2;
-      const width = Math.max(0, lineEnd - lineStart);
-
-      setLineStyle({ left: lineStart, width });
+      setLineStyle({ left: firstCenter, width });
     };
 
     const handleResize = () => requestAnimationFrame(measureLine);
@@ -86,7 +131,7 @@ const Experience = () => {
     };
   }, []);
 
-  const activeExperience = expCards[activeIndex];
+  const activeExperience = activeIndex !== null ? expCards[activeIndex] : null;
 
   return (
     <section
@@ -96,91 +141,76 @@ const Experience = () => {
       data-glitch-content
     >
       <div className="horizontal-experience-container">
-        <button
-          className="nav-arrow nav-arrow-left"
-          onClick={() => handleScroll("left")}
-          disabled={activeIndex === 0}
-          aria-label="Previous experience"
-        >
-          ←
-        </button>
+        <div className="timeline-shell">
+          <div ref={timelineRef} className="horizontal-timeline">
+            <div className="timeline-track">
+              <div
+                className="timeline-line"
+                style={{ left: lineStyle.left, width: lineStyle.width }}
+              />
 
-        <div ref={timelineRef} className="horizontal-timeline">
-          <div className="timeline-track">
-            <div
-              className="timeline-line"
-              style={{ left: lineStyle.left, width: lineStyle.width }}
-            />
-
-            <div className="timeline-nodes">
-              {expCards.map((card, index) => (
-                <div
-                  key={index}
-                  className={`timeline-node ${index === activeIndex ? "active" : ""}`}
-                  onClick={() => handleNodeClick(index)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      handleNodeClick(index);
-                    }
-                  }}
-                >
-                  <div className="node-circle">
-                    <img
-                      src={card.logoPath}
-                      alt={`${card.company} logo`}
-                      className="node-logo"
-                    />
+              <div className="timeline-nodes">
+                {expCards.map((card, index) => (
+                  <div
+                    key={index}
+                    className={`timeline-node ${index === activeIndex ? "active" : ""}`}
+                    onClick={() => handleNodeClick(index)}
+                    onMouseEnter={() => handleNodeEnter(index)}
+                    onMouseLeave={handleNodeLeave}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={index === activeIndex}
+                    onFocus={() => handleNodeEnter(index)}
+                    onBlur={handleNodeLeave}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        handleNodeClick(index);
+                      }
+                    }}
+                  >
+                    <div className="node-circle">
+                      <img
+                        src={card.logoPath}
+                        alt={`${card.company} logo`}
+                        className="node-logo"
+                      />
+                    </div>
+                    <div className="node-label">{card.company}</div>
                   </div>
-                  <div className="node-label">{card.company}</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
-        <button
-          className="nav-arrow nav-arrow-right"
-          onClick={() => handleScroll("right")}
-          disabled={activeIndex === expCards.length - 1}
-          aria-label="Next experience"
-        >
-          →
-        </button>
-
-        <div className="experience-details">
-          {activeExperience && (
-            <div className="experience-card">
-              <div className="experience-header">
-                <img
-                  src={activeExperience.logoPath}
-                  alt={`${activeExperience.company} logo`}
-                  className="experience-logo"
-                />
-                <div>
-                  <h2 className="experience-title">{activeExperience.title}</h2>
-                  <p className="experience-company">{activeExperience.company}</p>
-                  <p className="experience-date">{activeExperience.date}</p>
-                </div>
+        {activeExperience && (
+          <div
+            key={activeIndex}
+            className="experience-info"
+            onMouseEnter={handleDetailsEnter}
+            onMouseLeave={handleDetailsLeave}
+          >
+            <div className="experience-info-header">
+              <div className="experience-info-meta">
+                <h2>{activeExperience.title}</h2>
+                <p className="experience-info-company">{activeExperience.company}</p>
               </div>
-
-              <div className="experience-content">
-                <h3>Responsibilities</h3>
-                <ul className="responsibilities-list">
-                  {activeExperience.responsibilities.map((responsibility, index) => (
-                    <li key={index}>{responsibility}</li>
-                  ))}
-                </ul>
-              </div>
+              <p className="experience-info-date">{activeExperience.date}</p>
             </div>
-          )}
-        </div>
+            <ul className="experience-info-list">
+              {activeExperience.responsibilities.slice(0, 4).map((responsibility, index) => (
+                <li key={index}>{responsibility}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-        <div className="progress-indicator">
-          {activeIndex + 1} of {expCards.length}
-        </div>
+        {activeExperience && (
+          <div className="progress-indicator">
+            {activeIndex + 1} of {expCards.length}
+          </div>
+        )}
       </div>
     </section>
   );
