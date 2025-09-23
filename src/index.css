@@ -257,15 +257,15 @@ body {
   .hero-badge { @apply bg-white/10 backdrop-blur-md text-white py-2 px-4 rounded-full w-fit text-sm md:text-base text-nowrap border border-white/20; }
   .hero-3d-layout {
     position: relative;
-    width: clamp(320px, 46vw, 600px);
-    min-height: clamp(340px, 60vh, 600px);
-    margin-left: clamp(-36rem, -34vw, -18rem);
+    width: clamp(360px, 55vw, 760px);
+    min-height: clamp(380px, 68vh, 680px);
+    margin-left: clamp(-40rem, -38vw, -20rem);
     margin-right: auto;
-    margin-top: clamp(3rem, 6vw, 5.5rem);
+    margin-top: clamp(1rem, 3vw, 3rem);
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    transform: translateX(-12vw);
+    transform: translateX(-16vw);
     pointer-events: none;
     z-index: 30;
   }
@@ -284,7 +284,7 @@ body {
   @media (max-width: 1024px) {
     .hero-3d-layout {
       margin-inline: auto;
-      margin-top: clamp(2.5rem, 8vw, 4.5rem);
+      margin-top: clamp(1.8rem, 7vw, 3.5rem);
       margin-left: 0;
       width: clamp(280px, 80vw, 540px);
       justify-content: center;
@@ -293,11 +293,19 @@ body {
   }
 
   .hero-animation__svg {
-    width: min(640px, 90%);
+    width: min(880px, 110%);
     height: auto;
     display: block;
     filter: drop-shadow(0 24px 48px rgba(6, 79, 148, 0.18));
     transform: translate3d(0, 0, 0);
+  }
+
+  .hero-animation__svg--um {
+    opacity: 0.82;
+  }
+
+  .hero-text p {
+    color: rgba(12, 22, 38, 0.96);
   }
 
   .hero-socials {
