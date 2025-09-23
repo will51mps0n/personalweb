@@ -1307,7 +1307,7 @@ body {
 
   .horizontal-timeline {
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     height: 150px;
     position: relative;
     overflow-x: auto;
@@ -1333,8 +1333,6 @@ body {
   .timeline-line {
     position: absolute;
     top: 50%;
-    left: 60px;
-    right: 60px;
     height: 3px;
     background: linear-gradient(
       90deg,
@@ -1349,8 +1347,8 @@ body {
   .timeline-nodes {
     display: flex;
     align-items: center;
-    gap: 120px;
-    padding: 0 60px;
+    gap: 200px;
+    padding: 0 90px;
     position: relative;
     z-index: 2;
   }
@@ -1420,7 +1418,7 @@ body {
 
   .experience-details {
     margin-top: 3rem;
-    max-width: 700px;
+    max-width: 900px;
     width: 100%;
   }
 
@@ -1428,7 +1426,7 @@ body {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(6, 107, 189, 0.2);
     border-radius: 12px;
-    padding: 2rem;
+    padding: 2.4rem;
     backdrop-filter: blur(12px);
     animation: slideUp 0.5s ease-out;
   }
@@ -1531,8 +1529,8 @@ body {
     }
 
     .timeline-nodes {
-      gap: 100px;
-      padding: 0 60px;
+      gap: 150px;
+      padding: 0 70px;
     }
 
     .node-circle {

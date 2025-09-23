@@ -4,6 +4,7 @@ import { expCards } from "../constants";
 
 const Experience = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
   const timelineRef = useRef(null);
 
   const handleNodeClick = (index) => {
@@ -36,15 +37,54 @@ const Experience = () => {
   useEffect(() => {
     if (!timelineRef.current) return;
 
-    const nodeWidth = 120; // Approximate width + gap per node
+    const nodes = timelineRef.current.querySelectorAll('.timeline-node');
     const containerWidth = timelineRef.current.offsetWidth;
-    const scrollPosition = activeIndex * nodeWidth - containerWidth / 2 + nodeWidth / 2;
+
+    if (!nodes.length) return;
+
+    const activeNode = nodes[activeIndex];
+    if (!activeNode) return;
+
+    const nodeCenter = activeNode.offsetLeft + activeNode.offsetWidth / 2;
+    const scrollPosition = nodeCenter - containerWidth / 2;
 
     timelineRef.current.scrollTo({
       left: Math.max(0, scrollPosition),
       behavior: "smooth",
     });
   }, [activeIndex]);
+
+  useEffect(() => {
+    if (!timelineRef.current) return;
+
+    const measureLine = () => {
+      const track = timelineRef.current?.querySelector('.timeline-track');
+      if (!track) return;
+      const nodeElements = track.querySelectorAll('.timeline-node');
+      if (nodeElements.length === 0) return;
+
+      const firstNode = nodeElements[0];
+      const lastNode = nodeElements[nodeElements.length - 1];
+
+      const firstCenter = firstNode.offsetLeft + firstNode.offsetWidth / 2;
+      const lastCenter = lastNode.offsetLeft + lastNode.offsetWidth / 2;
+
+      const lineStart = firstCenter - firstNode.offsetWidth / 2;
+      const lineEnd = lastCenter + lastNode.offsetWidth / 2;
+      const width = Math.max(0, lineEnd - lineStart);
+
+      setLineStyle({ left: lineStart, width });
+    };
+
+    const handleResize = () => requestAnimationFrame(measureLine);
+
+    measureLine();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const activeExperience = expCards[activeIndex];
 
@@ -67,7 +107,10 @@ const Experience = () => {
 
         <div ref={timelineRef} className="horizontal-timeline">
           <div className="timeline-track">
-            <div className="timeline-line" />
+            <div
+              className="timeline-line"
+              style={{ left: lineStyle.left, width: lineStyle.width }}
+            />
 
             <div className="timeline-nodes">
               {expCards.map((card, index) => (
