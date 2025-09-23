@@ -151,7 +151,7 @@ const expCards = [
       "Built a computer-vision pipeline to automate hydrophobicity analysis for biomedical surfaces. Integrated real-time droplet detection/angle estimation with a lightweight UI to streamline lab workflows and data capture.",
     imgPath: "/images/UM2.jpeg",
     logoPath: "/images/M.png",
-    title: "Software Developer / Researcher",
+    title: "Software Engineer",
     date: "May 2025 - August 2025",
     startDate: "May 2025",
     responsibilities: [
