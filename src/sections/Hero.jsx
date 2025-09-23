@@ -2,6 +2,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import HeroExperience from "../components/models/hero_models/HeroExperience";
+import TextGlitchHover from "../components/TextGlitchHover";
 
 const Hero = () => {
   useGSAP(() => {
@@ -57,30 +58,36 @@ const Hero = () => {
                 className="text-base leading-snug text-ink max-w-md font-semibold mt-30 ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
-                Systems-driven developer with a focus on <br />
-                low-level infrastructure and intelligent software. <br />
-                Building virtual memory pagers, multithreaded <br />
-                servers, and custom thread libraries in C and C++.
+                <TextGlitchHover radius={50}>
+                  Systems-driven developer with a focus on
+                  low-level infrastructure and intelligent software.
+                  Building virtual memory pagers, multithreaded
+                  servers, and custom thread libraries in C and C++.
+                </TextGlitchHover>
               </p>
               <br />
-              <p 
+              <p
                 className="text-base leading-snug text-ink max-w-md font-semibold ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
-                Experienced in applied machine learning, from <br />
-                airline operations forecasting at American Airlines <br />
-                to computer vision, reinforcement learning, and <br />
-                predictive modeling in Python and PyTorch.
+                <TextGlitchHover radius={50}>
+                  Experienced in applied machine learning, from
+                  airline operations forecasting at American Airlines
+                  to computer vision, reinforcement learning, and
+                  predictive modeling in Python and PyTorch.
+                </TextGlitchHover>
               </p>
               <br />
-              <p 
+              <p
                 className="text-base leading-snug text-ink max-w-md font-semibold ml-6 md:ml-16 lg:ml-28"
                 data-slide-up
               >
-                Creator of full-stack and mobile products including <br />
-                WaitFast, a real-time iOS app with a Flask/AWS backend. <br />
-                Graduate of the University of Michigan, B.S. in <br />
-                Electrical Engineering &amp; Computer Science, Class of 2025.
+                <TextGlitchHover radius={50}>
+                  Creator of full-stack and mobile products including
+                  WaitFast, a real-time iOS app with a Flask/AWS backend.
+                  Graduate of the University of Michigan, B.S. in
+                  Electrical Engineering &amp; Computer Science, Class of 2025.
+                </TextGlitchHover>
               </p>
             </div>
 
