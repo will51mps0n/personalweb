@@ -1605,26 +1605,31 @@ body {
     }
     10% {
       text-shadow:
-        -2px 0 rgba(255, 0, 255, 0.7),
-        2px 0 rgba(0, 255, 255, 0.7);
+        -2px 0 red,
+        2px 0 cyan;
     }
     20% {
       text-shadow:
-        -1px 0 rgba(255, 0, 255, 0.5),
-        1px 0 rgba(0, 255, 255, 0.5);
+        -1px 0 red,
+        1px 0 cyan;
     }
     30% {
       text-shadow:
-        -3px 0 rgba(255, 0, 255, 0.8),
-        3px 0 rgba(0, 255, 255, 0.8);
+        -3px 0 red,
+        3px 0 cyan;
     }
     40% {
       text-shadow: none;
     }
+    50% {
+      text-shadow:
+        -2px 0 red,
+        2px 0 cyan;
+    }
     60% {
       text-shadow:
-        -1px 0 rgba(255, 0, 255, 0.6),
-        1px 0 rgba(0, 255, 255, 0.6);
+        -1px 0 red,
+        1px 0 cyan;
     }
     80% {
       text-shadow: none;
@@ -1640,6 +1645,15 @@ body {
   .experience-info-date,
   .experience-summary p {
     animation: experienceGlitchText 1.2s ease-in-out 0.3s;
+  }
+
+  /* Apply glitch effect to project details when they appear */
+  .code-noise-panel.is-active .code-noise-panel__title,
+  .code-noise-panel.is-active .code-noise-panel__label,
+  .code-noise-panel.is-active .code-noise-panel__bullets li,
+  .code-noise-panel.is-active .code-noise-panel__stack p,
+  .code-noise-panel.is-active .code-noise-panel__stack li {
+    animation: experienceGlitchText 1.0s ease-in-out 0.2s;
   }
 
   .experience-info-header {

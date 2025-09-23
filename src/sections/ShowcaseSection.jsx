@@ -245,7 +245,10 @@ export default function AppShowcase() {
         {/* RIGHT: sticky media viewer (can swap to image for activeIndex later) */}
         <aside className="ref-media" data-glitch-content>
           <div className="ref-media-frame">
-            <CodeNoisePanel project={showDetails ? activeProject : null} />
+            <CodeNoisePanel
+              key={showDetails ? `${activeProject?.title}-${activeIndex}` : 'no-project'}
+              project={showDetails ? activeProject : null}
+            />
           </div>
         </aside>
       </div>
