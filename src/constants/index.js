@@ -153,6 +153,7 @@ const expCards = [
     logoPath: "/images/M.png",
     title: "Software Developer / Researcher",
     date: "May 2025 - August 2025",
+    startDate: "May 2025",
     responsibilities: [
       "Designed OpenCV + Haar Cascade pipeline for contact-angle measurement; reduced manual error ~40%.",
       "Trained/validated classifiers on annotated biomedical datasets (catheter/ECMO tubing) to predict SNAT solubility.",
@@ -167,6 +168,7 @@ const expCards = [
     logoPath: "/images/AA.png",
     title: "Full Stack Developer",
     date: "Jan 2025 - May 2025",
+    startDate: "Jan 2025",
     responsibilities: [
       "Built/tuned MLPClassifier to classify scan-time distributions; improved turnaround prediction accuracy.",
       "Ran EDA at scale with Snowflake SQL to surface station/hub patterns and peak risks.",
@@ -182,6 +184,7 @@ const expCards = [
     logoPath: "/images/H.png",
     title: "Software Engineer",
     date: "Jul 2024 - Feb 2025",
+    startDate: "Jul 2024",
     responsibilities: [
       "Built Python backend with ML + LLM pipelines for disclosure parsing (TDS/SDN) and risk extraction.",
       "Automated draft generation for agreements and summaries; saved buyers ≈$10K per transaction on average.",
@@ -196,6 +199,7 @@ const expCards = [
     logoPath: "/images/AV.png",
     title: "Co-Founder",
     date: "Jul 2023 - Apr 2024",
+    startDate: "Jul 2023",
     responsibilities: [
       "Won Lurie Institute Startup Grant; recruited and onboarded 10+ residential hosts.",
       "Designed/installed screen hardware; built backend to monitor content delivery/uptime.",

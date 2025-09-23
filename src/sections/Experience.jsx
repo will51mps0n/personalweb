@@ -5,6 +5,7 @@ import { expCards } from "../constants";
 const Experience = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
+  const [infoPosition, setInfoPosition] = useState(null);
   const timelineRef = useRef(null);
   const collapseTimeoutRef = useRef(null);
   const displayedCards = [...expCards].reverse();
@@ -20,18 +21,21 @@ const Experience = () => {
     clearCollapseTimeout();
     collapseTimeoutRef.current = setTimeout(() => {
       setActiveIndex(null);
+      setInfoPosition(null);
       collapseTimeoutRef.current = null;
     }, 120);
   };
 
   const handleNodeClick = (index) => {
     clearCollapseTimeout();
+    updateInfoPosition(index);
     setActiveIndex(index);
   };
 
   const handleNodeEnter = (index) => {
     clearCollapseTimeout();
     setActiveIndex(index);
+    updateInfoPosition(index);
   };
 
   const handleNodeLeave = () => {
@@ -46,6 +50,23 @@ const Experience = () => {
     scheduleCollapse();
   };
 
+  const updateInfoPosition = (index) => {
+    if (!timelineRef.current) return;
+    const nodes = timelineRef.current.querySelectorAll('.timeline-node');
+    const node = nodes[index];
+    if (!node) return;
+
+    const containerElement = timelineRef.current.closest('.horizontal-experience-container');
+    if (!containerElement) return;
+
+    const containerRect = containerElement.getBoundingClientRect();
+    const nodeRect = node.getBoundingClientRect();
+
+    const centerX = nodeRect.left + nodeRect.width / 2;
+    const relativeX = centerX - containerRect.left;
+    setInfoPosition({ left: relativeX });
+  };
+
   const handleScroll = (direction) => {
     clearCollapseTimeout();
     const lastIndex = displayedCards.length - 1;
@@ -54,14 +75,24 @@ const Experience = () => {
       if (activeIndex === null) return;
       if (activeIndex === 0) {
         setActiveIndex(null);
+        setInfoPosition(null);
       } else {
-        setActiveIndex((prev) => (prev === null ? null : prev - 1));
+        setActiveIndex((prev) => {
+          const nextIndex = prev === null ? null : prev - 1;
+          if (nextIndex !== null) updateInfoPosition(nextIndex);
+          return nextIndex;
+        });
       }
     } else if (direction === "right") {
       if (activeIndex === null) {
+        updateInfoPosition(0);
         setActiveIndex(0);
       } else if (activeIndex < lastIndex) {
-        setActiveIndex((prev) => (prev === null ? 0 : prev + 1));
+        setActiveIndex((prev) => {
+          const nextIndex = prev === null ? 0 : prev + 1;
+          updateInfoPosition(nextIndex);
+          return nextIndex;
+        });
       }
     }
   };
@@ -93,6 +124,8 @@ const Experience = () => {
 
     const activeNode = nodes[activeIndex];
     if (!activeNode) return;
+
+    updateInfoPosition(activeIndex);
 
     const nodeCenter = activeNode.offsetLeft + activeNode.offsetWidth / 2;
     const scrollPosition = nodeCenter - containerWidth / 2;
@@ -154,32 +187,34 @@ const Experience = () => {
 
               <div className="timeline-nodes">
                 {displayedCards.map((card, index) => (
-                  <div
-                    key={index}
-                    className={`timeline-node ${index === activeIndex ? "active" : ""}`}
-                    onClick={() => handleNodeClick(index)}
-                    onMouseEnter={() => handleNodeEnter(index)}
-                    onMouseLeave={handleNodeLeave}
-                    role="button"
-                    tabIndex={0}
-                    aria-pressed={index === activeIndex}
-                    onFocus={() => handleNodeEnter(index)}
-                    onBlur={handleNodeLeave}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        handleNodeClick(index);
-                      }
-                    }}
-                  >
-                    <div className="node-circle">
-                      <img
-                        src={card.logoPath}
-                        alt={`${card.company} logo`}
-                        className="node-logo"
-                      />
+                  <div className="timeline-node-wrapper" key={`${card.company}-${index}`}>
+                    <div className="node-date">{card.startDate}</div>
+                    <div
+                      className={`timeline-node ${index === activeIndex ? "active" : ""}`}
+                      onClick={() => handleNodeClick(index)}
+                      onMouseEnter={() => handleNodeEnter(index)}
+                      onMouseLeave={handleNodeLeave}
+                      role="button"
+                      tabIndex={0}
+                      aria-pressed={index === activeIndex}
+                      onFocus={() => handleNodeEnter(index)}
+                      onBlur={handleNodeLeave}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          handleNodeClick(index);
+                        }
+                      }}
+                    >
+                      <div className="node-circle">
+                        <img
+                          src={card.logoPath}
+                          alt={`${card.company} logo`}
+                          className="node-logo"
+                        />
+                      </div>
+                      <div className="node-label">{card.company}</div>
                     </div>
-                    <div className="node-label">{card.company}</div>
                   </div>
                 ))}
               </div>
@@ -187,10 +222,11 @@ const Experience = () => {
           </div>
         </div>
 
-        {activeExperience && (
+        {activeExperience && infoPosition && (
           <div
             key={`${activeExperience.company}-${activeIndex}`}
             className="experience-info"
+            style={{ left: infoPosition.left }}
             onMouseEnter={handleDetailsEnter}
             onMouseLeave={handleDetailsLeave}
           >
