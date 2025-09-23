@@ -1414,6 +1414,49 @@ body {
     text-align: left;
   }
 
+  .experience-summary {
+    position: absolute;
+    top: calc(50% - 240px);
+    transform: translate(-50%, -20px);
+    width: clamp(300px, 32vw, 440px);
+    padding: clamp(0.8rem, 1.8vw, 1.1rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.55rem, 1.2vw, 0.85rem);
+    color: var(--color-default);
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid rgba(13, 76, 125, 0.45);
+    border-radius: 16px;
+    box-shadow: 0 20px 44px rgba(13, 76, 125, 0.14);
+    backdrop-filter: blur(18px);
+    opacity: 0;
+    animation: experienceInfoSlide 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .experience-summary__banner {
+    width: 100%;
+    height: clamp(54px, 9vw, 82px);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(13, 76, 125, 0.32);
+    background: rgba(6, 79, 148, 0.05);
+  }
+
+  .experience-summary__banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .experience-summary p {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--color-default);
+    margin: 0;
+  }
+
   @keyframes experienceInfoSlide {
     from {
       opacity: 0;
@@ -1524,6 +1567,17 @@ body {
     .experience-info {
       width: min(85vw, 320px);
       gap: 0.45rem;
+    }
+
+    .experience-summary {
+      width: min(86vw, 340px);
+      top: calc(50% - 210px);
+      padding: 0.65rem 0.8rem;
+      gap: 0.45rem;
+    }
+
+    .experience-summary__banner {
+      height: clamp(48px, 18vw, 80px);
     }
 
     .experience-info-header {

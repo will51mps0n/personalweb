@@ -177,6 +177,25 @@ const Experience = () => {
       data-glitch-content
     >
       <div className="horizontal-experience-container">
+        {activeExperience && infoPosition && (
+          <div
+            key={`${activeExperience.company}-${activeIndex}-summary`}
+            className="experience-summary"
+            style={{ left: infoPosition.left }}
+            onMouseEnter={handleDetailsEnter}
+            onMouseLeave={handleDetailsLeave}
+          >
+            {activeExperience.imgPath ? (
+              <div className="experience-summary__banner">
+                <img src={activeExperience.imgPath} alt={`${activeExperience.company} banner`} />
+              </div>
+            ) : null}
+            {activeExperience.review ? (
+              <p>{activeExperience.review}</p>
+            ) : null}
+          </div>
+        )}
+
         <div className="timeline-shell">
           <div ref={timelineRef} className="horizontal-timeline">
             <div className="timeline-track">
