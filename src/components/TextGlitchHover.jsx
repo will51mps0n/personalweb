@@ -19,7 +19,7 @@ const TextGlitchHover = ({ children, radius = 80 }) => {
       [...text].forEach((char, index) => {
         const span = document.createElement('span');
         span.textContent = char;
-        span.style.display = char === ' ' ? 'inline' : 'inline-block';
+        span.style.display = 'inline';
         span.style.position = 'relative';
         span.style.transition = 'text-shadow 0.1s ease';
         span.dataset.charIndex = index;

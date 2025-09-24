@@ -176,7 +176,7 @@ const Hero = () => {
              className="
                hero-text
                font-semibold text-[color:var(--color-black-100)]
-               text-[15px] md:text-[16px] leading-[1.45]
+               text-[14px] md:text-[16px] leading-[1.45]
                -mt-1
              "
            >
