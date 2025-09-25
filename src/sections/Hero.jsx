@@ -3,8 +3,22 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import HeroExperience from "../components/models/hero_models/HeroExperience";
 import TextGlitchHover from "../components/TextGlitchHover";
+import { useState, useEffect } from "react";
 
 const Hero = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useGSAP(() => {
     // Animate the 3D model container
     gsap.fromTo(
@@ -22,40 +36,66 @@ const Hero = () => {
   }, []);
 
   return (
-    <section 
-      id="hero" 
+    <section
+      id="hero"
       className="relative overflow-hidden snap-section"
       style={{ height: '100dvh' }}
     >
       <div
-        className="
-          hero-layout 
-          min-h-[80vh] md:min-h-[82vh]
-          items-start
-        "
+        className={`
+          ${isMobile
+            ? 'flex flex-col items-center justify-center min-h-[100vh] px-5'
+            : 'hero-layout min-h-[80vh] md:min-h-[82vh] items-start'
+          }
+        `}
       >
-        {/* LEFT: text column */}
+        {/* Text content */}
         <header
-          className="
-            flex flex-col justify-start
-            md:w-full w-screen
-            md:px-20 px-5
-            pt-12 md:pt-10 lg:pt-8
-          "
+          className={`
+            ${isMobile
+              ? 'flex flex-col items-center justify-center text-center w-full max-w-lg'
+              : 'flex flex-col justify-start md:w-full w-screen md:px-20 px-5 pt-12 md:pt-10 lg:pt-8'
+            }
+          `}
           data-fade-in
           data-glitch-content
         >
-         <div className="max-w-xl md:max-w-2xl lg:max-w-3xl">
+          {/* Name Title - Mobile Only */}
+          {isMobile && (
+            <div className="mb-6 text-center">
+              <h1 className="text-3xl text-[color:var(--color-black-100)]"
+                style={{
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase'
+                }}>
+                Adam Simpson
+              </h1>
+              <p className="mt-2 text-sm text-[color:var(--color-black-100)]"
+                style={{
+                  fontWeight: 400,
+                  letterSpacing: '0.05em',
+                  opacity: 0.8
+                }}>
+                DEVELOPMENT PORTFOLIO
+              </p>
+            </div>
+          )}
+
+         <div className={isMobile ? 'max-w-sm' : 'max-w-xl md:max-w-2xl lg:max-w-3xl'}>
            <div
-             className="
+             className={`
                 hero-text
                 font-semibold text-[color:var(--color-black-100)]
                 text-[15px] md:text-[16px] leading-[1.45]
-                -mt-1
-              "
+                ${isMobile ? 'text-center' : '-mt-1'}
+              `}
             >
               <p
-                className="text-base leading-snug text-ink max-w-md font-semibold mt-30 ml-6 md:ml-16 lg:ml-28"
+                className={`
+                  text-base leading-snug text-ink max-w-md font-semibold
+                  ${isMobile ? 'text-center mx-auto mb-4' : 'mt-30 ml-6 md:ml-16 lg:ml-28'}
+                `}
                 data-slide-up
               >
                 <TextGlitchHover radius={90}>
@@ -65,9 +105,12 @@ const Hero = () => {
                   servers, and custom thread libraries in C and C++.
                 </TextGlitchHover>
               </p>
-              <br />
+              {!isMobile && <br />}
               <p
-                className="text-base leading-snug text-ink max-w-md font-semibold ml-6 md:ml-16 lg:ml-28"
+                className={`
+                  text-base leading-snug text-ink max-w-md font-semibold
+                  ${isMobile ? 'text-center mx-auto mb-4' : 'ml-6 md:ml-16 lg:ml-28'}
+                `}
                 data-slide-up
               >
                 <TextGlitchHover radius={90}>
@@ -77,9 +120,12 @@ const Hero = () => {
                   predictive modeling in Python and PyTorch.
                 </TextGlitchHover>
               </p>
-              <br />
+              {!isMobile && <br />}
               <p
-                className="text-base leading-snug text-ink max-w-md font-semibold ml-6 md:ml-16 lg:ml-28"
+                className={`
+                  text-base leading-snug text-ink max-w-md font-semibold
+                  ${isMobile ? 'text-center mx-auto mb-6' : 'ml-6 md:ml-16 lg:ml-28'}
+                `}
                 data-slide-up
               >
                 <TextGlitchHover radius={90}>
@@ -91,7 +137,7 @@ const Hero = () => {
               </p>
             </div>
 
-            <div className="hero-socials" aria-label="Social links">
+            <div className={`hero-socials ${isMobile ? 'justify-center' : ''}`} aria-label="Social links">
               <a
                 className="hero-social-button"
                 href="https://www.linkedin.com/in/adam-simpson-b6a3201a7/"
@@ -127,12 +173,14 @@ const Hero = () => {
           </div>
         </header>
 
-        {/* RIGHT: 3D model */}
-        <figure data-scale-in data-glitch-content>
-          <div className="hero-3d-layout">
-            <HeroExperience />
-          </div>
-        </figure>
+        {/* 3D model - only show on desktop */}
+        {!isMobile && (
+          <figure data-scale-in data-glitch-content>
+            <div className="hero-3d-layout">
+              <HeroExperience />
+            </div>
+          </figure>
+        )}
       </div>
 
     </section>

@@ -1,14 +1,44 @@
 // src/sections/Experience.jsx
 import { useEffect, useRef, useState } from "react";
 import { expCards } from "../constants";
+import MobileSectionHeader from "../components/MobileSectionHeader";
 
 const Experience = () => {
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(null); // Start with no experience active on desktop
   const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
   const [infoPosition, setInfoPosition] = useState(null);
   const timelineRef = useRef(null);
   const collapseTimeoutRef = useRef(null);
   const displayedCards = [...expCards].reverse();
+
+  // Mobile carousel state
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentMobileIndex, setCurrentMobileIndex] = useState(0);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Mobile navigation functions
+  const goToPrevious = () => {
+    setCurrentMobileIndex((prev) =>
+      prev === 0 ? displayedCards.length - 1 : prev - 1
+    );
+  };
+
+  const goToNext = () => {
+    setCurrentMobileIndex((prev) =>
+      prev === displayedCards.length - 1 ? 0 : prev + 1
+    );
+  };
 
   const clearCollapseTimeout = () => {
     if (collapseTimeoutRef.current) {
@@ -138,6 +168,8 @@ const Experience = () => {
 
   useEffect(() => () => clearCollapseTimeout(), []);
 
+  // No initial positioning needed - timeline starts empty
+
   useEffect(() => {
     if (!timelineRef.current) return;
 
@@ -167,16 +199,99 @@ const Experience = () => {
     };
   }, []);
 
-  const activeExperience = activeIndex !== null ? displayedCards[activeIndex] : null;
+  const activeExperience = displayedCards[activeIndex] || null;
+  const currentMobileExperience = displayedCards[currentMobileIndex];
 
   return (
     <section
       id="experience"
       className="snap-section full-height-only"
-      style={{ height: "100vh", overflow: "hidden" }}
-      data-glitch-content
+      style={{
+        height: "100vh",
+        overflow: isMobile ? "visible" : "hidden"
+      }}
     >
-      <div className="horizontal-experience-container">
+      <MobileSectionHeader title="Experience" />
+
+      {isMobile ? (
+        /* Mobile Single Experience Layout */
+        <div className="mobile-experience-single-container">
+          {/* Navigation Controls at Top */}
+          <div className="mobile-experience-nav-controls">
+            <button
+              className="mobile-experience-nav-arrow"
+              onClick={goToPrevious}
+              aria-label="Previous experience"
+              disabled={currentMobileIndex === 0}
+            >
+              ←
+            </button>
+
+            <div className="mobile-experience-counter">
+              {currentMobileIndex + 1} / {displayedCards.length}
+            </div>
+
+            <button
+              className="mobile-experience-nav-arrow"
+              onClick={goToNext}
+              aria-label="Next experience"
+              disabled={currentMobileIndex === displayedCards.length - 1}
+            >
+              →
+            </button>
+          </div>
+
+          {/* Experience Card */}
+          <div className="mobile-experience-card">
+            {/* Company Logo and Date */}
+            <div className="mobile-exp-header">
+              <div className="mobile-exp-logo-wrapper">
+                <img
+                  src={currentMobileExperience?.logoPath}
+                  alt={`${currentMobileExperience?.company} logo`}
+                  className="mobile-exp-logo"
+                />
+              </div>
+              <div className="mobile-exp-date">{currentMobileExperience?.date}</div>
+            </div>
+
+            {/* Job Title and Company */}
+            <div className="mobile-exp-title-section">
+              <h2 className="mobile-exp-title">{currentMobileExperience?.title}</h2>
+              <p className="mobile-exp-company">{currentMobileExperience?.company}</p>
+            </div>
+
+            {/* Experience Banner Image */}
+            {currentMobileExperience?.imgPath && (
+              <div className="mobile-exp-banner">
+                <img
+                  src={currentMobileExperience.imgPath}
+                  alt={`${currentMobileExperience.company} banner`}
+                />
+              </div>
+            )}
+
+            {/* Experience Description */}
+            {currentMobileExperience?.review && (
+              <div className="mobile-exp-review">
+                <p>{currentMobileExperience.review}</p>
+              </div>
+            )}
+
+            {/* Responsibilities */}
+            <div className="mobile-exp-responsibilities">
+              <h3>Key Responsibilities:</h3>
+              <ul>
+                {currentMobileExperience?.responsibilities?.map((responsibility, idx) => (
+                  <li key={idx}>{responsibility}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Desktop Timeline Layout */
+        <div className="horizontal-experience-container">
         {activeExperience && infoPosition && (
           <div
             key={`${activeExperience.company}-${activeIndex}-summary`}
@@ -196,7 +311,7 @@ const Experience = () => {
           </div>
         )}
 
-        <div className="timeline-shell">
+        <div className="timeline-shell" data-fade-in>
           <div ref={timelineRef} className="horizontal-timeline">
             <div className="timeline-track">
               <div
@@ -264,12 +379,13 @@ const Experience = () => {
           </div>
         )}
 
-        {activeExperience && (
-          <div className="progress-indicator">
-            {activeIndex + 1} of {displayedCards.length}
-          </div>
-        )}
-      </div>
+          {activeExperience && (
+            <div className="progress-indicator">
+              {activeIndex + 1} of {displayedCards.length}
+            </div>
+          )}
+        </div>
+      )}
     </section>
   );
 };

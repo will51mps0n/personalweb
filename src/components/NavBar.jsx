@@ -56,19 +56,8 @@ const NavBar = () => {
       if (!isMobile) return;
 
       const currentScrollY = window.scrollY;
-      const scrollDifference = Math.abs(currentScrollY - lastScrollY);
-
-      // Only hide/show if scroll difference is significant (avoid small jiggles)
-      if (scrollDifference > 10) {
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-          // Scrolling down & past 100px
-          setIsVisible(false);
-        } else {
-          // Scrolling up or near top
-          setIsVisible(true);
-        }
-        setLastScrollY(currentScrollY);
-      }
+      // On mobile, just track scroll for navbar background, but keep it always visible
+      setLastScrollY(currentScrollY);
     };
 
     // Initial check
@@ -82,14 +71,47 @@ const NavBar = () => {
       window.removeEventListener('resize', checkMobile);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isMobile, lastScrollY]);
+  }, [isMobile]);
 
   const showCounter = useMemo(() => {
     return activeSection === "work" && projectCounter;
   }, [activeSection, projectCounter]);
 
-  const handleNavClick = (target) => {
+  const handleNavClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const target = e.currentTarget.getAttribute('data-target');
     const targetId = target.replace('#', '');
+
+    console.log('Nav clicked:', targetId); // Debug log
+
+    // For mobile, use direct scrollIntoView for reliable navigation
+    if (isMobile) {
+      const targetElement = document.getElementById(targetId);
+      console.log('Target element found:', targetElement); // Debug log
+      if (targetElement) {
+        // Force smooth scrolling using window.scrollTo
+        const elementTop = targetElement.offsetTop;
+        const navbarHeight = 70;
+
+        window.scrollTo({
+          top: elementTop - navbarHeight,
+          behavior: 'smooth'
+        });
+
+        // Also try scrollIntoView as backup
+        setTimeout(() => {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 50);
+      }
+      return;
+    }
+
+    // For desktop, use the existing scroll controller
     window.dispatchEvent(
       new CustomEvent('requestSectionScroll', {
         detail: { id: targetId },
@@ -99,37 +121,64 @@ const NavBar = () => {
 
   return (
     <header
-      className={`navbar ${isMobile ? (isVisible ? 'navbar--visible' : 'navbar--hidden') : ''}`}
+      className={`navbar ${isMobile ? `navbar--mobile ${lastScrollY > 50 ? 'navbar--scrolled' : ''}` : ''}`}
       role="banner"
     >
-      <div className={`navbar-title ${titleVariant === 'hero' ? 'hero' : 'standard'}`}>
-        <span className="navbar-title__text">{sectionTitle}</span>
-        {showCounter ? (
-          <span className="navbar-title__counter">
-            {pad(projectCounter.current)}/
-            {pad(projectCounter.total)}
-          </span>
-        ) : null}
-      </div>
+      {/* Desktop layout */}
+      {!isMobile ? (
+        <>
+          <div className={`navbar-title ${titleVariant === 'hero' ? 'hero' : 'standard'}`}>
+            <span className="navbar-title__text">{sectionTitle}</span>
+            {showCounter ? (
+              <span className="navbar-title__counter">
+                {pad(projectCounter.current)}/
+                {pad(projectCounter.total)}
+              </span>
+            ) : null}
+          </div>
 
-      <nav className="mini-nav" aria-label="Section navigation">
-        {navLinks.map(({ link, name }) => {
-          const id = link.replace('#', '');
-          const isActive = activeSection === id;
+          <nav className="mini-nav" aria-label="Section navigation">
+            {navLinks.map(({ link, name }) => {
+              const id = link.replace('#', '');
+              const isActive = activeSection === id;
 
-          return (
-            <button
-              key={name}
-              type="button"
-              className={`mini-nav__item ${isActive ? 'is-active' : ''}`}
-              aria-current={isActive ? 'page' : undefined}
-              onClick={() => handleNavClick(link)}
-            >
-              {name}
-            </button>
-          );
-        })}
-      </nav>
+              return (
+                <button
+                  key={name}
+                  type="button"
+                  className={`mini-nav__item ${isActive ? 'is-active' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                  onClick={handleNavClick}
+                  data-target={link}
+                >
+                  {name}
+                </button>
+              );
+            })}
+          </nav>
+        </>
+      ) : (
+        /* Mobile layout - horizontal nav only */
+        <nav className="mobile-nav" aria-label="Section navigation">
+          {navLinks.map(({ link, name }) => {
+            const id = link.replace('#', '');
+            const isActive = activeSection === id;
+
+            return (
+              <button
+                key={name}
+                type="button"
+                className={`mobile-nav__item ${isActive ? 'is-active' : ''}`}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={handleNavClick}
+                data-target={link}
+              >
+                {name}
+              </button>
+            );
+          })}
+        </nav>
+      )}
     </header>
   );
 };

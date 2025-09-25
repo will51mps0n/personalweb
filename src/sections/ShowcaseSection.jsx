@@ -1,6 +1,7 @@
 // src/sections/ShowcaseSection.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import CodeNoisePanel from "../components/CodeNoisePanel";
+import MobileSectionHeader from "../components/MobileSectionHeader";
 
 const GITHUB_BASE = "https://github.com/will51mps0n"; // <-- change this once
 
@@ -159,8 +160,24 @@ export default function AppShowcase() {
   // The item that stays selected (drives the top counter & underline)
   const [activeIndex, setActiveIndex] = useState(1); // 1-based
 
-  // Only used to control the “muffle the others” effect while the pointer is inside the list
+  // Only used to control the "muffle the others" effect while the pointer is inside the list
   const [isPointerInList, setIsPointerInList] = useState(false);
+
+  // Mobile detection and dropdown state
+  const [isMobile, setIsMobile] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const projects = useMemo(() => {
     const base = [
@@ -206,52 +223,90 @@ export default function AppShowcase() {
 
   return (
     <section id="work" data-title="Projects" ref={sectionRef} className="work-section ref-wrap">
-      <div className="ref-body">
-        {/* LEFT: list */}
-        <ol
-          className="ref-list"
-          data-hover={isPointerInList ? "true" : "false"}
-          onMouseEnter={() => setIsPointerInList(true)}
-          onMouseLeave={() => setIsPointerInList(false)}
-        >
-          {projects.map((p, i) => {
-            const idx = i + 1;
-            const isActive = idx === activeIndex;
-            return (
-              <li
-                key={idx}
-                className={isActive ? "is-active" : ""}
-                onMouseEnter={() => setActiveIndex(idx)}    // set, but never clear on leave
-                onFocus={() => {
-                  setActiveIndex(idx);
-                  setIsPointerInList(true);
-                }}         // keyboard focus also sets it
-                onBlur={({ currentTarget }) => {
-                  if (!currentTarget?.parentNode?.contains(document.activeElement)) {
-                    setIsPointerInList(false);
-                  }
-                }}
-                data-glitch-content
-              >
-                <span className="num">{pad(idx)}</span>
-                <a className="ref-link" href={p.href} title={p.title} target={p.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
-                  {p.title}
-                </a>
-              </li>
-            );
-          })}
-        </ol>
+      <MobileSectionHeader title="Select Projects" />
 
-        {/* RIGHT: sticky media viewer (can swap to image for activeIndex later) */}
-        <aside className="ref-media" data-glitch-content>
-          <div className="ref-media-frame">
-            <CodeNoisePanel
-              key={showDetails ? `${activeProject?.title}-${activeIndex}` : 'no-project'}
-              project={showDetails ? activeProject : null}
-            />
+      {isMobile ? (
+        /* Mobile Layout: Horizontal List with Popup */
+        <div className="mobile-projects-container">
+          <div className="mobile-projects-list">
+            {projects.map((p, i) => {
+              const idx = i + 1;
+              const isActive = idx === activeIndex;
+              return (
+                <button
+                  key={idx}
+                  className={`mobile-project-button ${isActive ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveIndex(idx);
+                    setIsPointerInList(true);
+                  }}
+                >
+                  <span className="mobile-project-num">{pad(idx)}</span>
+                  <span className="mobile-project-title">{p.title}</span>
+                </button>
+              );
+            })}
           </div>
-        </aside>
-      </div>
+
+          {/* Mobile Project Display */}
+          {activeProject && showDetails && (
+            <div className="mobile-project-display">
+              <CodeNoisePanel
+                key={`${activeProject.title}-${activeIndex}`}
+                project={activeProject}
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        /* Desktop Layout: Original Design */
+        <div className="ref-body">
+          {/* LEFT: list */}
+          <ol
+            className="ref-list"
+            data-hover={isPointerInList ? "true" : "false"}
+            onMouseEnter={() => setIsPointerInList(true)}
+            onMouseLeave={() => setIsPointerInList(false)}
+          >
+            {projects.map((p, i) => {
+              const idx = i + 1;
+              const isActive = idx === activeIndex;
+              return (
+                <li
+                  key={idx}
+                  className={isActive ? "is-active" : ""}
+                  onMouseEnter={() => setActiveIndex(idx)}    // set, but never clear on leave
+                  onFocus={() => {
+                    setActiveIndex(idx);
+                    setIsPointerInList(true);
+                  }}         // keyboard focus also sets it
+                  onBlur={({ currentTarget }) => {
+                    if (!currentTarget?.parentNode?.contains(document.activeElement)) {
+                      setIsPointerInList(false);
+                    }
+                  }}
+                  data-glitch-content
+                >
+                  <span className="num">{pad(idx)}</span>
+                  <a className="ref-link" href={p.href} title={p.title} target={p.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+                    {p.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+
+          {/* RIGHT: sticky media viewer (can swap to image for activeIndex later) */}
+          <aside className="ref-media" data-glitch-content>
+            <div className="ref-media-frame">
+              <CodeNoisePanel
+                key={showDetails ? `${activeProject?.title}-${activeIndex}` : 'no-project'}
+                project={showDetails ? activeProject : null}
+              />
+            </div>
+          </aside>
+        </div>
+      )}
     </section>
   );
 }

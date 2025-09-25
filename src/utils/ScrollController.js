@@ -103,9 +103,23 @@ class ScrollController {
   }
 
   prepareGlitchContentDefaults() {
+    // Skip setting initial hidden states on mobile
+    if (this.isMobile) return;
+
     this.sections.forEach((section) => {
       const elements = this.getGlitchElements(section);
       if (elements.length === 0) return;
+
+      // Don't hide the experience section content - keep it visible
+      if (section.id === 'experience') {
+        gsap.set(elements, {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          pointerEvents: 'auto'
+        });
+        return;
+      }
 
       gsap.set(elements, {
         opacity: 0,
@@ -185,6 +199,13 @@ class ScrollController {
 
     gsap.delayedCall(0.2, () => {
       this.animateSectionContent(initialSection);
+
+      // Ensure experience section is visible regardless
+      const experienceSection = document.getElementById('experience');
+      if (experienceSection) {
+        this.animateSectionContent(experienceSection);
+      }
+
       this.isScrolling = false;
     });
   }
@@ -521,6 +542,42 @@ class ScrollController {
   animateSectionContent(section, timeline = null) {
     if (!section) return;
 
+    // On mobile, skip all animations and make content immediately visible
+    if (this.isMobile) {
+      const fadeElements = Array.from(section.querySelectorAll('[data-fade-in]'));
+      const slideElements = Array.from(section.querySelectorAll('[data-slide-up]'));
+      const scaleElements = Array.from(section.querySelectorAll('[data-scale-in]'));
+      const glitchElements = Array.from(section.querySelectorAll('[data-glitch-content]'));
+
+      const allElements = [...fadeElements, ...slideElements, ...scaleElements, ...glitchElements];
+
+      gsap.set(allElements, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        rotationX: 0,
+        filter: 'blur(0px)',
+        pointerEvents: 'auto'
+      });
+
+      const sectionContent = section.querySelector('.section-content') || section;
+      sectionContent.classList.add('section-content');
+      return;
+    }
+
+    // For experience section on desktop, ensure content is always visible
+    if (section.id === 'experience') {
+      const glitchElements = Array.from(section.querySelectorAll('[data-glitch-content]'));
+      gsap.set(glitchElements, {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        pointerEvents: 'auto'
+      });
+      return;
+    }
+
     const fadeElements = Array.from(section.querySelectorAll('[data-fade-in]'));
     const slideElements = Array.from(section.querySelectorAll('[data-slide-up]'));
     const scaleElements = Array.from(section.querySelectorAll('[data-scale-in]'));
@@ -616,6 +673,20 @@ class ScrollController {
     const { id } = event.detail || {};
     if (!id) return;
 
+    // Check if mobile at the time of request (more reliable)
+    const isMobileNow = window.innerWidth <= 768;
+
+    // For both mobile and desktop, use simple scrolling for nav clicks
+    const targetElement = document.getElementById(id);
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      return;
+    }
+
+    // Fallback to custom scroll logic if needed
     this.scrollToSectionById(id);
   }
 

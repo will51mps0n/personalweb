@@ -57,6 +57,16 @@ section { width: 100dvw; }
     touch-action: pan-y;
   }
 
+  /* Enable smooth scrolling for mobile navigation */
+  html {
+    scroll-behavior: smooth !important;
+  }
+
+  /* Ensure sections are properly accessible for navigation */
+  section[id] {
+    scroll-margin-top: 70px; /* Account for navbar height */
+  }
+
   /* Ensure mobile sections don't have scroll conflicts */
   .snap-section {
     scroll-snap-align: none;
@@ -474,8 +484,63 @@ body {
     color: var(--color-black-100);
   }
 
+  /* Mobile navbar styles */
+  .navbar--mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: transparent;
+    backdrop-filter: none;
+    padding: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .navbar--mobile.navbar--scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+  }
+
+  .mobile-nav__item {
+    background: none;
+    border: none;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .mobile-nav__item:hover,
+  .mobile-nav__item.is-active {
+    color: var(--color-black-100);
+  }
+
+  .mobile-nav__item.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-black-100);
+  }
+
   @media (max-width: 640px) {
-    .navbar {
+    .navbar:not(.navbar--mobile) {
       padding-inline: clamp(1rem, 5vw, 1.5rem);
       top: clamp(0.75rem, 2vw, 1.5rem);
     }
@@ -1329,6 +1394,11 @@ body {
     position: relative;
     max-width: 100vw;
     overflow: hidden;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    filter: none !important;
   }
 
   .timeline-shell {
@@ -1880,5 +1950,460 @@ body {
   .snap-section {
     min-height: auto;
     height: auto;
+  }
+}
+
+/* Mobile Section Headers */
+.mobile-section-header {
+  position: sticky;
+  top: 70px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: transparent;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+
+.mobile-section-title {
+  font-size: 1.875rem;  /* Match text-3xl from Adam Simpson title */
+  font-weight: 700;
+  color: var(--color-black-100);
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 769px) {
+  .mobile-section-header {
+    display: none;
+  }
+}
+
+/* Vertical Section Titles */
+.vertical-section-title {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  z-index: 15;
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-top: 120px;
+  pointer-events: none;
+}
+
+.vertical-section-title-text {
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-black-100);
+  margin: 0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+@media (min-width: 769px) {
+  .vertical-section-title {
+    display: none;
+  }
+}
+
+/* Mobile Projects List */
+.mobile-projects-container {
+  padding: 1rem;
+  max-width: 100%;
+}
+
+.mobile-projects-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mobile-projects-list::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-project-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: 1px solid rgba(6, 107, 189, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.mobile-project-button:hover {
+  border-color: rgba(6, 107, 189, 0.4);
+  background: rgba(6, 107, 189, 0.05);
+  transform: translateY(-2px);
+}
+
+.mobile-project-button.active {
+  border-color: rgba(6, 107, 189, 0.8);
+  background: rgba(6, 107, 189, 0.1);
+  box-shadow: 0 4px 12px rgba(6, 107, 189, 0.2);
+  transform: translateY(-2px);
+}
+
+.mobile-project-num {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-default);
+  opacity: 0.7;
+}
+
+.mobile-project-title {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--color-black-100);
+  text-align: center;
+  line-height: 1.2;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Force Experience Section to Always Be Visible - Mobile Only */
+@media (max-width: 768px) {
+  #experience {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  #experience * {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* Force About Section to Always Be Visible - Mobile Only */
+@media (max-width: 768px) {
+  #about {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  #about * {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* MOBILE SECTION SPACING */
+@media (max-width: 768px) {
+  /* More space between Projects and Experience */
+  #experience {
+    margin-top: 4rem !important;
+    padding-top: 2rem !important;
+  }
+
+  /* More space between Experience and About - handled by About section margin */
+  .about-section {
+    display: block;            /* override grid/flex two-column on mobile */
+    padding: 5rem 1.25rem 1rem 1.25rem;     /* even more top padding to clear Experience section */
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    margin-top: 5rem;          /* increased margin for more space from Experience */
+  }
+
+  /* Slightly less space between Home and Projects */
+  #work {
+    margin-top: -2rem !important;
+  }
+
+  /* Hide left footer on mobile */
+  .footer-container > div:first-child {
+    display: none !important;
+  }
+
+  /* Adjust footer layout for mobile without left column */
+  .footer-container {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Make sure the header appears above the text and spans full width */
+  .about-title {
+    position: static;          /* undo sticky/absolute left-rail behavior */
+    order: 0;                  /* in case flex/grid order was altered */
+    margin: 0 0 0.75rem 0;     /* small gap under the header */
+    width: 100%;
+    text-align: center;        /* center the header on mobile */
+    font-size: 1.875rem;      /* Match text-3xl from Adam Simpson title */
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-black-100) !important;  /* Match other headers */
+  }
+
+  /* Make the body copy take the full width */
+  .about-body {
+    width: 100%;
+    max-width: none;           /* undo any 45ch/600px caps */
+    margin: 0;                 /* remove auto side margins that center/narrow */
+  }
+
+  /* Paragraph typography: left aligned, ragged right */
+  .about-body p {
+    text-align: left !important;      /* force left alignment */
+    text-justify: auto;               /* neutralize full justification if set */
+    hyphens: auto;                    /* optional: nicer wraps */
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--color-default);
+  }
+
+  /* If a two-column template is applied site-wide, also neutralize these: */
+  .about-section [class*="col-"],
+  .about-section .sidebar,
+  .about-section .left-rail {
+    float: none;
+    width: 100%;
+  }
+}
+
+.mobile-project-button.active .mobile-project-title {
+  color: var(--color-black-100);
+  font-weight: 600;
+}
+
+.mobile-project-display {
+  margin-top: 1rem;
+}
+
+@media (min-width: 769px) {
+  .mobile-projects-container {
+    display: none;
+  }
+}
+
+/* Mobile Experience Single Layout */
+.mobile-experience-single-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  height: auto;
+  min-height: calc(100vh - 140px);
+  overflow-y: visible;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.mobile-experience-nav-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+.mobile-experience-nav-arrow {
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(6, 107, 189, 0.4);
+  background: transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--color-black-100);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobile-experience-nav-arrow:hover:not(:disabled) {
+  border-color: rgba(6, 107, 189, 0.8);
+  background: rgba(6, 107, 189, 0.1);
+  transform: scale(1.05);
+}
+
+.mobile-experience-nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.mobile-experience-counter {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-black-100);
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(6, 107, 189, 0.3);
+  border-radius: 20px;
+  background: rgba(6, 107, 189, 0.05);
+}
+
+.mobile-experience-card {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(13, 76, 125, 0.45);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 0 2px rgba(102, 224, 255, 0.22), 0 24px 48px rgba(13, 76, 125, 0.18);
+  backdrop-filter: blur(18px);
+  overflow-y: auto;
+}
+
+.mobile-exp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-exp-logo-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(6, 107, 189, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mobile-exp-logo {
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mobile-exp-date {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-default);
+  opacity: 0.8;
+  text-align: right;
+}
+
+.mobile-exp-title-section {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-exp-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-black-100);
+  margin: 0 0 0.5rem 0;
+}
+
+.mobile-exp-company {
+  font-size: 0.9rem;
+  color: var(--color-white-50);
+  margin: 0;
+  font-weight: 500;
+}
+
+.mobile-exp-banner {
+  width: 100%;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(13, 76, 125, 0.32);
+}
+
+.mobile-exp-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: rgba(255,255,255,0.6);
+}
+
+.mobile-exp-review {
+  margin-bottom: 1.5rem;
+}
+
+.mobile-exp-review p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-default);
+  margin: 0;
+  font-style: italic;
+}
+
+.mobile-exp-responsibilities h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-black-100);
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mobile-exp-responsibilities ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mobile-exp-responsibilities li {
+  position: relative;
+  padding-left: 1.25rem;
+  line-height: 1.4;
+  color: var(--color-default);
+  font-size: 0.8rem;
+}
+
+.mobile-exp-responsibilities li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--color-white-50);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+@media (min-width: 769px) {
+  .mobile-experience-container {
+    display: none;
   }
 }
