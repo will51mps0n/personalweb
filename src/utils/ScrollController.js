@@ -61,8 +61,9 @@ class ScrollController {
     this.prepareGlitchContentDefaults();
     this.pageShell = document.querySelector('.page-main');
 
-    // Only disable native scroll snap on desktop
+    // Hide scrollbar and disable smooth scroll on desktop
     if (!this.isMobile) {
+      this.hideScrollbarAndDisableSmooth();
       this.disableNativeScrollSnap();
     }
 
@@ -102,16 +103,42 @@ class ScrollController {
     document.body.appendChild(this.glitchOverlay);
   }
 
+  hideScrollbarAndDisableSmooth() {
+    // Hide scrollbar on desktop
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  }
+
+  restoreScrollbar() {
+    // Restore scrollbar
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
   prepareGlitchContentDefaults() {
     // Skip setting initial hidden states on mobile
-    if (this.isMobile) return;
+    if (this.isMobile) {
+      this.sections.forEach((section) => {
+        const elements = this.getGlitchElements(section);
+        if (elements.length === 0) return;
 
-    this.sections.forEach((section) => {
+        gsap.set(elements, {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          pointerEvents: 'auto'
+        });
+      });
+      return;
+    }
+
+    // On desktop, set content hidden for animation except for hero
+    this.sections.forEach((section, index) => {
       const elements = this.getGlitchElements(section);
       if (elements.length === 0) return;
 
-      // Don't hide the experience section content - keep it visible
-      if (section.id === 'experience') {
+      // Keep hero section visible immediately
+      if (index === 0) {
         gsap.set(elements, {
           opacity: 1,
           y: 0,
@@ -121,6 +148,7 @@ class ScrollController {
         return;
       }
 
+      // Hide other sections for animation
       gsap.set(elements, {
         opacity: 0,
         y: 14,
@@ -440,10 +468,9 @@ class ScrollController {
       targetSection.classList.add('transitioning-in');
     }, 0);
 
-    transitionTimeline.to(window, {
-      scrollTo: { y: targetSection, autoKill: false },
-      duration: 0.01,
-      ease: 'none'
+    // Use instant positioning instead of smooth scrolling
+    transitionTimeline.add(() => {
+      targetSection.scrollIntoView({ behavior: 'instant' });
     }, 0.12);
 
     transitionTimeline.add(() => {
@@ -566,62 +593,51 @@ class ScrollController {
       return;
     }
 
-    // For experience section on desktop, ensure content is always visible
+    // Special animation for Experience section with glitch effect
     if (section.id === 'experience') {
       const glitchElements = Array.from(section.querySelectorAll('[data-glitch-content]'));
-      gsap.set(glitchElements, {
-        opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
-        pointerEvents: 'auto'
-      });
+
+      if (glitchElements.length > 0) {
+        // Apply glitch effect immediately
+        this.applyGlitchClass(glitchElements, 1.2);
+
+        // Animate in with fade and slight glitch
+        gsap.fromTo(glitchElements, {
+          opacity: 0,
+          y: 8,
+          filter: 'blur(2px)',
+          pointerEvents: 'none'
+        }, {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          pointerEvents: 'auto',
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power2.out',
+          delay: timeline ? 0.4 : 0.2
+        });
+      }
       return;
     }
 
+    // For other sections, make content visible immediately (no shaky transitions)
     const fadeElements = Array.from(section.querySelectorAll('[data-fade-in]'));
     const slideElements = Array.from(section.querySelectorAll('[data-slide-up]'));
     const scaleElements = Array.from(section.querySelectorAll('[data-scale-in]'));
+    const glitchElements = Array.from(section.querySelectorAll('[data-glitch-content]'));
 
-    const hasTimeline = Boolean(timeline);
-    const baseTimelineStart = hasTimeline ? 0.34 : 0;
+    const allElements = [...fadeElements, ...slideElements, ...scaleElements, ...glitchElements];
 
-    const animateGroup = (elements, setProps, toProps, timelinePosition, fallbackDelay) => {
-      if (elements.length === 0) return;
-      const initialProps = { filter: 'blur(12px)', pointerEvents: 'none', ...setProps };
-      const targetProps = { filter: 'blur(0px)', pointerEvents: 'auto', ...toProps };
-
-      gsap.set(elements, initialProps);
-
-      if (hasTimeline) {
-        timeline.to(elements, { ...targetProps }, timelinePosition);
-      } else {
-        gsap.to(elements, { ...targetProps, delay: fallbackDelay });
-      }
-    };
-
-    animateGroup(
-      fadeElements,
-      { opacity: 0, y: 20, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.08, ease: 'power2.out' },
-      baseTimelineStart,
-      0.4
-    );
-
-    animateGroup(
-      slideElements,
-      { opacity: 0, y: 40, rotationX: 10 },
-      { opacity: 1, y: 0, rotationX: 0, duration: 0.8, stagger: 0.12, ease: 'back.out(1.2)' },
-      baseTimelineStart + 0.12,
-      0.5
-    );
-
-    animateGroup(
-      scaleElements,
-      { opacity: 0, scale: 0.7, rotation: 5 },
-      { opacity: 1, scale: 1, rotation: 0, duration: 0.9, stagger: 0.1, ease: 'elastic.out(1, 0.5)' },
-      Math.max(baseTimelineStart - 0.08, 0),
-      0.3
-    );
+    gsap.set(allElements, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotation: 0,
+      rotationX: 0,
+      filter: 'blur(0px)',
+      pointerEvents: 'auto'
+    });
 
     const sectionContent = section.querySelector('.section-content') || section;
     sectionContent.classList.add('section-content');
@@ -676,18 +692,32 @@ class ScrollController {
     // Check if mobile at the time of request (more reliable)
     const isMobileNow = window.innerWidth <= 768;
 
-    // For both mobile and desktop, use simple scrolling for nav clicks
-    const targetElement = document.getElementById(id);
-    if (targetElement) {
-      targetElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-      return;
+    // For mobile, use simple scrolling
+    if (isMobileNow) {
+      const targetElement = document.getElementById(id);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+        return;
+      }
     }
 
-    // Fallback to custom scroll logic if needed
-    this.scrollToSectionById(id);
+    // For desktop, use custom scroll logic to ensure content shows
+    const targetIndex = this.sectionMeta.findIndex((meta) => meta.id === id);
+    if (targetIndex !== -1) {
+      // Force scroll to section and trigger content animation
+      this.scrollToSection(targetIndex);
+
+      // Ensure content is visible after navigation
+      setTimeout(() => {
+        const targetSection = this.sections[targetIndex];
+        if (targetSection) {
+          this.animateSectionContent(targetSection);
+        }
+      }, 100);
+    }
   }
 
   getGlitchElements(section) {
@@ -758,7 +788,7 @@ class ScrollController {
     if (this.observer) {
       this.observer.kill();
     }
-    
+
     // Remove wheel event listener
     if (this.handleWheel) {
       window.removeEventListener('wheel', this.handleWheel);
@@ -772,17 +802,22 @@ class ScrollController {
     if (this.glitchOverlay && this.glitchOverlay.parentNode) {
       this.glitchOverlay.parentNode.removeChild(this.glitchOverlay);
     }
-    
+
     if (this.pageShell) {
       this.pageShell.removeEventListener('animationend', this.handleBlinkEnd);
       this.pageShell.classList.remove('is-blinking');
     }
-    
+
     this.scrollTriggers.forEach(trigger => trigger.kill());
     this.scrollTriggers = [];
-    
+
     this.enableNativeScrollSnap();
-    
+
+    // Restore scrollbar on cleanup
+    if (!this.isMobile) {
+      this.restoreScrollbar();
+    }
+
     // Remove other event listeners
     document.removeEventListener('keydown', this.handleKeydown);
     document.removeEventListener('touchstart', this.onTouchStart);
