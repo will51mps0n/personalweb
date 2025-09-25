@@ -6,12 +6,10 @@ import Hero from "./sections/Hero";
 import ShowcaseSection from "./sections/ShowcaseSection";
 import Navbar from "./components/NavBar";
 import Background from "./components/Background";
-import AvailabilityBadge from "./components/AvailabilityBadge";
 import ScrollController from './utils/ScrollController';
 
 const App = () => {
   const scrollControllerRef = useRef(null);
-  const [showBadge, setShowBadge] = useState(true);
 
   useEffect(() => {
     // Initialize scroll controller after DOM is ready
@@ -47,7 +45,6 @@ const App = () => {
       <Background />
       <div className="page-shell" style={{ position: "relative", zIndex: 10 }}>
         <Navbar />
-        <AvailabilityBadge visible={showBadge} />
 
         <div className="page-main">
           {/* Add data-scroll-section to each main section */}
