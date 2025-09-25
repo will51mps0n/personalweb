@@ -2413,3 +2413,39 @@ body {
     display: none;
   }
 }
+
+/* Desktop Footer Styles */
+.desktop-footer {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.desktop-footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.footer-line {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-default);
+  opacity: 0.8;
+  letter-spacing: 0.02em;
+  transition: opacity 0.3s ease;
+}
+
+.footer-line:hover {
+  opacity: 1;
+}
+
+/* Hide desktop footer on mobile */
+@media (max-width: 768px) {
+  .desktop-footer {
+    display: none !important;
+  }
+}

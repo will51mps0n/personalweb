@@ -223,7 +223,7 @@ export default function AppShowcase() {
 
   return (
     <section id="work" data-title="Projects" ref={sectionRef} className="work-section ref-wrap">
-      <MobileSectionHeader title="Select Projects" />
+      <MobileSectionHeader title="Projects" />
 
       {isMobile ? (
         /* Mobile Layout: Horizontal List with Popup */
