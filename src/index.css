@@ -566,7 +566,7 @@ body {
     @apply w-full md:px-20 px-5 min-h-screen;
     scroll-snap-align: start;
     position: relative;
-    padding-top: clamp(7rem, 13vw, 13rem);
+    padding-top: clamp(7rem, 9vw, 13rem);
   }
 
   .about-section {
