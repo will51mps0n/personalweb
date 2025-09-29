@@ -93,7 +93,7 @@ const App = () => {
         {/* Desktop Footer - Hidden on Mobile */}
         <div className="desktop-footer">
           <div className="desktop-footer-content">
-            <div className="footer-line">University of Michigan, CSE 2025</div>
+            <div className="footer-line">University of Michigan CSE 2025</div>
             <div className="footer-line">Available for work</div>
             <div className="footer-line">adwisi@umich.edu</div>
           </div>
