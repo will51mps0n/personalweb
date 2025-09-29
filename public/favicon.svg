@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <style>
+      .brand{ stroke:#1560FF; fill:none; stroke-width:18; stroke-linecap:round; stroke-linejoin:round; }
+      .fill{ fill:#1560FF; }
+    </style>
+  </defs>
+  <!-- Rotated rounded square (diamond) -->
+  <g transform="rotate(45 128 128)">
+    <rect x="64" y="64" width="128" height="128" rx="34" class="brand"/>
+  </g>
+  <!-- Monogram A -->
+  <path d="M96 168 L128 88 L160 168" class="brand"/>
+  <path d="M110 136 H146" class="brand"/>
+</svg>
