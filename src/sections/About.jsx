@@ -34,8 +34,8 @@ const About = () => {
       <div className="about-inner" data-glitch-content>
 
         {/* Technologies Section */}
-        <div className="tech-section" data-fade-in>
-          <div className="tech-intro">
+        <div className="tech-section">
+          <div className="tech-intro" data-fade-in>
             <p className="tech-subtitle">
               I've worked with a range of technologies across systems programming,
               machine learning, and full-stack development.
@@ -44,14 +44,13 @@ const About = () => {
 
           {/* Technology Stacks Grid */}
           <div className="tech-stacks-grid">
-            <div className="tech-categories">
+            <div className="tech-categories" data-slide-up>
               {techStacks.map((stack, index) => (
                 <div
                   key={index}
                   className={`tech-category-card ${index === activeStack ? 'active' : ''}`}
                   onClick={() => setActiveStack(index)}
                   onMouseEnter={() => setActiveStack(index)}
-                  data-slide-up
                 >
                   <div className="tech-category-icon">
                     {index === 0 && <SystemsIcon />}
@@ -67,7 +66,7 @@ const About = () => {
             </div>
 
             {/* Active Stack Details */}
-            <div className="tech-stack-details" data-fade-in>
+            <div className="tech-stack-details" data-slide-up>
               <div className="code-noise-panel is-active">
                 <div className="code-noise-panel__content">
                   <div className="code-noise-panel__inner">
@@ -91,9 +90,9 @@ const About = () => {
         </div>
 
         {/* About Me Content */}
-        <div className="about-content-section" data-slide-up>
-          <h3 className="about-content-title">Adam Simpson / Software Developer</h3>
-          <div className="about-columns">
+        <div className="about-content-section">
+          <h3 className="about-content-title" data-fade-in>Adam Simpson / Software Developer</h3>
+          <div className="about-columns" data-slide-up>
             <div className="about-copy">
               <p>
                 Hi! I'm Adam Simpson, a systems and ML focused software developer based in Houston, Texas, with a

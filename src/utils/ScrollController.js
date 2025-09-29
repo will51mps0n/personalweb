@@ -594,8 +594,10 @@ class ScrollController {
     }
 
     // Special animation for Experience section with glitch effect
-    if (section.id === 'experience') {
+    if (section.id === 'experience' || section.dataset.sectionId === 'experience') {
       const glitchElements = Array.from(section.querySelectorAll('[data-glitch-content]'));
+      const fadeElements = Array.from(section.querySelectorAll('[data-fade-in]'));
+      const slideElements = Array.from(section.querySelectorAll('[data-slide-up]'));
 
       if (glitchElements.length > 0) {
         // Apply glitch effect immediately
@@ -618,6 +620,27 @@ class ScrollController {
           delay: timeline ? 0.4 : 0.2
         });
       }
+
+      // Animate timeline elements together as one unit
+      const timelineElements = [...fadeElements, ...slideElements];
+      if (timelineElements.length > 0) {
+        gsap.fromTo(timelineElements, {
+          opacity: 0,
+          y: 8,
+          filter: 'blur(1px)',
+          pointerEvents: 'none'
+        }, {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          pointerEvents: 'auto',
+          duration: 0.7,
+          stagger: 0,
+          ease: 'power2.out',
+          delay: 0.4
+        });
+      }
+
       return;
     }
 

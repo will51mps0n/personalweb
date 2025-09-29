@@ -299,6 +299,7 @@ const Experience = () => {
             style={{ left: infoPosition.left }}
             onMouseEnter={handleDetailsEnter}
             onMouseLeave={handleDetailsLeave}
+            data-fade-in
           >
             {activeExperience.imgPath ? (
               <div className="experience-summary__banner">
@@ -311,15 +312,16 @@ const Experience = () => {
           </div>
         )}
 
-        <div className="timeline-shell" data-fade-in>
+        <div className="timeline-shell">
           <div ref={timelineRef} className="horizontal-timeline">
             <div className="timeline-track">
               <div
                 className="timeline-line"
                 style={{ left: lineStyle.left, width: lineStyle.width }}
+                data-fade-in
               />
 
-              <div className="timeline-nodes">
+              <div className="timeline-nodes" data-slide-up>
                 {displayedCards.map((card, index) => (
                   <div className="timeline-node-wrapper" key={`${card.company}-${index}`}>
                     <div className="node-date">{card.startDate}</div>
@@ -363,6 +365,7 @@ const Experience = () => {
             style={{ left: infoPosition.left }}
             onMouseEnter={handleDetailsEnter}
             onMouseLeave={handleDetailsLeave}
+            data-slide-up
           >
             <div className="experience-info-header">
               <div className="experience-info-meta">
