@@ -942,11 +942,12 @@ body {
 
   .about-content-title {
     font-size: clamp(1.1rem, 1.8vw, 1.3rem);
-    font-weight: 700;
+    font-weight: 400;
     color: var(--color-black-100);
     text-align: center;
     margin: 0 0 6px 0;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .about-columns {
