@@ -783,7 +783,7 @@ body {
   }
 
   .tech-subtitle {
-    font-size: clamp(0.75rem, 1.1vw, 0.8rem);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     color: rgba(47, 54, 66, 0.8);
     max-width: 50rem;
     margin: 0 auto;
@@ -962,18 +962,11 @@ body {
   }
 
   .about-copy p {
-    font-size: 14px;
+    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
     line-height: 1.5;
     color: rgba(47, 54, 66, 0.9);
     margin: 0;
     letter-spacing: -0.01em;
-  }
-
-  @media (min-width: 1280px) {
-    .about-copy p {
-      font-size: 15px;
-      line-height: 1.55;
-    }
   }
 
   /* Education Badge Override */

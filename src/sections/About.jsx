@@ -92,7 +92,7 @@ const About = () => {
 
         {/* About Me Content */}
         <div className="about-content-section" data-slide-up>
-          <h3 className="about-content-title">About Me</h3>
+          <h3 className="about-content-title">Adam Simpson / Software Developer</h3>
           <div className="about-columns">
             <div className="about-copy">
               <p>
