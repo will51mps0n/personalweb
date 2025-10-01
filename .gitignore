@@ -10,6 +10,7 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+*.txt
 
 # --- Env / secrets ---
 .env
